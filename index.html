@@ -66,7 +66,6 @@
     }
 
     document.addEventListener("keydown", function (e) {
-      // Shift + P unlocks embedded iframe
       if (e.shiftKey && e.key.toLowerCase() === "p") {
         const code = prompt("Enter access code:");
         if (code === "1020284") {
@@ -76,7 +75,6 @@
         }
       }
 
-      // Shift + B triggers hidden button
       if (e.shiftKey && e.key.toLowerCase() === "b") {
         document.getElementById("launchProxy").click();
       }
@@ -88,8 +86,8 @@
         alert("Pop-up blocked. Please allow pop-ups for this site.");
         return;
       }
-      const doc = newTab.document;
-      doc.write(`
+
+      const content = `
         <!DOCTYPE html>
         <html>
         <head>
@@ -125,11 +123,14 @@
                 iframe.msRequestFullscreen();
               }
             };
-          </script>
+          <\/script>
         </body>
         </html>
-      `);
-      doc.close();
+      `;
+
+      newTab.document.open();
+      newTab.document.write(content);
+      newTab.document.close();
     });
   </script>
 </body>
