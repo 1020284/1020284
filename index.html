@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>John's Coding Project</title>
   <style>
     body {
@@ -66,6 +65,7 @@
     }
 
     document.addEventListener("keydown", function (e) {
+      // Shift + P unlocks embedded iframe
       if (e.shiftKey && e.key.toLowerCase() === "p") {
         const code = prompt("Enter access code:");
         if (code === "1020284") {
@@ -73,6 +73,53 @@
         } else {
           alert("Incorrect code.");
         }
+      }
+
+      // Shift + B opens about:blank tab with fullscreen iframe
+      if (e.shiftKey && e.key.toLowerCase() === "b") {
+        const newTab = window.open("about:blank", "_blank");
+        const doc = newTab.document;
+        doc.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Loading...</title>
+            <style>
+              body { margin: 0; overflow: hidden; }
+              iframe { width: 100vw; height: 100vh; border: none; }
+              #fullscreenBtn {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                z-index: 9999;
+                padding: 10px 15px;
+                background: #0077cc;
+                color: white;
+                border: none;
+                font-size: 16px;
+                cursor: pointer;
+              }
+            </style>
+          </head>
+          <body>
+            <button id="fullscreenBtn">Fullscreen</button>
+            <iframe id="proxyFrame" src="https://edu-production-cd8e.up.railway.app/"></iframe>
+            <script>
+              document.getElementById("fullscreenBtn").onclick = function() {
+                const iframe = document.getElementById("proxyFrame");
+                if (iframe.requestFullscreen) {
+                  iframe.requestFullscreen();
+                } else if (iframe.webkitRequestFullscreen) {
+                  iframe.webkitRequestFullscreen();
+                } else if (iframe.msRequestFullscreen) {
+                  iframe.msRequestFullscreen();
+                }
+              };
+            </script>
+          </body>
+          </html>
+        `);
+        doc.close();
       }
     });
   </script>
