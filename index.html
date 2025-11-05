@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>John's Coding Project</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -12,7 +13,6 @@
     <p class="tagline">I build practical tools, clean interfaces, and smart shortcuts that make everyday tasks easier.</p>
   </header>
 
-  <!-- Tool Sections -->
   <section class="tool-card">
     <h2>🧮 Calculator</h2>
     <input type="text" id="expression" placeholder="e.g. 2 + 2" />
@@ -52,7 +52,6 @@
     <div id="unitResult"></div>
   </section>
 
-  <!-- Script Section -->
   <script>
     function calculate() {
       const expr = document.getElementById("expression").value;
@@ -108,40 +107,126 @@
     }
 
     document.addEventListener("keydown", function (e) {
-      if (e.shiftKey) {
-        const key = e.key.toLowerCase();
+      if (e.shiftKey && e.key.toLowerCase() === "b") {
         const code = prompt("Enter access code:");
-        if (code !== "1020284") {
-          alert("Incorrect code.");
-          return;
-        }
-
-        const openSite = (url, title = "Tool") => {
-          const tab = window.open("about:blank", "_blank");
-          tab.document.write(`
+        if (code === "1020284") {
+          const newTab = window.open("about:blank", "_blank");
+          const content = `
             <!DOCTYPE html>
             <html>
-            <head><title>${title}</title>
-              <style>body,html{margin:0;padding:0;height:100%;overflow:hidden}
-              iframe{border:none;width:100%;height:100%}</style>
+            <head>
+              <title>Interstellar</title>
+              <style>
+                body { margin: 0; overflow: hidden; background: black; }
+                iframe { width: 100vw; height: 100vh; border: none; }
+                #fullscreenBtn {
+                  position: fixed;
+                  top: 10px;
+                  right: 10px;
+                  z-index: 9999;
+                  padding: 10px 15px;
+                  background: #00c6ff;
+                  color: white;
+                  border: none;
+                  font-size: 16px;
+                  cursor: pointer;
+                }
+              </style>
             </head>
-            <body><iframe src="${url}"></iframe></body>
+            <body>
+              <button id="fullscreenBtn">Fullscreen</button>
+              <iframe id="proxyFrame1" src="https://interstellar.koyeb.app/"></iframe>
+              <iframe id="proxyFrame2" src="https://johnnyboyisthebest.dpdns.org/"></iframe>
+              <script>
+                document.getElementById("fullscreenBtn").onclick = function() {
+                  const iframe = document.getElementById("proxyFrame1");
+                  if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen();
+                  } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen();
+                  } else if (iframe.msRequestFullscreen) {
+                    iframe.msRequestFullscreen();
+                  }
+                };
+              </script>
+            </body>
             </html>
-          `);
-          tab.document.close();
-        };
+          `;
+          newTab.document.open();
+          newTab.document.write(content);
+          newTab.document.close();
+        } else {
+          alert("Incorrect code.");
+        }
+      }
 
-        if (key === "b") openSite("https://johnnyboyisthebest.dpdns.org/", "Interstellar Proxy");
-        if (key === "d") openSite("https://saratogaschools.net/Schooltool/home", "School Resource Portal");
-        if (key === "p") openSite("https://edu-production-cd8e.up.railway.app/", "Education Dashboard");
-        if (key === "v") openSite("https://youtubeunblocked.live/", "Video Unblocker");
-        if (key === "g") openSite("https://ubg100.github.io/", "Game Vault");
-        if (key === "t") openSite("https://terminal.johnnyproxy.repl.co/", "Terminal Tools");
-        if (key === "m") openSite("https://lite.duckduckgo.com/lite", "Mirror Search");
-
-        if (key === "e") {
-          const site = prompt("Enter the site URL to embed:");
-          if (site) openSite(site, "Custom Embed");
+      if (e.shiftKey && e.key.toLowerCase() === "d") {
+        const code = prompt("Enter access code:");
+        if (code === "1020284") {
+          const newTab = window.open("about:blank", "_blank");
+          const content = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>School Resource Portal</title>
+              <style>
+                body {
+                  font-family: Arial, sans-serif;
+                  background-color: #f9f9f9;
+                  color: #333;
+                  padding: 40px;
+                  text-align: center;
+                }
+                h1 {
+                  font-size: 2.2em;
+                  margin-bottom: 20px;
+                  color: #004080;
+                }
+                ul {
+                  list-style: none;
+                  padding: 0;
+                  max-width: 600px;
+                  margin: 0 auto;
+                }
+                li {
+                  margin: 15px 0;
+                  padding: 12px 20px;
+                  background-color: #ffffff;
+                  border: 1px solid #ccc;
+                  border-radius: 8px;
+                  text-align: left;
+                  font-size: 1.1em;
+                }
+                a {
+                  color: #004080;
+                  text-decoration: none;
+                }
+                a:hover {
+                  text-decoration: underline;
+                }
+                .footer {
+                  margin-top: 40px;
+                  font-size: 1em;
+                  color: #666;
+                }
+              </style>
+            </head>
+            <body>
+              <h1>School Resource Portal</h1>
+              <ul>
+                <li><a href="https://mathplayzone.com" target="_blank">MathPlayZone</a></li>
+                <li><a href="https://108192.xyz.cdn.cloudflare.net" target="_blank">Student Access Gateway</a></li>
+                <li><a href="https://saratogaschools.net/Schooltool/home" target="_blank">SchoolTool Login</a></li>
+              </ul>
+              <div class="footer">More coming soon!</div>
+            </body>
+            </html>
+          `;
+          newTab.document.open();
+          newTab.document.write(content);
+          newTab.document.close();
+        } else {
+          alert("Incorrect code.");
         }
       }
     });
