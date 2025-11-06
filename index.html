@@ -235,5 +235,13 @@
     <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
     <p>by John McCombs</p>
   </footer>
+  <script>
+  document.body.addEventListener('click', () => {
+    document.body.classList.add('animate-background');
+    setTimeout(() => {
+      document.body.classList.remove('animate-background');
+    }, 4000); // Match the animation duration
+  });
+</script>
 </body>
 </html>
