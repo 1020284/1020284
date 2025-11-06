@@ -7,8 +7,8 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to right, #f0f4ff, #e0f7fa);
-  color: #333;
+  background-color: #0d1b2a;
+  color: #e0e0e0;
   line-height: 1.6;
   padding: 20px;
   overflow-x: hidden;
@@ -18,45 +18,47 @@ body {
 header {
   text-align: center;
   padding: 40px 20px;
-  background: linear-gradient(to right, #00c6ff, #0072ff);
-  color: white;
+  background-color: #1b263b;
+  color: #ffffff;
   border-radius: 12px;
   margin-bottom: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  animation: fadeInDown 1s ease-out;
+  box-shadow: 0 0 20px rgba(0, 170, 255, 0.4);
+  animation: floatDown 2s ease;
 }
 
 header h1 {
   font-size: 2.8em;
   margin-bottom: 10px;
+  text-shadow: 0 0 10px #00aaff;
 }
 
 header .tagline {
   font-size: 1.2em;
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 /* Tool Cards */
 .tool-card {
-  background: white;
+  background-color: #1e2a3a;
   border-radius: 12px;
   padding: 25px;
   margin: 20px auto;
   max-width: 700px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  animation: fadeInUp 0.8s ease;
+  box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: floatUp 1.5s ease;
 }
 
 .tool-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  box-shadow: 0 0 25px rgba(0, 170, 255, 0.4);
 }
 
 .tool-card h2 {
   font-size: 1.6em;
   margin-bottom: 15px;
-  color: #0072ff;
+  color: #00aaff;
+  text-shadow: 0 0 8px #00aaff;
 }
 
 /* Inputs and Buttons */
@@ -67,34 +69,39 @@ select {
   width: 100%;
   padding: 12px;
   margin: 10px 0 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #3a4f6b;
   border-radius: 8px;
   font-size: 1em;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #0d1b2a;
+  color: #e0e0e0;
+  box-shadow: 0 0 8px rgba(0, 170, 255, 0.2);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: #0072ff;
-  box-shadow: 0 0 5px rgba(0, 114, 255, 0.3);
+  border-color: #00aaff;
+  box-shadow: 0 0 12px rgba(0, 170, 255, 0.6);
   outline: none;
 }
 
 button {
-  background-color: #0072ff;
+  background-color: #00aaff;
   color: white;
   border: none;
   padding: 12px 20px;
   border-radius: 8px;
   font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 170, 255, 0.4);
 }
 
 button:hover {
-  background-color: #005fcc;
+  background-color: #0088cc;
   transform: scale(1.05);
+  box-shadow: 0 0 16px rgba(0, 170, 255, 0.6);
 }
 
 /* Results and Output */
@@ -104,8 +111,9 @@ button:hover {
 #unitResult {
   font-weight: 600;
   font-size: 1.1em;
-  color: #333;
+  color: #ffffff;
   margin-top: 10px;
+  text-shadow: 0 0 6px #00aaff;
 }
 
 /* Footer */
@@ -113,12 +121,13 @@ footer {
   margin-top: 60px;
   padding: 30px 20px;
   text-align: center;
-  background-color: #e3f2fd;
-  border-top: 2px solid #90caf9;
+  background-color: #1b263b;
+  border-top: 2px solid #00aaff;
   border-radius: 12px;
   font-size: 1em;
-  color: #333;
+  color: #e0e0e0;
   animation: fadeIn 2s ease;
+  box-shadow: 0 0 15px rgba(0, 170, 255, 0.3);
 }
 
 footer p {
@@ -127,35 +136,15 @@ footer p {
 
 footer em {
   font-style: italic;
-  color: #0072ff;
+  color: #00aaff;
+  text-shadow: 0 0 6px #00aaff;
 }
 
-/* Surprise: Floating Emoji Confetti */
-.confetti {
-  position: fixed;
-  top: -50px;
-  font-size: 24px;
-  animation: fall 6s linear infinite;
-  opacity: 0.8;
-  z-index: 9999;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-50px) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-/* Animations */
-@keyframes fadeInDown {
+/* Floating Animations */
+@keyframes floatUp {
   from {
     opacity: 0;
-    transform: translateY(-30px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -163,10 +152,10 @@ footer em {
   }
 }
 
-@keyframes fadeInUp {
+@keyframes floatDown {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(-30px);
   }
   to {
     opacity: 1;
