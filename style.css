@@ -138,9 +138,16 @@ body.animate-background {
 /* Footer */
 footer {
   margin-top: 40px;
-  padding: 20px;
-  font-size: 0.9em;
-  color: #ccc;
+  padding: 20px 30px;
+  font-size: 1em;
+  color: #aaffaa;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 6px 20px rgba(0, 198, 255, 0.3);
   animation: float 3s ease-in-out infinite;
 }
 
