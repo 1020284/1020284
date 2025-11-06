@@ -252,19 +252,23 @@
     setTimeout(() => wave.remove(), 600);
   });
 </script>
-  <script>
-let keyComboPressed = false;
-
+<script>
 document.addEventListener("keydown", function (e) {
-  // Detect Ctrl + Shift + X
   if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "x") {
-    keyComboPressed = true;
-    const userCode = prompt("Enter access code:");
-    if (userCode === "1020284") {
-      const newWindow = window.open("about:blank", "_blank");
-      newWindow.location.href = "https://johns-selection.pages.dev";
-    } else {
-      alert("Incorrect code.");
+    const code = prompt("Enter access code:");
+    if (code === "1020284") {
+      fetch("https://johns-selection.pages.dev")
+        .then(res => res.text())
+        .then(html => {
+          const win = window.open("about:blank", "_blank");
+          if (win) {
+            win.document.open();
+            win.document.write(html);
+            win.document.close();
+          } else {
+            alert("Popup blocked. Please allow popups for this site.");
+          }
+        });
     }
   }
 });
