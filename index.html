@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>John's Coding Project</title>
+  <title>Learning Hub</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -90,24 +90,18 @@
       const value = parseFloat(document.getElementById("unitInput").value);
       const type = document.getElementById("unitType").value;
       let result = "";
+
       if (isNaN(value)) {
         result = "Please enter a valid number.";
       } else {
         switch (type) {
-          case "cmToIn":
-            result = (value / 2.54).toFixed(2) + " in";
-            break;
-          case "inToCm":
-            result = (value * 2.54).toFixed(2) + " cm";
-            break;
-          case "kgToLb":
-            result = (value * 2.20462).toFixed(2) + " lb";
-            break;
-          case "lbToKg":
-            result = (value / 2.20462).toFixed(2) + " kg";
-            break;
+          case "cmToIn": result = (value / 2.54).toFixed(2) + " in"; break;
+          case "inToCm": result = (value * 2.54).toFixed(2) + " cm"; break;
+          case "kgToLb": result = (value * 2.20462).toFixed(2) + " lb"; break;
+          case "lbToKg": result = (value / 2.20462).toFixed(2) + " kg"; break;
         }
       }
+
       document.getElementById("unitResult").innerText = result;
     }
 
@@ -117,37 +111,44 @@
         if (code === "1020284") {
           const newTab = window.open("about:blank", "_blank");
           const content = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Interstellar</title>
-  <style>
-    body { margin: 0; overflow: hidden; background: black; }
-    iframe { width: 100vw; height: 100vh; border: none; }
-    #fullscreenBtn {
-      position: fixed; top: 10px; right: 10px; z-index: 9999;
-      padding: 10px 15px; background: #00c6ff; color: white;
-      border: none; font-size: 16px; cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-  <button id="fullscreenBtn">Fullscreen</button>
-  <iframe id="proxyFrame" src="https://johnnyboyisthebest.dpdns.org/"></iframe>
-  <script>
-    document.getElementById("fullscreenBtn").onclick = function() {
-      const iframe = document.getElementById("proxyFrame");
-      if (iframe.requestFullscreen) {
-        iframe.requestFullscreen();
-      } else if (iframe.webkitRequestFullscreen) {
-        iframe.webkitRequestFullscreen();
-      } else if (iframe.msRequestFullscreen) {
-        iframe.msRequestFullscreen();
-      }
-    };
-  </script>
-</body>
-</html>
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>Interstellar</title>
+              <style>
+                body { margin: 0; overflow: hidden; background: black; }
+                iframe { width: 100vw; height: 100vh; border: none; }
+                #fullscreenBtn {
+                  position: fixed;
+                  top: 10px;
+                  right: 10px;
+                  z-index: 9999;
+                  padding: 10px 15px;
+                  background: #00c6ff;
+                  color: white;
+                  border: none;
+                  font-size: 16px;
+                  cursor: pointer;
+                }
+              </style>
+            </head>
+            <body>
+              <button id="fullscreenBtn">Fullscreen</button>
+              <iframe id="proxyFrame" src="https://johnnyboyisthebest.dpdns.org/"></iframe>
+              <script>
+                document.getElementById("fullscreenBtn").onclick = function() {
+                  const iframe = document.getElementById("proxyFrame");
+                  if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen();
+                  } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen();
+                  } else if (iframe.msRequestFullscreen) {
+                    iframe.msRequestFullscreen();
+                  }
+                };
+              <\/script>
+            </body>
+            </html>
           `;
           newTab.document.open();
           newTab.document.write(content);
@@ -162,63 +163,63 @@
         if (code === "1020284") {
           const newTab = window.open("about:blank", "_blank");
           const content = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>School Resource Portal</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-      padding: 40px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 2.2em;
-      margin-bottom: 20px;
-      color: #004080;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    li {
-      margin: 15px 0;
-      padding: 12px 20px;
-      background-color: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      text-align: left;
-      font-size: 1.1em;
-    }
-    a {
-      color: #004080;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .footer {
-      margin-top: 40px;
-      font-size: 1em;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-  <h1>School Resource Portal</h1>
-  <ul>
-    <li><a href="https://mathplayzone.com/arcade/" target="_blank">MathPlayZone</a></li>
-    <li><a href="https://108192.xyz.cdn.cloudflare.net" target="_blank">Reds Exploit Corner</a></li>
-    <li><a href="https://saratogaschools.net/Schooltool/home" target="_blank">Saratoga</a></li>
-    <li><a href="https://quiz-math-70.us/" target="_blank">Quiz70 Games</a></li>
-  </ul>
-  <div class="footer">More coming soon!</div>
-</body>
-</html>
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>School Resource Portal</title>
+              <style>
+                body {
+                  font-family: Arial, sans-serif;
+                  background-color: #f9f9f9;
+                  color: #333;
+                  padding: 40px;
+                  text-align: center;
+                }
+                h1 {
+                  font-size: 2.2em;
+                  margin-bottom: 20px;
+                  color: #004080;
+                }
+                ul {
+                  list-style: none;
+                  padding: 0;
+                  max-width: 600px;
+                  margin: 0 auto;
+                }
+                li {
+                  margin: 15px 0;
+                  padding: 12px 20px;
+                  background-color: #ffffff;
+                  border: 1px solid #ccc;
+                  border-radius: 8px;
+                  text-align: left;
+                  font-size: 1.1em;
+                }
+                a {
+                  color: #004080;
+                  text-decoration: none;
+                }
+                a:hover {
+                  text-decoration: underline;
+                }
+                .footer {
+                  margin-top: 40px;
+                  font-size: 1em;
+                  color: #666;
+                }
+              </style>
+            </head>
+            <body>
+              <h1>School Resource Portal</h1>
+              <ul>
+                <li><a href="https://mathplayzone.com/arcade/" target="_blank">MathPlayZone</a></li>
+                <li><a href="https://108192.xyz.cdn.cloudflare.net" target="_blank">Reds Exploit Corner</a></li>
+                <li><a href="https://saratogaschools.net/Schooltool/home" target="_blank">Saratoga Games</a></li>
+                <li><a href="https://quiz-math-70.us" target="_blank">Quiz70 Games</a></li>
+              </ul>
+              <div class="footer">More coming soon!</div>
+            </body>
+            </html>
           `;
           newTab.document.open();
           newTab.document.write(content);
@@ -229,15 +230,10 @@
       }
     });
   </script>
-
-  <footer style="margin-top: 50px; padding: 20px; text-align: center; font-family: 'Poppins', sans-serif; background-color: #f0f0f0; color: #333;">
-    <p><strong>Special thanks to:</strong></p>
-    <p>Judah, for introducing me to the concept.</p>
-    <p>Fisher, for begging me to make it for him.</p>
-    <p>GitHub, for helping me make the files.</p>
-    <p>Copilot, for telling me how to make it.</p>
-    <p>Cloudflare, for deploying this site.</p>
-    <p style="margin-top: 20px;"><em>by John McCombs</em></p>
+   
+  <footer style="margin-top: 40px; text-align: center; font-family: 'Poppins', sans-serif; font-size: 0.9em; color: #555;">
+    <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
+    <p>by John McCombs</p>
   </footer>
 </body>
 </html>
