@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -158,110 +159,108 @@
         }
       }
 
-     <script>
-document.addEventListener("keydown", function(e) {
-  if (e.shiftKey && e.key.toLowerCase() === "d") {
-    const code = prompt("Enter access code:");
-    if (code === "1020284") {
-      const newTab = window.open("about:blank", "_blank");
-      const content = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>School Resource Portal</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              background-color: #f9f9f9;
-              color: #333;
-              padding: 40px;
-              text-align: center;
-            }
-            h1 {
-              font-size: 2.2em;
-              margin-bottom: 20px;
-              color: #004080;
-            }
-            ul {
-              list-style: none;
-              padding: 0;
-              max-width: 600px;
-              margin: 0 auto;
-            }
-            li {
-              margin: 15px 0;
-              padding: 12px 20px;
-              background-color: #ffffff;
-              border: 1px solid #ccc;
-              border-radius: 8px;
-              text-align: left;
-              font-size: 1.1em;
-            }
-            a {
-              color: #004080;
-              text-decoration: none;
-              cursor: pointer;
-            }
-            a:hover {
-              text-decoration: underline;
-            }
-            .footer {
-              margin-top: 40px;
-              font-size: 1em;
-              color: #666;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>School Resource Portal</h1>
-          <ul>
-            <li><a onclick="openInNewTab('https://mathplayzone.com/arcade/')">MathPlayZone – Math Arcade Games</a></li>
-            <li><a onclick="openInNewTab('https://108192.xyz.cdn.cloudflare.net')">Reds Exploit Corner – Tools & Resources</a></li>
-            <li><a onclick="openInNewTab('https://saratogaschools.net/Schooltool/home')">Saratoga Games – Schooltool Access</a></li>
-            <li><a onclick="openInNewTab('https://quiz-math-70.us')">Quiz70 Games – Math Quizzes</a></li>
-            <li><a onclick="openInNewTab('https://jordans-math-homework.pages.dev')">Jordan's Math Homework – Worksheets & Games</a></li>
-            <li><a onclick="openInNewTab('https://john2.pages.dev')">John2 – Cloudflare Pages Project</a></li>
-            <li><a onclick="openInNewTab('https://johnlovesmath.pages.dev')">John Loves Math – Math Games Hub</a></li>
-            <li><a onclick="openInNewTab('https://saratoga.pages.dev')">Saratoga Resources – Local Info</a></li>
-            <li><a onclick="openInNewTab('https://geometrytime.pages.dev')">Geometry Time – Geometry Dash / Guides</a></li>
-            <li><a onclick="openInNewTab('https://math-hw.pages.dev')">Math Homework – Worksheet Generator</a></li>
-            <li><a onclick="openInNewTab('https://johns-selection.pages.dev')">John's Selection – Unblocked Games & Proxy</a></li>
-          </ul>
-          <div class="footer">More coming soon!</div>
+if (e.shiftKey && e.key.toLowerCase() === "d") {
+  const code = prompt("Enter access code:");
+  if (code === "1020284") {
+    const newTab = window.open("about:blank", "_blank");
+    const content = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>School Resource Portal</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 40px;
+            text-align: center;
+          }
+          h1 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #004080;
+          }
+          ul {
+            list-style: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+          }
+          li {
+            margin: 15px 0;
+            padding: 12px 20px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1.1em;
+          }
+          a {
+            color: #004080;
+            text-decoration: none;
+            cursor: pointer;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
+          .footer {
+            margin-top: 40px;
+            font-size: 1em;
+            color: #666;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>School Resource Portal</h1>
+        <ul>
+          <li><a onclick="openInNewTab('https://mathplayzone.com/arcade/')">MathPlayZone – Math Arcade Games</a></li>
+          <li><a onclick="openInNewTab('https://108192.xyz.cdn.cloudflare.net')">Reds Exploit Corner – Tools & Resources</a></li>
+          <li><a onclick="openInNewTab('https://saratogaschools.net/Schooltool/home')">Saratoga Games – Schooltool Access</a></li>
+          <li><a onclick="openInNewTab('https://quiz-math-70.us')">Quiz70 Games – Math Quizzes</a></li>
+          <li><a onclick="openInNewTab('https://jordans-math-homework.pages.dev')">Jordan's Math Homework – Worksheets & Games</a></li>
+          <li><a onclick="openInNewTab('https://john2.pages.dev')">John2 – Cloudflare Pages Project</a></li>
+          <li><a onclick="openInNewTab('https://johnlovesmath.pages.dev')">John Loves Math – Math Games Hub</a></li>
+          <li><a onclick="openInNewTab('https://saratoga.pages.dev')">Saratoga Resources – Local Info</a></li>
+          <li><a onclick="openInNewTab('https://geometrytime.pages.dev')">Geometry Time – Geometry Dash / Guides</a></li>
+          <li><a onclick="openInNewTab('https://math-hw.pages.dev')">Math Homework – Worksheet Generator</a></li>
+          <li><a onclick="openInNewTab('https://johns-selection.pages.dev')">John's Selection – Unblocked Games & Proxy</a></li>
+        </ul>
+        <div class="footer">More coming soon!</div>
 
-          <script>
-            function openInNewTab(url) {
-              const tab = window.open("about:blank", "_blank");
-              tab.document.write(\`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                  <title>Resource Viewer</title>
-                  <style>
-                    body { margin:0; font-family:Arial; }
-                    iframe { border:none; width:100%; height:100vh; }
-                  </style>
-                </head>
-                <body>
-                  <iframe src="\${url}"></iframe>
-                </body>
-                </html>
-              \`);
-              tab.document.close();
-            }
-          </script>
-        </body>
-        </html>
-      `;
-      newTab.document.open();
-      newTab.document.write(content);
-      newTab.document.close();
-    } else {
-      alert("Incorrect code.");
-    }
+        <script>
+          function openInNewTab(url) {
+            const tab = window.open("about:blank", "_blank");
+            tab.document.write(\`
+              <!DOCTYPE html>
+              <html>
+              <head>
+                <title>Resource Viewer</title>
+                <style>
+                  body { margin:0; font-family:Arial; }
+                  iframe { border:none; width:100%; height:100vh; }
+                </style>
+              </head>
+              <body>
+                <iframe src="\${url}"></iframe>
+              </body>
+              </html>
+            \`);
+            tab.document.close();
+          }
+        <\/script>
+      </body>
+      </html>
+    `;
+    newTab.document.open();
+    newTab.document.write(content);
+    newTab.document.close();
+  } else {
+    alert("Incorrect code.");
   }
-});
-</script>
+}
+
+   
   <footer style="margin-top: 40px; text-align: center; font-family: 'Poppins', sans-serif; font-size: 0.9em; color: #ffffff;">
     <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
     <p>by John McCombs</p>
