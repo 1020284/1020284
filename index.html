@@ -1,3 +1,18 @@
+<script>
+  window.onload = function() {
+    // Open a new about:blank tab
+    var newTab = window.open("about:blank", "_blank");
+
+    // Write your main page into the about:blank tab
+    if (newTab) {
+      newTab.document.write('<iframe src="index.html" style="border:none;width:100%;height:100%;"></iframe>');
+      newTab.document.title = "My Arcade";
+    }
+
+    // Redirect the current tab to Google
+    window.location.href = "https://www.google.com";
+  };
+</script>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,19 +52,6 @@
     <input type="number" id="max" placeholder="Max" />
     <button onclick="generateRandom()">Generate</button>
     <div id="randomResult"></div>
-  </section>
-
-  <section class="tool-card">
-    <h2>🔁 Unit Converter</h2>
-    <input type="number" id="unitInput" placeholder="Enter value" />
-    <select id="unitType">
-      <option value="cmToIn">cm → inches</option>
-      <option value="inToCm">inches → cm</option>
-      <option value="kgToLb">kg → pounds</option>
-      <option value="lbToKg">pounds → kg</option>
-    </select>
-    <button onclick="convertUnit()">Convert</button>
-    <div id="unitResult"></div>
   </section>
 
   <script>
