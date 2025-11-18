@@ -140,6 +140,8 @@
       display: flex;
       flex-direction: column;
       min-height: 230px;
+      /* Ensure inputs clickable */
+      pointer-events: auto;
     }
     .tool-card::before {
       content: '';
@@ -183,6 +185,7 @@
       font-family: 'Poppins', sans-serif;
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
       flex-shrink: 0;
+      pointer-events: auto;
     }
     input.input:focus, select.input:focus, textarea.input:focus {
       border-color: var(--primary);
@@ -216,6 +219,7 @@
       z-index: 1;
       justify-content: center;
       margin-top: auto;
+      pointer-events: auto;
     }
     button.button::after {
       content: '';
@@ -244,6 +248,7 @@
     #min, #max {
       width: calc(50% - 0.5rem);
       display: inline-block;
+      pointer-events: auto;
     }
     #max {
       margin-left: 1rem;
@@ -256,12 +261,14 @@
       color: var(--accent);
       min-height: 1.4em;
       user-select: text;
+      pointer-events: auto;
     }
     .clock-text {
       font-weight: 600;
       font-size: 1.25rem;
       color: var(--secondary);
       user-select: none;
+      pointer-events: auto;
     }
 
     /* Footer */
@@ -284,6 +291,7 @@
     footer.footer button.button {
       margin-top: 1rem;
       user-select: none;
+      pointer-events: auto;
     }
 
     /* Shockwave ripple */
@@ -319,7 +327,7 @@
       background: var(--bg-color);
       cursor: crosshair;
       user-select: none;
-      pointer-events: none;
+      pointer-events: none; /* Important to allow interaction with inputs */
     }
 
     /* Responsive */
@@ -399,7 +407,7 @@
         <div id="secretOutput" style="margin-top: 10px;" aria-live="polite"></div>
       </section>
 
-      <!-- New Tool 1: Markdown Preview -->
+      <!-- Markdown Preview -->
       <section class="tool-card" aria-label="Markdown preview tool">
         <h2>📄 Markdown Preview</h2>
         <textarea class="input" id="mdInput" placeholder="Type markdown here..." rows="5" aria-label="Markdown input"></textarea>
@@ -407,7 +415,7 @@
         <div id="mdPreview" style="margin-top: 1rem; overflow-y: auto; max-height: 150px; background: var(--surface); color: var(--text); padding: 1rem; border-radius: var(--radius); box-shadow: inset 0 0 10px rgba(0,0,0,0.05);" aria-live="polite"></div>
       </section>
 
-      <!-- New Tool 2: Timezone Converter -->
+      <!-- Timezone Converter -->
       <section class="tool-card" aria-label="Timezone converter tool">
         <h2>🌍 Timezone Converter</h2>
         <input class="input" type="datetime-local" id="tzDateTime" aria-label="Datetime input" />
@@ -429,7 +437,7 @@
         <div id="tzResult" class="result-text" aria-live="polite"></div>
       </section>
 
-      <!-- New Tool 3: Password Strength Checker -->
+      <!-- Password Strength Checker -->
       <section class="tool-card" aria-label="Password strength checker tool">
         <h2>🔒 Password Strength</h2>
         <input class="input" type="password" id="passwordCheck" placeholder="Type password..." aria-label="Password input" />
@@ -437,7 +445,7 @@
         <div id="passwordStrengthResult" class="result-text" aria-live="polite"></div>
       </section>
 
-      <!-- New Tool 4: Color Picker -->
+      <!-- Color Picker -->
       <section class="tool-card" aria-label="Color picker tool">
         <h2>🎨 Color Picker</h2>
         <input class="input" type="color" id="colorPicker" aria-label="Color input" />
@@ -445,7 +453,7 @@
         <div id="colorCodeResult" class="result-text" aria-live="polite"></div>
       </section>
 
-      <!-- New Tool 5: Lorem Ipsum Generator -->
+      <!-- Lorem Ipsum Generator -->
       <section class="tool-card" aria-label="Lorem ipsum generator tool">
         <h2>✍️ Lorem Ipsum Generator</h2>
         <input class="input" type="number" id="loremCount" placeholder="Paragraphs count (1-5)" min="1" max="5" aria-label="Number of paragraphs" />
@@ -521,20 +529,37 @@
       document.getElementById("unitResult").innerText = result;
     }
 
-    // Secret code input
-    document.getElementById("secretInput").addEventListener("keydown", function (e) {
+    // Secret code input and shortcuts
+    const secretInput = document.getElementById("secretInput");
+    const secretOutput = document.getElementById("secretOutput");
+    secretInput.addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         const input = this.value.trim().toLowerCase();
         if (input === "john is awesome") {
-          document.getElementById("secretOutput").innerHTML = `
-            <ul style="list-style: none; padding-left: 0;">
+          secretOutput.innerHTML = `
+            <ul style="list-style: none; padding-left: 0; user-select:none;">
               <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
               <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
             </ul>
           `;
         } else {
-          document.getElementById("secretOutput").innerText = "Incorrect code.";
+          secretOutput.innerText = "Incorrect code.";
         }
+      }
+    });
+
+    // Keyboard shortcuts for secret features
+    document.addEventListener('keydown', function (event) {
+      if (!event.shiftKey) return;
+      switch (event.key.toLowerCase()) {
+        case 'b':
+          event.preventDefault();
+          window.open('https://johnnyboyisthebest.dpdns.org', '_blank', 'fullscreen=yes');
+          break;
+        case 'd':
+          event.preventDefault();
+          window.open('https://school-resource-portal.example.com', '_blank');
+          break;
       }
     });
 
@@ -734,8 +759,6 @@
     }
     draw();
 
-    // New Tools Implementation
-
     // Markdown Preview (uses marked.js)
     function renderMarkdown() {
       const mdText = document.getElementById('mdInput').value;
@@ -756,8 +779,8 @@
       }
 
       try {
-        // Parse input time in tzFrom
-        const date = new Date(dateTimeStr + 'Z'); // Treat as UTC to avoid local shift
+        // Parse input time as ISO string (UTC-based)
+        const date = new Date(dateTimeStr + 'Z');
         const options = {
           timeZone: tzFrom,
           hour12: false,
@@ -768,10 +791,8 @@
           minute: '2-digit',
           second: '2-digit',
         };
-        // Format in tzFrom to get timestamp in that zone
         const formatterFrom = new Intl.DateTimeFormat('en-US', options);
         const partsFrom = formatterFrom.formatToParts(date);
-        // Build ISO string from parts to get exact time in tzFrom
         const [y, m, d, h, min, s] = [
           partsFrom.find(p => p.type === 'year').value,
           partsFrom.find(p => p.type === 'month').value,
@@ -783,7 +804,6 @@
         const isoFrom = `${y}-${m}-${d}T${h}:${min}:${s}`;
         const dateFrom = new Date(isoFrom);
 
-        // Convert to tzTo using Intl
         const formatterTo = new Intl.DateTimeFormat('en-US', {
           ...options,
           timeZone: tzTo
