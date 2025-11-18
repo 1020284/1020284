@@ -11,37 +11,6 @@
 
     /* ===== Root Variables ===== */
     :root {
-      --bg-color: #f0f2f5;
-      --surface: #ffffff;
-      --primary: #4f46e5;
-      --secondary: #06b6d4;
-      --accent: #ef4444;
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --text: #0f172a;
-      --muted: #64748b;
-
-      --radius-xs: 8px;
-      --radius: 16px;
-      --radius-lg: 24px;
-
-      --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
-      --shadow: 0 8px 24px rgba(0,0,0,0.12);
-      --shadow-lg: 0 16px 40px rgba(0,0,0,0.18);
-
-      --glass: rgba(255,255,255,0.12);
-      --glass-strong: rgba(255,255,255,0.24);
-
-      --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-      --gradient-alt: radial-gradient(1200px 600px at 10% 10%, rgba(79,70,229,0.25), transparent 60%);
-
-      --transition-fast: 150ms ease;
-      --transition: 300ms ease;
-      --transition-slow: 600ms ease;
-    }
-
-    /* ===== Dark Mode ===== */
-    body.dark-mode {
       --bg-color: #0b1220;
       --surface: #0f172a;
       --primary: #38bdf8;
@@ -52,15 +21,23 @@
       --text: #e6edf7;
       --muted: #94a3b8;
 
-      --glass: rgba(16,23,42,0.35);
-      --glass-strong: rgba(16,23,42,0.55);
+      --radius-xs: 8px;
+      --radius: 16px;
+      --radius-lg: 24px;
 
       --shadow-sm: 0 4px 12px rgba(0,0,0,0.35);
       --shadow: 0 8px 24px rgba(0,0,0,0.45);
       --shadow-lg: 0 16px 40px rgba(0,0,0,0.6);
 
+      --glass: rgba(16,23,42,0.35);
+      --glass-strong: rgba(16,23,42,0.55);
+
       --gradient: linear-gradient(135deg, var(--primary), var(--accent));
       --gradient-alt: radial-gradient(1000px 500px at 80% 20%, rgba(56,189,248,0.18), transparent 60%);
+
+      --transition-fast: 150ms ease;
+      --transition: 300ms ease;
+      --transition-slow: 600ms ease;
     }
 
     /* ===== Base ===== */
@@ -140,8 +117,7 @@
       display: flex;
       flex-direction: column;
       min-height: 230px;
-      /* Ensure inputs clickable */
-      pointer-events: auto;
+      pointer-events: auto; /* Make inputs interactive */
     }
     .tool-card::before {
       content: '';
@@ -171,7 +147,7 @@
       text-shadow: 0 0 5px var(--primary);
     }
 
-    input.input, select.input, textarea.input {
+    input.input, select.input, textarea.input, input[type="text"], input[type="number"], input[type="password"], textarea {
       width: 100%;
       background: var(--surface);
       color: var(--text);
@@ -187,19 +163,19 @@
       flex-shrink: 0;
       pointer-events: auto;
     }
-    input.input:focus, select.input:focus, textarea.input:focus {
+    input.input:focus, select.input:focus, textarea.input:focus, input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus, textarea:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 6px rgba(56,189,248,0.3);
       background: var(--surface);
     }
-    textarea.input {
+    textarea.input, textarea {
       resize: vertical;
       min-height: 6rem;
       font-size: 1rem;
       line-height: 1.4;
     }
 
-    button.button {
+    button.button, button {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
@@ -221,7 +197,7 @@
       margin-top: auto;
       pointer-events: auto;
     }
-    button.button::after {
+    button.button::after, button::after {
       content: '';
       position: absolute;
       inset: 0;
@@ -233,14 +209,14 @@
       border-radius: var(--radius);
       z-index: 2;
     }
-    button.button:hover::after {
+    button.button:hover::after, button:hover::after {
       opacity: 1;
     }
-    button.button:hover {
+    button.button:hover, button:hover {
       transform: translateY(-2px) scale(1.02);
       box-shadow: var(--shadow-lg);
     }
-    button.button:active {
+    button.button:active, button:active {
       transform: translateY(0) scale(0.98);
     }
 
@@ -346,7 +322,7 @@
     }
   </style>
 </head>
-<body class="dark-mode">
+<body>
   <canvas id="spiderweb"></canvas>
 
   <header class="header">
@@ -366,13 +342,13 @@
 
       <!-- Current Time -->
       <section class="tool-card" aria-label="Current time display">
-        <h2>⏰ Current Time</h2>
+        <h2>📅 Current Time</h2>
         <div id="clock" class="clock-text" aria-live="polite" aria-atomic="true"></div>
       </section>
 
       <!-- Note Pad -->
       <section class="tool-card" aria-label="Note pad tool">
-        <h2>📝 Note Pad</h2>
+        <h2>📓 Note Pad</h2>
         <textarea class="input" id="notes" placeholder="Type your notes here..." rows="5" aria-label="Notes text area"></textarea>
         <button class="button" onclick="saveNotes()">Save Notes</button>
       </section>
@@ -402,63 +378,9 @@
 
       <!-- Secret Code -->
       <section class="tool-card" aria-label="Secret code input">
-        <h2>🔐 Secret Code</h2>
+        <h2>🕵️ Secret Code</h2>
         <input class="input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
         <div id="secretOutput" style="margin-top: 10px;" aria-live="polite"></div>
-      </section>
-
-      <!-- Markdown Preview -->
-      <section class="tool-card" aria-label="Markdown preview tool">
-        <h2>📄 Markdown Preview</h2>
-        <textarea class="input" id="mdInput" placeholder="Type markdown here..." rows="5" aria-label="Markdown input"></textarea>
-        <button class="button" onclick="renderMarkdown()">Preview</button>
-        <div id="mdPreview" style="margin-top: 1rem; overflow-y: auto; max-height: 150px; background: var(--surface); color: var(--text); padding: 1rem; border-radius: var(--radius); box-shadow: inset 0 0 10px rgba(0,0,0,0.05);" aria-live="polite"></div>
-      </section>
-
-      <!-- Timezone Converter -->
-      <section class="tool-card" aria-label="Timezone converter tool">
-        <h2>🌍 Timezone Converter</h2>
-        <input class="input" type="datetime-local" id="tzDateTime" aria-label="Datetime input" />
-        <select class="input" id="tzFrom" aria-label="From timezone">
-          <option value="UTC">UTC</option>
-          <option value="America/New_York">New York (EST)</option>
-          <option value="Europe/London">London (GMT)</option>
-          <option value="Asia/Tokyo">Tokyo (JST)</option>
-          <option value="Australia/Sydney">Sydney (AEST)</option>
-        </select>
-        <select class="input" id="tzTo" aria-label="To timezone">
-          <option value="UTC">UTC</option>
-          <option value="America/New_York">New York (EST)</option>
-          <option value="Europe/London">London (GMT)</option>
-          <option value="Asia/Tokyo">Tokyo (JST)</option>
-          <option value="Australia/Sydney">Sydney (AEST)</option>
-        </select>
-        <button class="button" onclick="convertTimezone()">Convert</button>
-        <div id="tzResult" class="result-text" aria-live="polite"></div>
-      </section>
-
-      <!-- Password Strength Checker -->
-      <section class="tool-card" aria-label="Password strength checker tool">
-        <h2>🔒 Password Strength</h2>
-        <input class="input" type="password" id="passwordCheck" placeholder="Type password..." aria-label="Password input" />
-        <button class="button" onclick="checkPasswordStrength()">Check Strength</button>
-        <div id="passwordStrengthResult" class="result-text" aria-live="polite"></div>
-      </section>
-
-      <!-- Color Picker -->
-      <section class="tool-card" aria-label="Color picker tool">
-        <h2>🎨 Color Picker</h2>
-        <input class="input" type="color" id="colorPicker" aria-label="Color input" />
-        <button class="button" onclick="showColorCode()">Show Color Code</button>
-        <div id="colorCodeResult" class="result-text" aria-live="polite"></div>
-      </section>
-
-      <!-- Lorem Ipsum Generator -->
-      <section class="tool-card" aria-label="Lorem ipsum generator tool">
-        <h2>✍️ Lorem Ipsum Generator</h2>
-        <input class="input" type="number" id="loremCount" placeholder="Paragraphs count (1-5)" min="1" max="5" aria-label="Number of paragraphs" />
-        <button class="button" onclick="generateLorem()">Generate</button>
-        <div id="loremResult" style="margin-top: 1rem; max-height: 150px; overflow-y: auto; background: var(--surface); color: var(--text); padding: 1rem; border-radius: var(--radius);" aria-live="polite"></div>
       </section>
     </div>
   </main>
@@ -466,10 +388,8 @@
   <footer class="footer">
     <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
     <p>by John McCombs</p>
-    <button id="toggleMode" class="button" aria-pressed="false" aria-label="Toggle dark mode">Toggle Dark Mode</button>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     // Calculator
     function calculate() {
@@ -529,37 +449,283 @@
       document.getElementById("unitResult").innerText = result;
     }
 
-    // Secret code input and shortcuts
-    const secretInput = document.getElementById("secretInput");
-    const secretOutput = document.getElementById("secretOutput");
-    secretInput.addEventListener("keydown", function (e) {
+    // Secret code input event
+    document.getElementById("secretInput").addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         const input = this.value.trim().toLowerCase();
         if (input === "john is awesome") {
-          secretOutput.innerHTML = `
+          document.getElementById("secretOutput").innerHTML = `
             <ul style="list-style: none; padding-left: 0; user-select:none;">
               <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
               <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
             </ul>
           `;
         } else {
-          secretOutput.innerText = "Incorrect code.";
+          document.getElementById("secretOutput").innerText = "Incorrect code.";
         }
       }
     });
 
-    // Keyboard shortcuts for secret features
-    document.addEventListener('keydown', function (event) {
-      if (!event.shiftKey) return;
-      switch (event.key.toLowerCase()) {
-        case 'b':
-          event.preventDefault();
-          window.open('https://johnnyboyisthebest.dpdns.org', '_blank', 'fullscreen=yes');
-          break;
-        case 'd':
-          event.preventDefault();
-          window.open('https://school-resource-portal.example.com', '_blank');
-          break;
+    // Keyboard shortcuts with access codes and tab openings
+    document.addEventListener("keydown", function (e) {
+      if (!e.shiftKey) return;
+      const key = e.key.toLowerCase();
+
+      if (key === "b") {
+        e.preventDefault();
+        const code = prompt("Enter access code:");
+        if (code === "1020284") {
+          const newTab = window.open("about:blank", "_blank");
+          const content = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>Interstellar</title>
+              <style>
+                body { margin: 0; overflow: hidden; background: black; }
+                iframe { width: 100vw; height: 100vh; border: none; }
+                #fullscreenBtn {
+                  position: fixed;
+                  top: 10px;
+                  right: 10px;
+                  z-index: 9999;
+                  padding: 10px 15px;
+                  background: #00c6ff;
+                  color: white;
+                  border: none;
+                  font-size: 16px;
+                  cursor: pointer;
+                }
+              </style>
+            </head>
+            <body>
+              <button id="fullscreenBtn">Fullscreen</button>
+              <iframe id="proxyFrame" src="https://johnnyboyisthebest.dpdns.org/"></iframe>
+              <script>
+                document.getElementById("fullscreenBtn").onclick = function() {
+                  const iframe = document.getElementById("proxyFrame");
+                  if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen();
+                  } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen();
+                  } else if (iframe.msRequestFullscreen) {
+                    iframe.msRequestFullscreen();
+                  }
+                };
+              <\/script>
+            </body>
+            </html>
+          `;
+          newTab.document.open();
+          newTab.document.write(content);
+          newTab.document.close();
+        } else {
+          alert("Incorrect code.");
+        }
+      }
+
+      if (key === "d") {
+        e.preventDefault();
+        const code = prompt("Enter access code:");
+        if (code === "1020284") {
+          const newTab = window.open("about:blank", "_blank");
+          const content = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>School Resource Portal</title>
+              <style>
+                body {
+                  font-family: Arial, sans-serif;
+                  background-color: #f9f9f9;
+                  color: #333;
+                  padding: 40px;
+                  text-align: center;
+                }
+                h1 {
+                  font-size: 2.2em;
+                  margin-bottom: 20px;
+                  color: #004080;
+                }
+                ul {
+                  list-style: none;
+                  padding: 0;
+                  max-width: 600px;
+                  margin: 0 auto;
+                }
+                li {
+                  margin: 15px 0;
+                  padding: 12px 20px;
+                  background-color: #ffffff;
+                  border: 1px solid #ccc;
+                  border-radius: 8px;
+                  text-align: left;
+                  font-size: 1.1em;
+                }
+                a {
+                  color: #004080;
+                  text-decoration: none;
+                  cursor: pointer;
+                }
+                a:hover {
+                  text-decoration: underline;
+                }
+                .footer {
+                  margin-top: 40px;
+                  font-size: 1em;
+                  color: #666;
+                }
+              </style>
+            </head>
+            <body>
+              <h1>School Resource Portal</h1>
+              <ul>
+                <li><a onclick="openInNewTab('https://108192.xyz.cdn.cloudflare.net')">Reds Exploit Corner – Tools & Resources</a></li>
+                <li><a onclick="openInNewTab('https://quiz-math-70.us')">Quiz70 Games – blocked for some</a></li>
+                <li><a onclick="openInNewTab('https://jordans-math-homework.pages.dev')">Jordan's Math Homework</a></li>
+                <li><a onclick="openInNewTab('https://john2.pages.dev')">John2 – More games</a></li>
+                <li><a onclick="openInNewTab('https://johnlovesmath.pages.dev')">John Loves Math – Unreliable</a></li>
+                <li><a onclick="openInNewTab('https://novamath.net')">Saratoga Resources – I fixed Saratoga</a></li>
+                <li><a onclick="openInNewTab('https://geometrytime.pages.dev')">Geometry Time – Genizy Math</a></li>
+                <li><a onclick="openInNewTab('https://math-hw.pages.dev')">Math Homework – Minecraft</a></li>
+                <li><a onclick="openInNewTab('https://john3.pages.dev')">Another One of my amazing game sites</a></li>
+                <li><a onclick="openInNewTab('https://johns-selection.wasmer.app')">John's Selection – Unblocked Games & Proxy</a></li>
+              </ul>
+              <div class="footer">More coming soon! -John</div>
+
+              <script>
+                function openInNewTab(url) {
+                  const tab = window.open("about:blank", "_blank");
+                  tab.document.write(\`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                      <title>Resource Viewer</title>
+                      <style>
+                        body { margin:0; font-family:Arial; }
+                        iframe { border:none; width:100%; height:100vh; }
+                      </style>
+                    </head>
+                    <body>
+                      <iframe src="\${url}"></iframe>
+                    </body>
+                    </html>
+                  \`);
+                  tab.document.close();
+                }
+              <\/script>
+            </body>
+            </html>
+          `;
+          newTab.document.open();
+          newTab.document.write(content);
+          newTab.document.close();
+        } else {
+          alert("Incorrect code.");
+        }
+      }
+
+      if (key === "r") {
+        e.preventDefault();
+        const newTab = window.open("about:blank", "_blank");
+        const content = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Private Selection</title>
+            <style>
+              body { margin: 0; overflow: hidden; background: #111; }
+              iframe { width: 100vw; height: 100vh; border: none; }
+            </style>
+          </head>
+          <body>
+            <iframe src="https://johns-selection.wasmer.app"></iframe>
+          </body>
+          </html>
+        `;
+        newTab.document.open();
+        newTab.document.write(content);
+        newTab.document.close();
+      }
+
+      if (key === "x") {
+        e.preventDefault();
+        const code = prompt("Enter access code:");
+        if (code === "1020284") {
+          const newTab = window.open("about:blank", "_blank");
+          const content = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>NettleWeb</title>
+              <style>
+                body { margin: 0; overflow: hidden; background: black; }
+                iframe { width: 100vw; height: 100vh; border: none; }
+                #fullscreenBtn {
+                  position: fixed;
+                  top: 10px;
+                  right: 10px;
+                  z-index: 9999;
+                  padding: 10px 15px;
+                  background: #00c6ff;
+                  color: white;
+                  border: none;
+                  font-size: 16px;
+                  cursor: pointer;
+                }
+              </style>
+            </head>
+            <body>
+              <iframe id="proxyFrame" src="https://novamath.net/"></iframe>
+              <script>
+                document.getElementById("fullscreenBtn")?.addEventListener('click', function() {
+                  const iframe = document.getElementById("proxyFrame");
+                  if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen();
+                  } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen();
+                  } else if (iframe.msRequestFullscreen) {
+                    iframe.msRequestFullscreen();
+                  }
+                });
+              <\/script>
+            </body>
+            </html>
+          `;
+          newTab.document.open();
+          newTab.document.write(content);
+          newTab.document.close();
+        } else {
+          alert("Incorrect code.");
+        }
+      }
+
+      if (key === "c") {
+        e.preventDefault();
+        const code = prompt("Enter access code:");
+        if (code === "1020284") {
+          const newTab = window.open("about:blank", "_blank");
+          const content = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>Canlite</title>
+              <style>
+                body { margin: 0; overflow: hidden; background: black; }
+                iframe { width: 100vw; height: 100vh; border: none; }
+              </style>
+            </head>
+            <body>
+              <iframe src="https://canlite.org"></iframe>
+            </body>
+            </html>
+          `;
+          newTab.document.open();
+          newTab.document.write(content);
+          newTab.document.close();
+        } else {
+          alert("Incorrect code.");
+        }
       }
     });
 
@@ -578,18 +744,10 @@
       setTimeout(() => wave.remove(), 600);
     });
 
-    // Retain notes on load
+    // Restore notes from localStorage on load
     window.addEventListener("load", () => {
       const notes = localStorage.getItem("userNotes");
       if (notes) document.getElementById("notes").value = notes;
-    });
-
-    // Dark mode toggle
-    const toggleModeBtn = document.getElementById('toggleMode');
-    toggleModeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      toggleModeBtn.setAttribute('aria-pressed', isDark.toString());
     });
 
     // Spiderweb interactive complex canvas
@@ -609,7 +767,6 @@
     resize();
     window.addEventListener('resize', resize);
 
-    // Spiderweb points and nodes
     const POINTS = 150;
     const MAX_DIST = 130;
     const SPEED = 0.3;
@@ -617,7 +774,6 @@
     const HOVER_RADIUS = 50;
     const colors = ["#38bdf8", "#ef4444", "#94a3b8"];
 
-    // Generate points with velocity and color
     let points = Array.from({ length: POINTS }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
@@ -629,7 +785,6 @@
       connections: []
     }));
 
-    // Find connections for each point based on distance
     function updateConnections() {
       points.forEach(p => p.connections = []);
       for (let i = 0; i < points.length; i++) {
@@ -647,9 +802,7 @@
     }
     updateConnections();
 
-    // Mouse interaction state
     let mouse = { x: null, y: null, isHovering: false };
-
     canvas.addEventListener('mousemove', e => {
       const rect = canvas.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
@@ -662,16 +815,13 @@
       mouse.isHovering = false;
     });
 
-    // Draw spiderweb with glow and interactive features
     function draw() {
       ctx.clearRect(0, 0, width, height);
 
-      // Draw layered webs with radial symmetry and rotation for complexity
       const ROTATION_SPEED = 0.0005;
       const centerX = width / 2;
       const centerY = height / 2;
 
-      // Draw radial lines for web effect
       ctx.lineWidth = 0.2;
       ctx.strokeStyle = `rgba(100, 149, 237, 0.12)`;
       ctx.beginPath();
@@ -683,7 +833,6 @@
       }
       ctx.stroke();
 
-      // Draw concentric circles for web rings
       ctx.lineWidth = 0.15;
       ctx.strokeStyle = `rgba(100, 149, 237, 0.1)`;
       for (let i = 1; i <= 20; i++) {
@@ -693,32 +842,26 @@
         ctx.stroke();
       }
 
-      // Update and draw points and lines between them
       points.forEach(p => {
-        // Move points
         p.x += p.vx;
         p.y += p.vy;
         if (p.x < 0 || p.x > width) p.vx *= -1;
         if (p.y < 0 || p.y > height) p.vy *= -1;
 
-        // Glow effect decay
         p.glow *= 0.9;
 
-        // Interaction: increase glow if mouse near
         if (mouse.isHovering && mouse.x !== null && mouse.y !== null) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < HOVER_RADIUS) {
             p.glow = Math.min(1, p.glow + 0.15);
-            // Repel point slightly from mouse for dynamic effect
             p.vx += (dx / dist) * 0.05;
             p.vy += (dy / dist) * 0.05;
           }
         }
       });
 
-      // Draw connections with glow and interaction effects
       points.forEach(p => {
         p.connections.forEach(c => {
           const opacity = 1 - c.dist / MAX_DIST;
@@ -732,9 +875,7 @@
         });
       });
 
-      // Draw points with glow halo
       points.forEach(p => {
-        // Draw glow halo
         if (p.glow > 0.01) {
           const gradient = ctx.createRadialGradient(p.x, p.y, NODE_RADIUS, p.x, p.y, NODE_RADIUS * 7);
           gradient.addColorStop(0, `rgba(56, 189, 248, ${p.glow * 0.6})`);
@@ -744,8 +885,6 @@
           ctx.arc(p.x, p.y, NODE_RADIUS * 7, 0, Math.PI * 2);
           ctx.fill();
         }
-
-        // Draw point
         ctx.beginPath();
         ctx.arc(p.x, p.y, NODE_RADIUS, 0, Math.PI * 2);
         ctx.fillStyle = p.c;
@@ -758,107 +897,6 @@
       requestAnimationFrame(draw);
     }
     draw();
-
-    // Markdown Preview (uses marked.js)
-    function renderMarkdown() {
-      const mdText = document.getElementById('mdInput').value;
-      const html = marked.parse(mdText);
-      document.getElementById('mdPreview').innerHTML = html;
-    }
-
-    // Timezone Converter
-    function convertTimezone() {
-      const dateTimeStr = document.getElementById('tzDateTime').value;
-      const tzFrom = document.getElementById('tzFrom').value;
-      const tzTo = document.getElementById('tzTo').value;
-      const resultEl = document.getElementById('tzResult');
-
-      if (!dateTimeStr) {
-        resultEl.innerText = 'Please select a date and time.';
-        return;
-      }
-
-      try {
-        // Parse input time as ISO string (UTC-based)
-        const date = new Date(dateTimeStr + 'Z');
-        const options = {
-          timeZone: tzFrom,
-          hour12: false,
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        };
-        const formatterFrom = new Intl.DateTimeFormat('en-US', options);
-        const partsFrom = formatterFrom.formatToParts(date);
-        const [y, m, d, h, min, s] = [
-          partsFrom.find(p => p.type === 'year').value,
-          partsFrom.find(p => p.type === 'month').value,
-          partsFrom.find(p => p.type === 'day').value,
-          partsFrom.find(p => p.type === 'hour').value,
-          partsFrom.find(p => p.type === 'minute').value,
-          partsFrom.find(p => p.type === 'second').value,
-        ];
-        const isoFrom = `${y}-${m}-${d}T${h}:${min}:${s}`;
-        const dateFrom = new Date(isoFrom);
-
-        const formatterTo = new Intl.DateTimeFormat('en-US', {
-          ...options,
-          timeZone: tzTo
-        });
-        const formattedTo = formatterTo.format(dateFrom);
-        resultEl.innerText = `Converted time (${tzTo}): ${formattedTo}`;
-      } catch {
-        resultEl.innerText = 'Error converting timezones.';
-      }
-    }
-
-    // Password Strength Checker (basic)
-    function checkPasswordStrength() {
-      const pw = document.getElementById('passwordCheck').value;
-      const resultEl = document.getElementById('passwordStrengthResult');
-      let score = 0;
-
-      if (pw.length >= 8) score++;
-      if (/[A-Z]/.test(pw)) score++;
-      if (/[a-z]/.test(pw)) score++;
-      if (/[0-9]/.test(pw)) score++;
-      if (/[^A-Za-z0-9]/.test(pw)) score++;
-
-      let strength = '';
-      switch (score) {
-        case 5: strength = 'Very Strong'; break;
-        case 4: strength = 'Strong'; break;
-        case 3: strength = 'Medium'; break;
-        case 2: strength = 'Weak'; break;
-        default: strength = 'Very Weak';
-      }
-      resultEl.innerText = `Password Strength: ${strength}`;
-    }
-
-    // Color Picker show code
-    function showColorCode() {
-      const color = document.getElementById('colorPicker').value;
-      document.getElementById('colorCodeResult').innerText = `Selected Color: ${color.toUpperCase()}`;
-    }
-
-    // Lorem Ipsum Generator (simple static paragraphs)
-    const loremParagraphs = [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
-    ];
-    function generateLorem() {
-      let count = parseInt(document.getElementById('loremCount').value);
-      if (isNaN(count) || count < 1) count = 1;
-      if (count > 5) count = 5;
-      const text = loremParagraphs.slice(0, count).map(p => `<p>${p}</p>`).join('');
-      document.getElementById('loremResult').innerHTML = text;
-    }
   </script>
 </body>
 </html>
