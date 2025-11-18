@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+  <canvas id="spiderweb"></canvas>
   <header>
     <h1>Welcome To Learning Hub</h1>
     <p class="tagline">This is version 1.4, so I'm still working out some bugs.</p>
@@ -265,6 +266,7 @@ if (e.shiftKey && e.key.toLowerCase() === "d") {
   <footer style="margin-top: 40px; text-align: center; font-family: 'Poppins', sans-serif; font-size: 0.9em; color: #ffffff;">
     <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
     <p>by John McCombs</p>
+    <button id="toggleMode" class="button">Toggle Dark Mode</button>
   </footer>
 <script>
   document.body.addEventListener('click', (e) => {
@@ -407,6 +409,62 @@ if (e.shiftKey && e.key.toLowerCase() === "d") {
       }
     }
   });
+</script>
+  <script>
+const canvas = document.getElementById('spiderweb');
+const ctx = canvas.getContext('2d');
+function size() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+size();
+
+const colors = ["#38bdf8", "#ef4444", "#000000"];
+const POINTS = 120;
+const MAX_DIST = 140;
+const SPEED = 0.35;
+
+let points = Array.from({ length: POINTS }, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  vx: (Math.random() - 0.5) * SPEED,
+  vy: (Math.random() - 0.5) * SPEED,
+  c: colors[Math.floor(Math.random() * colors.length)]
+}));
+
+function step() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < points.length; i++) {
+    const p = points[i];
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = p.c;
+    ctx.fill();
+
+    for (let j = i + 1; j < points.length; j++) {
+      const q = points[j];
+      const dx = p.x - q.x, dy = p.y - q.y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < MAX_DIST) {
+        ctx.strokeStyle = p.c;
+        ctx.lineWidth = 0.3;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(q.x, q.y);
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(step);
+}
+step();
+
+window.addEventListener('resize', size);
+
+document.getElementById('toggleMode').addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+});
 </script>
 </body>
 </html>
