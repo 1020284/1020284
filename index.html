@@ -75,7 +75,7 @@
       min-height: 100vh;
       padding: 2rem 1rem;
       display: grid;
-      grid-template-columns: 1fr min(800px, 90%) 1fr;
+      grid-template-columns: 1fr min(900px, 90%) 1fr;
       grid-template-rows: auto 1fr auto;
       gap: 2rem;
       position: relative;
@@ -117,6 +117,14 @@
       letter-spacing: 0.02em;
     }
 
+    /* ===== Tools Grid ===== */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.75rem 2rem;
+      align-items: start;
+    }
+
     /* ===== Tool Cards ===== */
     .tool-card {
       background: var(--glass);
@@ -129,6 +137,9 @@
       position: relative;
       overflow: hidden;
       cursor: default;
+      display: flex;
+      flex-direction: column;
+      min-height: 230px;
     }
     .tool-card::before {
       content: '';
@@ -171,6 +182,7 @@
       margin-bottom: 1rem;
       font-family: 'Poppins', sans-serif;
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+      flex-shrink: 0;
     }
     input.input:focus, select.input:focus, textarea.input:focus {
       border-color: var(--primary);
@@ -202,6 +214,8 @@
       position: relative;
       overflow: hidden;
       z-index: 1;
+      justify-content: center;
+      margin-top: auto;
     }
     button.button::after {
       content: '';
@@ -305,6 +319,7 @@
       background: var(--bg-color);
       cursor: crosshair;
       user-select: none;
+      pointer-events: none;
     }
 
     /* Responsive */
@@ -316,6 +331,9 @@
       }
       button.button {
         width: 100%;
+      }
+      .tools-grid {
+        grid-template-columns: 1fr !important;
       }
     }
   </style>
@@ -329,64 +347,127 @@
   </header>
 
   <main class="content-wrapper">
-    <section class="tool-card card">
-      <h2>🧮 Calculator</h2>
-      <input class="input" type="text" id="expression" placeholder="e.g. 2 + 2" />
-      <button class="button" onclick="calculate()">Calculate</button>
-      <div id="result" class="result-text"></div>
-    </section>
+    <div class="tools-grid">
+      <!-- Calculator -->
+      <section class="tool-card" aria-label="Calculator tool">
+        <h2>🧮 Calculator</h2>
+        <input class="input" type="text" id="expression" placeholder="e.g. 2 + 2" aria-label="Calculator expression input" />
+        <button class="button" onclick="calculate()">Calculate</button>
+        <div id="result" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <section class="tool-card card">
-      <h2>📅 Current Time</h2>
-      <div id="clock" class="clock-text"></div>
-    </section>
+      <!-- Current Time -->
+      <section class="tool-card" aria-label="Current time display">
+        <h2>⏰ Current Time</h2>
+        <div id="clock" class="clock-text" aria-live="polite" aria-atomic="true"></div>
+      </section>
 
-    <section class="tool-card card">
-      <h2>📓 Note Pad</h2>
-      <textarea class="input" id="notes" placeholder="Type your notes here..." rows="5"></textarea>
-      <button class="button" onclick="saveNotes()">Save Notes</button>
-    </section>
+      <!-- Note Pad -->
+      <section class="tool-card" aria-label="Note pad tool">
+        <h2>📝 Note Pad</h2>
+        <textarea class="input" id="notes" placeholder="Type your notes here..." rows="5" aria-label="Notes text area"></textarea>
+        <button class="button" onclick="saveNotes()">Save Notes</button>
+      </section>
 
-    <section class="tool-card card">
-      <h2>🎲 Random Number Generator</h2>
-      <input class="input" type="number" id="min" placeholder="Min" />
-      <input class="input" type="number" id="max" placeholder="Max" />
-      <button class="button" onclick="generateRandom()">Generate</button>
-      <div id="randomResult" class="result-text"></div>
-    </section>
+      <!-- Random Number Generator -->
+      <section class="tool-card" aria-label="Random number generator">
+        <h2>🎲 Random Number Generator</h2>
+        <input class="input" type="number" id="min" placeholder="Min" aria-label="Minimum number" />
+        <input class="input" type="number" id="max" placeholder="Max" aria-label="Maximum number" />
+        <button class="button" onclick="generateRandom()">Generate</button>
+        <div id="randomResult" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <section class="tool-card card">
-      <h2>🔁 Unit Converter</h2>
-      <input class="input" type="number" id="unitInput" placeholder="Enter value" />
-      <select class="input" id="unitType">
-        <option value="cmToIn">cm → inches</option>
-        <option value="inToCm">inches → cm</option>
-        <option value="kgToLb">kg → pounds</option>
-        <option value="lbToKg">pounds → kg</option>
-      </select>
-      <button class="button" onclick="convertUnit()">Convert</button>
-      <div id="unitResult" class="result-text"></div>
-    </section>
+      <!-- Unit Converter -->
+      <section class="tool-card" aria-label="Unit converter">
+        <h2>🔁 Unit Converter</h2>
+        <input class="input" type="number" id="unitInput" placeholder="Enter value" aria-label="Value to convert" />
+        <select class="input" id="unitType" aria-label="Conversion type">
+          <option value="cmToIn">cm → inches</option>
+          <option value="inToCm">inches → cm</option>
+          <option value="kgToLb">kg → pounds</option>
+          <option value="lbToKg">pounds → kg</option>
+        </select>
+        <button class="button" onclick="convertUnit()">Convert</button>
+        <div id="unitResult" class="result-text" aria-live="polite"></div>
+      </section>
 
-    <section class="tool-card card">
-      <h2>🕵️ Secret Code</h2>
-      <input class="input" type="text" id="secretInput" placeholder="Type your secret code..." />
-      <div id="secretOutput" style="margin-top: 10px;"></div>
-    </section>
+      <!-- Secret Code -->
+      <section class="tool-card" aria-label="Secret code input">
+        <h2>🔐 Secret Code</h2>
+        <input class="input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
+        <div id="secretOutput" style="margin-top: 10px;" aria-live="polite"></div>
+      </section>
+
+      <!-- New Tool 1: Markdown Preview -->
+      <section class="tool-card" aria-label="Markdown preview tool">
+        <h2>📄 Markdown Preview</h2>
+        <textarea class="input" id="mdInput" placeholder="Type markdown here..." rows="5" aria-label="Markdown input"></textarea>
+        <button class="button" onclick="renderMarkdown()">Preview</button>
+        <div id="mdPreview" style="margin-top: 1rem; overflow-y: auto; max-height: 150px; background: var(--surface); color: var(--text); padding: 1rem; border-radius: var(--radius); box-shadow: inset 0 0 10px rgba(0,0,0,0.05);" aria-live="polite"></div>
+      </section>
+
+      <!-- New Tool 2: Timezone Converter -->
+      <section class="tool-card" aria-label="Timezone converter tool">
+        <h2>🌍 Timezone Converter</h2>
+        <input class="input" type="datetime-local" id="tzDateTime" aria-label="Datetime input" />
+        <select class="input" id="tzFrom" aria-label="From timezone">
+          <option value="UTC">UTC</option>
+          <option value="America/New_York">New York (EST)</option>
+          <option value="Europe/London">London (GMT)</option>
+          <option value="Asia/Tokyo">Tokyo (JST)</option>
+          <option value="Australia/Sydney">Sydney (AEST)</option>
+        </select>
+        <select class="input" id="tzTo" aria-label="To timezone">
+          <option value="UTC">UTC</option>
+          <option value="America/New_York">New York (EST)</option>
+          <option value="Europe/London">London (GMT)</option>
+          <option value="Asia/Tokyo">Tokyo (JST)</option>
+          <option value="Australia/Sydney">Sydney (AEST)</option>
+        </select>
+        <button class="button" onclick="convertTimezone()">Convert</button>
+        <div id="tzResult" class="result-text" aria-live="polite"></div>
+      </section>
+
+      <!-- New Tool 3: Password Strength Checker -->
+      <section class="tool-card" aria-label="Password strength checker tool">
+        <h2>🔒 Password Strength</h2>
+        <input class="input" type="password" id="passwordCheck" placeholder="Type password..." aria-label="Password input" />
+        <button class="button" onclick="checkPasswordStrength()">Check Strength</button>
+        <div id="passwordStrengthResult" class="result-text" aria-live="polite"></div>
+      </section>
+
+      <!-- New Tool 4: Color Picker -->
+      <section class="tool-card" aria-label="Color picker tool">
+        <h2>🎨 Color Picker</h2>
+        <input class="input" type="color" id="colorPicker" aria-label="Color input" />
+        <button class="button" onclick="showColorCode()">Show Color Code</button>
+        <div id="colorCodeResult" class="result-text" aria-live="polite"></div>
+      </section>
+
+      <!-- New Tool 5: Lorem Ipsum Generator -->
+      <section class="tool-card" aria-label="Lorem ipsum generator tool">
+        <h2>✍️ Lorem Ipsum Generator</h2>
+        <input class="input" type="number" id="loremCount" placeholder="Paragraphs count (1-5)" min="1" max="5" aria-label="Number of paragraphs" />
+        <button class="button" onclick="generateLorem()">Generate</button>
+        <div id="loremResult" style="margin-top: 1rem; max-height: 150px; overflow-y: auto; background: var(--surface); color: var(--text); padding: 1rem; border-radius: var(--radius);" aria-live="polite"></div>
+      </section>
+    </div>
   </main>
 
   <footer class="footer">
     <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
     <p>by John McCombs</p>
-    <button id="toggleMode" class="button">Toggle Dark Mode</button>
+    <button id="toggleMode" class="button" aria-pressed="false" aria-label="Toggle dark mode">Toggle Dark Mode</button>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     // Calculator
     function calculate() {
       const expr = document.getElementById("expression").value;
       try {
-        const result = eval(expr);
+        const result = Function('"use strict";return (' + expr + ')')();
         document.getElementById("result").innerText = "Result: " + result;
       } catch {
         document.getElementById("result").innerText = "Invalid expression.";
@@ -479,8 +560,11 @@
     });
 
     // Dark mode toggle
-    document.getElementById('toggleMode').addEventListener('click', () => {
+    const toggleModeBtn = document.getElementById('toggleMode');
+    toggleModeBtn.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      toggleModeBtn.setAttribute('aria-pressed', isDark.toString());
     });
 
     // Spiderweb interactive complex canvas
@@ -559,7 +643,6 @@
 
       // Draw layered webs with radial symmetry and rotation for complexity
       const ROTATION_SPEED = 0.0005;
-      const layers = 3;
       const centerX = width / 2;
       const centerY = height / 2;
 
@@ -650,6 +733,112 @@
       requestAnimationFrame(draw);
     }
     draw();
+
+    // New Tools Implementation
+
+    // Markdown Preview (uses marked.js)
+    function renderMarkdown() {
+      const mdText = document.getElementById('mdInput').value;
+      const html = marked.parse(mdText);
+      document.getElementById('mdPreview').innerHTML = html;
+    }
+
+    // Timezone Converter
+    function convertTimezone() {
+      const dateTimeStr = document.getElementById('tzDateTime').value;
+      const tzFrom = document.getElementById('tzFrom').value;
+      const tzTo = document.getElementById('tzTo').value;
+      const resultEl = document.getElementById('tzResult');
+
+      if (!dateTimeStr) {
+        resultEl.innerText = 'Please select a date and time.';
+        return;
+      }
+
+      try {
+        // Parse input time in tzFrom
+        const date = new Date(dateTimeStr + 'Z'); // Treat as UTC to avoid local shift
+        const options = {
+          timeZone: tzFrom,
+          hour12: false,
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        };
+        // Format in tzFrom to get timestamp in that zone
+        const formatterFrom = new Intl.DateTimeFormat('en-US', options);
+        const partsFrom = formatterFrom.formatToParts(date);
+        // Build ISO string from parts to get exact time in tzFrom
+        const [y, m, d, h, min, s] = [
+          partsFrom.find(p => p.type === 'year').value,
+          partsFrom.find(p => p.type === 'month').value,
+          partsFrom.find(p => p.type === 'day').value,
+          partsFrom.find(p => p.type === 'hour').value,
+          partsFrom.find(p => p.type === 'minute').value,
+          partsFrom.find(p => p.type === 'second').value,
+        ];
+        const isoFrom = `${y}-${m}-${d}T${h}:${min}:${s}`;
+        const dateFrom = new Date(isoFrom);
+
+        // Convert to tzTo using Intl
+        const formatterTo = new Intl.DateTimeFormat('en-US', {
+          ...options,
+          timeZone: tzTo
+        });
+        const formattedTo = formatterTo.format(dateFrom);
+        resultEl.innerText = `Converted time (${tzTo}): ${formattedTo}`;
+      } catch {
+        resultEl.innerText = 'Error converting timezones.';
+      }
+    }
+
+    // Password Strength Checker (basic)
+    function checkPasswordStrength() {
+      const pw = document.getElementById('passwordCheck').value;
+      const resultEl = document.getElementById('passwordStrengthResult');
+      let score = 0;
+
+      if (pw.length >= 8) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/[a-z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+      let strength = '';
+      switch (score) {
+        case 5: strength = 'Very Strong'; break;
+        case 4: strength = 'Strong'; break;
+        case 3: strength = 'Medium'; break;
+        case 2: strength = 'Weak'; break;
+        default: strength = 'Very Weak';
+      }
+      resultEl.innerText = `Password Strength: ${strength}`;
+    }
+
+    // Color Picker show code
+    function showColorCode() {
+      const color = document.getElementById('colorPicker').value;
+      document.getElementById('colorCodeResult').innerText = `Selected Color: ${color.toUpperCase()}`;
+    }
+
+    // Lorem Ipsum Generator (simple static paragraphs)
+    const loremParagraphs = [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
+    ];
+    function generateLorem() {
+      let count = parseInt(document.getElementById('loremCount').value);
+      if (isNaN(count) || count < 1) count = 1;
+      if (count > 5) count = 5;
+      const text = loremParagraphs.slice(0, count).map(p => `<p>${p}</p>`).join('');
+      document.getElementById('loremResult').innerHTML = text;
+    }
   </script>
 </body>
 </html>
