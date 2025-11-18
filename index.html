@@ -3,60 +3,377 @@
 <head>
   <meta charset="UTF-8" />
   <title>Learning Hub</title>
-  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== Global Reset ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    /* ===== Root Variables ===== */
+    :root {
+      --bg-color: #f0f2f5;
+      --surface: #ffffff;
+      --primary: #4f46e5;
+      --secondary: #06b6d4;
+      --accent: #ef4444;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --text: #0f172a;
+      --muted: #64748b;
+
+      --radius-xs: 8px;
+      --radius: 16px;
+      --radius-lg: 24px;
+
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow: 0 8px 24px rgba(0,0,0,0.12);
+      --shadow-lg: 0 16px 40px rgba(0,0,0,0.18);
+
+      --glass: rgba(255,255,255,0.12);
+      --glass-strong: rgba(255,255,255,0.24);
+
+      --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+      --gradient-alt: radial-gradient(1200px 600px at 10% 10%, rgba(79,70,229,0.25), transparent 60%);
+
+      --transition-fast: 150ms ease;
+      --transition: 300ms ease;
+      --transition-slow: 600ms ease;
+    }
+
+    /* ===== Dark Mode ===== */
+    body.dark-mode {
+      --bg-color: #0b1220;
+      --surface: #0f172a;
+      --primary: #38bdf8;
+      --secondary: #ef4444;
+      --accent: #a3e635;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --text: #e6edf7;
+      --muted: #94a3b8;
+
+      --glass: rgba(16,23,42,0.35);
+      --glass-strong: rgba(16,23,42,0.55);
+
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.35);
+      --shadow: 0 8px 24px rgba(0,0,0,0.45);
+      --shadow-lg: 0 16px 40px rgba(0,0,0,0.6);
+
+      --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+      --gradient-alt: radial-gradient(1000px 500px at 80% 20%, rgba(56,189,248,0.18), transparent 60%);
+    }
+
+    /* ===== Base ===== */
+    body {
+      font-family: 'Poppins', Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg-color);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background var(--transition), color var(--transition);
+      background-image: var(--gradient-alt);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      display: grid;
+      grid-template-columns: 1fr min(800px, 90%) 1fr;
+      grid-template-rows: auto 1fr auto;
+      gap: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Wrapper for content in center column */
+    main.content-wrapper {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      z-index: 10;
+    }
+
+    /* ===== Header ===== */
+    header.header {
+      grid-column: 2;
+      text-align: center;
+      margin-bottom: 1rem;
+      z-index: 10;
+    }
+    header h1 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.25rem;
+      user-select: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-shadow: 0 0 6px var(--primary);
+    }
+    .tagline {
+      color: var(--muted);
+      font-weight: 500;
+      font-style: italic;
+      letter-spacing: 0.02em;
+    }
+
+    /* ===== Tool Cards ===== */
+    .tool-card {
+      background: var(--glass);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 2rem;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(20px);
+      transition: box-shadow var(--transition);
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(60deg, var(--primary), var(--secondary), var(--accent));
+      opacity: 0.15;
+      filter: blur(20px);
+      z-index: 0;
+      transition: opacity 0.4s ease;
+    }
+    .tool-card:hover::before {
+      opacity: 0.35;
+    }
+    .tool-card:hover {
+      box-shadow: var(--shadow-lg), 0 0 30px var(--primary);
+      border-color: var(--primary);
+    }
+    .tool-card h2 {
+      font-size: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
+      color: var(--primary);
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+      user-select: none;
+      text-shadow: 0 0 5px var(--primary);
+    }
+
+    input.input, select.input, textarea.input {
+      width: 100%;
+      background: var(--surface);
+      color: var(--text);
+      border: 1.5px solid rgba(127,127,127,0.25);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      margin-bottom: 1rem;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    }
+    input.input:focus, select.input:focus, textarea.input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 6px rgba(56,189,248,0.3);
+      background: var(--surface);
+    }
+    textarea.input {
+      resize: vertical;
+      min-height: 6rem;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    button.button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--gradient);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    button.button::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
+      background-size: 20px 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      border-radius: var(--radius);
+      z-index: 2;
+    }
+    button.button:hover::after {
+      opacity: 1;
+    }
+    button.button:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: var(--shadow-lg);
+    }
+    button.button:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* Inputs side by side for random number */
+    #min, #max {
+      width: calc(50% - 0.5rem);
+      display: inline-block;
+    }
+    #max {
+      margin-left: 1rem;
+    }
+
+    /* Result text styling */
+    .result-text {
+      margin-top: 0.5rem;
+      font-weight: 600;
+      color: var(--accent);
+      min-height: 1.4em;
+      user-select: text;
+    }
+    .clock-text {
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--secondary);
+      user-select: none;
+    }
+
+    /* Footer */
+    footer.footer {
+      grid-column: 2;
+      margin-top: 3rem;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      user-select: none;
+      z-index: 10;
+    }
+    footer.footer p {
+      margin-bottom: 0.5rem;
+    }
+    footer.footer button.button {
+      margin-top: 1rem;
+      user-select: none;
+    }
+
+    /* Shockwave ripple */
+    .shockwave {
+      position: fixed;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.3);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: shockwave 0.6s ease-out forwards;
+      z-index: 10000;
+    }
+    @keyframes shockwave {
+      0% {
+        transform: translate(-50%, -50%) scale(0.1);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Spiderweb canvas */
+    #spiderweb {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background: var(--bg-color);
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      #min, #max {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-bottom: 0.75rem;
+      }
+      button.button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body class="dark-mode">
   <canvas id="spiderweb"></canvas>
+
   <header class="header">
     <h1>Welcome To Learning Hub</h1>
     <p class="tagline">This is version 1.4, so I'm still working out some bugs.</p>
   </header>
 
-  <section class="tool-card card">
-    <h2>🧮 Calculator</h2>
-    <input class="input" type="text" id="expression" placeholder="e.g. 2 + 2" />
-    <button class="button" onclick="calculate()">Calculate</button>
-    <div id="result" class="result-text"></div>
-  </section>
+  <main class="content-wrapper">
+    <section class="tool-card card">
+      <h2>🧮 Calculator</h2>
+      <input class="input" type="text" id="expression" placeholder="e.g. 2 + 2" />
+      <button class="button" onclick="calculate()">Calculate</button>
+      <div id="result" class="result-text"></div>
+    </section>
 
-  <section class="tool-card card">
-    <h2>📅 Current Time</h2>
-    <div id="clock" class="clock-text"></div>
-  </section>
+    <section class="tool-card card">
+      <h2>📅 Current Time</h2>
+      <div id="clock" class="clock-text"></div>
+    </section>
 
-  <section class="tool-card card">
-    <h2>📓 Note Pad</h2>
-    <textarea class="input" id="notes" placeholder="Type your notes here..." rows="5"></textarea>
-    <button class="button" onclick="saveNotes()">Save Notes</button>
-  </section>
+    <section class="tool-card card">
+      <h2>📓 Note Pad</h2>
+      <textarea class="input" id="notes" placeholder="Type your notes here..." rows="5"></textarea>
+      <button class="button" onclick="saveNotes()">Save Notes</button>
+    </section>
 
-  <section class="tool-card card">
-    <h2>🎲 Random Number Generator</h2>
-    <input class="input" type="number" id="min" placeholder="Min" />
-    <input class="input" type="number" id="max" placeholder="Max" />
-    <button class="button" onclick="generateRandom()">Generate</button>
-    <div id="randomResult" class="result-text"></div>
-  </section>
+    <section class="tool-card card">
+      <h2>🎲 Random Number Generator</h2>
+      <input class="input" type="number" id="min" placeholder="Min" />
+      <input class="input" type="number" id="max" placeholder="Max" />
+      <button class="button" onclick="generateRandom()">Generate</button>
+      <div id="randomResult" class="result-text"></div>
+    </section>
 
-  <section class="tool-card card">
-    <h2>🔁 Unit Converter</h2>
-    <input class="input" type="number" id="unitInput" placeholder="Enter value" />
-    <select class="input" id="unitType">
-      <option value="cmToIn">cm → inches</option>
-      <option value="inToCm">inches → cm</option>
-      <option value="kgToLb">kg → pounds</option>
-      <option value="lbToKg">pounds → kg</option>
-    </select>
-    <button class="button" onclick="convertUnit()">Convert</button>
-    <div id="unitResult" class="result-text"></div>
-  </section>
+    <section class="tool-card card">
+      <h2>🔁 Unit Converter</h2>
+      <input class="input" type="number" id="unitInput" placeholder="Enter value" />
+      <select class="input" id="unitType">
+        <option value="cmToIn">cm → inches</option>
+        <option value="inToCm">inches → cm</option>
+        <option value="kgToLb">kg → pounds</option>
+        <option value="lbToKg">pounds → kg</option>
+      </select>
+      <button class="button" onclick="convertUnit()">Convert</button>
+      <div id="unitResult" class="result-text"></div>
+    </section>
 
-  <section class="tool-card card">
-    <h2>🕵️ Secret Code</h2>
-    <input class="input" type="text" id="secretInput" placeholder="Type your secret code..." />
-    <div id="secretOutput" style="margin-top: 10px;"></div>
-  </section>
+    <section class="tool-card card">
+      <h2>🕵️ Secret Code</h2>
+      <input class="input" type="text" id="secretInput" placeholder="Type your secret code..." />
+      <div id="secretOutput" style="margin-top: 10px;"></div>
+    </section>
+  </main>
 
   <footer class="footer">
     <p>Special thanks to: Judah for introducing me to the concept. Fisher, for begging me to make it for him. GitHub, for helping me make the files. Copilot, for telling me how to make it. Cloudflare, for deploying this site.</p>
@@ -64,394 +381,275 @@
     <button id="toggleMode" class="button">Toggle Dark Mode</button>
   </footer>
 
-<script>
-  function calculate() {
-    const expr = document.getElementById("expression").value;
-    try {
-      const result = eval(expr);
-      document.getElementById("result").innerText = "Result: " + result;
-    } catch {
-      document.getElementById("result").innerText = "Invalid expression.";
-    }
-  }
-
-  function updateClock() {
-    const now = new Date();
-    document.getElementById("clock").innerText = now.toLocaleString();
-  }
-  setInterval(updateClock, 1000);
-  updateClock();
-
-  function saveNotes() {
-    const notes = document.getElementById("notes").value;
-    localStorage.setItem("userNotes", notes);
-    alert("Notes saved!");
-  }
-
-  function generateRandom() {
-    const min = parseInt(document.getElementById("min").value);
-    const max = parseInt(document.getElementById("max").value);
-    if (isNaN(min) || isNaN(max) || min > max) {
-      document.getElementById("randomResult").innerText = "Invalid range.";
-      return;
-    }
-    const rand = Math.floor(Math.random() * (max - min + 1)) + min;
-    document.getElementById("randomResult").innerText = "Random number: " + rand;
-  }
-
-  function convertUnit() {
-    const value = parseFloat(document.getElementById("unitInput").value);
-    const type = document.getElementById("unitType").value;
-    let result = "";
-
-    if (isNaN(value)) {
-      result = "Please enter a valid number.";
-    } else {
-      switch (type) {
-        case "cmToIn": result = (value / 2.54).toFixed(2) + " in"; break;
-        case "inToCm": result = (value * 2.54).toFixed(2) + " cm"; break;
-        case "kgToLb": result = (value * 2.20462).toFixed(2) + " lb"; break;
-        case "lbToKg": result = (value / 2.20462).toFixed(2) + " kg"; break;
+  <script>
+    // Calculator
+    function calculate() {
+      const expr = document.getElementById("expression").value;
+      try {
+        const result = eval(expr);
+        document.getElementById("result").innerText = "Result: " + result;
+      } catch {
+        document.getElementById("result").innerText = "Invalid expression.";
       }
     }
 
-    document.getElementById("unitResult").innerText = result;
-  }
+    // Clock update
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clock").innerText = now.toLocaleString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-  document.getElementById("secretInput").addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      const input = this.value.trim().toLowerCase();
-      if (input === "john is awesome") {
-        document.getElementById("secretOutput").innerHTML = `
-          <ul style="list-style: none; padding-left: 0;">
-            <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
-            <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
-          </ul>
-        `;
+    // Save notes locally
+    function saveNotes() {
+      const notes = document.getElementById("notes").value;
+      localStorage.setItem("userNotes", notes);
+      alert("Notes saved!");
+    }
+
+    // Random number generator
+    function generateRandom() {
+      const min = parseInt(document.getElementById("min").value);
+      const max = parseInt(document.getElementById("max").value);
+      if (isNaN(min) || isNaN(max) || min > max) {
+        document.getElementById("randomResult").innerText = "Invalid range.";
+        return;
+      }
+      const rand = Math.floor(Math.random() * (max - min + 1)) + min;
+      document.getElementById("randomResult").innerText = "Random number: " + rand;
+    }
+
+    // Unit converter
+    function convertUnit() {
+      const value = parseFloat(document.getElementById("unitInput").value);
+      const type = document.getElementById("unitType").value;
+      let result = "";
+
+      if (isNaN(value)) {
+        result = "Please enter a valid number.";
       } else {
-        document.getElementById("secretOutput").innerText = "Incorrect code.";
+        switch (type) {
+          case "cmToIn": result = (value / 2.54).toFixed(2) + " in"; break;
+          case "inToCm": result = (value * 2.54).toFixed(2) + " cm"; break;
+          case "kgToLb": result = (value * 2.20462).toFixed(2) + " lb"; break;
+          case "lbToKg": result = (value / 2.20462).toFixed(2) + " kg"; break;
+        }
       }
+
+      document.getElementById("unitResult").innerText = result;
     }
-  });
 
-  document.body.addEventListener('click', (e) => {
-    document.body.classList.add('animate-background');
-    setTimeout(() => {
-      document.body.classList.remove('animate-background');
-    }, 4000);
+    // Secret code input
+    document.getElementById("secretInput").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const input = this.value.trim().toLowerCase();
+        if (input === "john is awesome") {
+          document.getElementById("secretOutput").innerHTML = `
+            <ul style="list-style: none; padding-left: 0;">
+              <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
+              <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
+            </ul>
+          `;
+        } else {
+          document.getElementById("secretOutput").innerText = "Incorrect code.";
+        }
+      }
+    });
 
-    const wave = document.createElement('div');
-    wave.className = 'shockwave';
-    wave.style.left = `${e.clientX}px`;
-    wave.style.top = `${e.clientY}px`;
-    document.body.appendChild(wave);
-    setTimeout(() => wave.remove(), 600);
-  });
+    // Body click shockwave effect
+    document.body.addEventListener('click', (e) => {
+      document.body.classList.add('animate-background');
+      setTimeout(() => {
+        document.body.classList.remove('animate-background');
+      }, 4000);
 
-  const canvas = document.getElementById('spiderweb');
-  const ctx = canvas.getContext('2d');
-  function size() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-  size();
+      const wave = document.createElement('div');
+      wave.className = 'shockwave';
+      wave.style.left = `${e.clientX}px`;
+      wave.style.top = `${e.clientY}px`;
+      document.body.appendChild(wave);
+      setTimeout(() => wave.remove(), 600);
+    });
 
-  const colors = ["#38bdf8", "#ef4444", "#94a3b8"];
-  const POINTS = 120;
-  const MAX_DIST = 140;
-  const SPEED = 0.35;
+    // Retain notes on load
+    window.addEventListener("load", () => {
+      const notes = localStorage.getItem("userNotes");
+      if (notes) document.getElementById("notes").value = notes;
+    });
 
-  let points = Array.from({ length: POINTS }, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    vx: (Math.random() - 0.5) * SPEED,
-    vy: (Math.random() - 0.5) * SPEED,
-    c: colors[Math.floor(Math.random() * colors.length)]
-  }));
+    // Dark mode toggle
+    document.getElementById('toggleMode').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
 
-  function step() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < points.length; i++) {
-      const p = points[i];
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+    // Spiderweb interactive complex canvas
+    const canvas = document.getElementById('spiderweb');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * devicePixelRatio;
+      canvas.height = height * devicePixelRatio;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+    resize();
+    window.addEventListener('resize', resize);
 
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-      ctx.fillStyle = p.c;
-      ctx.fill();
+    // Spiderweb points and nodes
+    const POINTS = 150;
+    const MAX_DIST = 130;
+    const SPEED = 0.3;
+    const NODE_RADIUS = 3;
+    const HOVER_RADIUS = 50;
+    const colors = ["#38bdf8", "#ef4444", "#94a3b8"];
 
-      for (let j = i + 1; j < points.length; j++) {
-        const q = points[j];
-        const dx = p.x - q.x, dy = p.y - q.y;
-        const d = Math.sqrt(dx*dx + dy*dy);
-        if (d < MAX_DIST) {
-          ctx.strokeStyle = p.c;
-          ctx.lineWidth = 0.3;
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(q.x, q.y);
-          ctx.stroke();
+    // Generate points with velocity and color
+    let points = Array.from({ length: POINTS }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * SPEED,
+      vy: (Math.random() - 0.5) * SPEED,
+      c: colors[Math.floor(Math.random() * colors.length)],
+      radius: NODE_RADIUS,
+      glow: 0,
+      connections: []
+    }));
+
+    // Find connections for each point based on distance
+    function updateConnections() {
+      points.forEach(p => p.connections = []);
+      for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        for (let j = i + 1; j < points.length; j++) {
+          const q = points[j];
+          const dx = p.x - q.x, dy = p.y - q.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MAX_DIST) {
+            p.connections.push({ point: q, dist });
+            points[j].connections.push({ point: p, dist });
+          }
         }
       }
     }
-    requestAnimationFrame(step);
-  }
-  step();
+    updateConnections();
 
-  window.addEventListener('resize', size);
+    // Mouse interaction state
+    let mouse = { x: null, y: null, isHovering: false };
 
-  document.getElementById('toggleMode').addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-  });
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.isHovering = true;
+    });
+    canvas.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+      mouse.isHovering = false;
+    });
 
-  // Retain notes on load
-  window.addEventListener("load", () => {
-    const notes = localStorage.getItem("userNotes");
-    if (notes) document.getElementById("notes").value = notes;
-  });
+    // Draw spiderweb with glow and interactive features
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
 
-  // Shortcut event listeners and code omitted for brevity; remain unchanged here
+      // Draw layered webs with radial symmetry and rotation for complexity
+      const ROTATION_SPEED = 0.0005;
+      const layers = 3;
+      const centerX = width / 2;
+      const centerY = height / 2;
 
-</script>
+      // Draw radial lines for web effect
+      ctx.lineWidth = 0.2;
+      ctx.strokeStyle = `rgba(100, 149, 237, 0.12)`;
+      ctx.beginPath();
+      const radialLines = 24;
+      for (let i = 0; i < radialLines; i++) {
+        const angle = (Math.PI * 2 / radialLines) * i + performance.now() * ROTATION_SPEED;
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(centerX + Math.cos(angle) * width, centerY + Math.sin(angle) * height);
+      }
+      ctx.stroke();
 
-<style>
-  /* ===== Global Reset ===== */
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; }
+      // Draw concentric circles for web rings
+      ctx.lineWidth = 0.15;
+      ctx.strokeStyle = `rgba(100, 149, 237, 0.1)`;
+      for (let i = 1; i <= 20; i++) {
+        ctx.beginPath();
+        const radius = (Math.min(width, height) / 2) * (i / 20);
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
 
-  /* ===== Root Variables ===== */
-  :root {
-    --bg-color: #f0f2f5;
-    --surface: #ffffff;
-    --primary: #4f46e5;
-    --secondary: #06b6d4;
-    --accent: #ef4444;
-    --success: #22c55e;
-    --warning: #f59e0b;
-    --text: #0f172a;
-    --muted: #64748b;
+      // Update and draw points and lines between them
+      points.forEach(p => {
+        // Move points
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
 
-    --radius-xs: 8px;
-    --radius: 16px;
-    --radius-lg: 24px;
+        // Glow effect decay
+        p.glow *= 0.9;
 
-    --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
-    --shadow: 0 8px 24px rgba(0,0,0,0.12);
-    --shadow-lg: 0 16px 40px rgba(0,0,0,0.18);
+        // Interaction: increase glow if mouse near
+        if (mouse.isHovering && mouse.x !== null && mouse.y !== null) {
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < HOVER_RADIUS) {
+            p.glow = Math.min(1, p.glow + 0.15);
+            // Repel point slightly from mouse for dynamic effect
+            p.vx += (dx / dist) * 0.05;
+            p.vy += (dy / dist) * 0.05;
+          }
+        }
+      });
 
-    --glass: rgba(255,255,255,0.12);
-    --glass-strong: rgba(255,255,255,0.24);
+      // Draw connections with glow and interaction effects
+      points.forEach(p => {
+        p.connections.forEach(c => {
+          const opacity = 1 - c.dist / MAX_DIST;
+          const glowFactor = Math.min(p.glow, c.point.glow);
+          ctx.strokeStyle = `rgba(56, 189, 248, ${opacity * 0.5 + glowFactor * 0.5})`;
+          ctx.lineWidth = 0.3 + glowFactor * 1.2;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(c.point.x, c.point.y);
+          ctx.stroke();
+        });
+      });
 
-    --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
-    --gradient-alt: radial-gradient(1200px 600px at 10% 10%, rgba(79,70,229,0.25), transparent 60%);
+      // Draw points with glow halo
+      points.forEach(p => {
+        // Draw glow halo
+        if (p.glow > 0.01) {
+          const gradient = ctx.createRadialGradient(p.x, p.y, NODE_RADIUS, p.x, p.y, NODE_RADIUS * 7);
+          gradient.addColorStop(0, `rgba(56, 189, 248, ${p.glow * 0.6})`);
+          gradient.addColorStop(1, 'rgba(56, 189, 248, 0)');
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, NODE_RADIUS * 7, 0, Math.PI * 2);
+          ctx.fill();
+        }
 
-    --transition-fast: 150ms ease;
-    --transition: 300ms ease;
-    --transition-slow: 600ms ease;
-  }
+        // Draw point
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, NODE_RADIUS, 0, Math.PI * 2);
+        ctx.fillStyle = p.c;
+        ctx.shadowColor = `rgba(56, 189, 248, ${p.glow * 0.7})`;
+        ctx.shadowBlur = 8 * p.glow;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
 
-  /* ===== Dark Mode ===== */
-  body.dark-mode {
-    --bg-color: #0b1220;
-    --surface: #0f172a;
-    --primary: #38bdf8;
-    --secondary: #ef4444;
-    --accent: #a3e635;
-    --success: #22c55e;
-    --warning: #f59e0b;
-    --text: #e6edf7;
-    --muted: #94a3b8;
-
-    --glass: rgba(16,23,42,0.35);
-    --glass-strong: rgba(16,23,42,0.55);
-
-    --shadow-sm: 0 4px 12px rgba(0,0,0,0.35);
-    --shadow: 0 8px 24px rgba(0,0,0,0.45);
-    --shadow-lg: 0 16px 40px rgba(0,0,0,0.6);
-
-    --gradient: linear-gradient(135deg, var(--primary), var(--accent));
-    --gradient-alt: radial-gradient(1000px 500px at 80% 20%, rgba(56,189,248,0.18), transparent 60%);
-  }
-
-  /* ===== Base ===== */
-  body {
-    font-family: 'Poppins', Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    background: var(--bg-color);
-    color: var(--text);
-    line-height: 1.6;
-    overflow-x: hidden;
-    transition: background var(--transition), color var(--transition);
-    background-image: var(--gradient-alt);
-    min-height: 100vh;
-    padding: 2rem 1rem;
-  }
-
-  /* ===== Header ===== */
-  header.header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-  header h1 {
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 800;
-    background: var(--gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 0.25rem;
-  }
-  .tagline {
-    color: var(--muted);
-    font-weight: 500;
-  }
-
-  /* ===== Tool Cards ===== */
-  .tool-card {
-    background: var(--glass);
-    border-radius: var(--radius-lg);
-    padding: 1.75rem 2rem;
-    margin-bottom: 1.75rem;
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(14px);
-    transition: box-shadow var(--transition);
-  }
-  .tool-card:hover {
-    box-shadow: var(--shadow-lg), 0 0 20px var(--primary);
-  }
-  .tool-card h2 {
-    font-size: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
-    color: var(--primary);
-    margin-bottom: 1rem;
-  }
-  
-  input.input, select.input, textarea.input {
-    width: 100%;
-    background: var(--surface);
-    color: var(--text);
-    border: 1.5px solid rgba(127,127,127,0.25);
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius);
-    font-size: 1rem;
-    outline: none;
-    transition: border-color var(--transition), box-shadow var(--transition);
-    margin-bottom: 1rem;
-    font-family: 'Poppins', sans-serif;
-  }
-  input.input:focus, select.input:focus, textarea.input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 6px rgba(56,189,248,0.3);
-    background: var(--surface);
-  }
-  textarea.input {
-    resize: vertical;
-  }
-  
-  button.button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--gradient);
-    color: #fff;
-    border: none;
-    padding: 0.85rem 1.5rem;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-    box-shadow: var(--shadow);
-    transition: transform var(--transition), box-shadow var(--transition);
-    user-select: none;
-  }
-  button.button:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: var(--shadow-lg);
-  }
-  button.button:active {
-    transform: translateY(0) scale(0.98);
-  }
-
-  /* Inputs side by side for random number */
-  #min, #max {
-    width: calc(50% - 0.5rem);
-    display: inline-block;
-  }
-  #max {
-    margin-left: 1rem;
-  }
-
-  /* Result text styling */
-  .result-text {
-    margin-top: 0.5rem;
-    font-weight: 600;
-    color: var(--accent);
-    min-height: 1.4em;
-  }
-  .clock-text {
-    font-weight: 600;
-    font-size: 1.25rem;
-    color: var(--secondary);
-  }
-
-  /* Footer */
-  footer.footer {
-    margin-top: 3rem;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem;
-    color: var(--muted);
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  footer.footer p {
-    margin-bottom: 0.5rem;
-  }
-  footer.footer button.button {
-    margin-top: 1rem;
-  }
-
-  /* Shockwave ripple */
-  .shockwave {
-    position: fixed;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background: rgba(56, 189, 248, 0.3);
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    animation: shockwave 0.6s ease-out forwards;
-    z-index: 10000;
-  }
-  @keyframes shockwave {
-    0% {
-      transform: translate(-50%, -50%) scale(0.1);
-      opacity: 0.6;
+      requestAnimationFrame(draw);
     }
-    100% {
-      transform: translate(-50%, -50%) scale(1.2);
-      opacity: 0;
-    }
-  }
-
-  /* Spiderweb canvas */
-  #spiderweb {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: var(--bg-color);
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    #min, #max {
-      width: 100%;
-      margin-left: 0 !important;
-      margin-bottom: 0.75rem;
-    }
-    button.button {
-      width: 100%;
-    }
-  }
-</style>
+    draw();
+  </script>
 </body>
 </html>
