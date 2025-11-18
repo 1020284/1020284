@@ -1,415 +1,450 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Learning Hub - Ultimate Edition</title>
-  <style>
-    /* Root & Global */
-    :root {
-      --bg-color: #0b1220;
-      --surface: #0f172a;
-      --primary: #38bdf8;
-      --secondary: #ef4444;
-      --accent: #a3e635;
-      --text: #e6edf7;
-      --muted: #94a3b8;
-      --radius: 16px;
-      --shadow-lg: 0 16px 40px rgba(0,0,0,0.6);
-      --gradient: linear-gradient(135deg, var(--primary), var(--accent));
-      --gradient-alt: radial-gradient(1000px 500px at 80% 20%, rgba(56,189,248,0.18), transparent 60%);
-      --transition: 300ms ease;
-    }
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      background: var(--bg-color);
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-      padding: 2rem 1rem;
-      background-image: var(--gradient-alt);
-      display: grid;
-      grid-template-columns: 1fr min(900px, 90%) 1fr;
-      grid-template-rows: auto 1fr auto;
-      gap: 2rem;
-    }
-    main.content-wrapper {
-      grid-column: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      z-index: 10;
-    }
-    header.header {
-      grid-column: 2;
-      text-align: center;
-      margin-bottom: 1rem;
-      user-select: none;
-      position: relative;
-      z-index: 10;
-    }
-    header h1 {
-      font-size: clamp(4rem, 8vw, 7rem);
-      font-weight: 900;
-      background: var(--gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 0.25rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      text-shadow: 0 0 12px var(--primary);
-      user-select: none;
-    }
-    .tagline {
-      color: var(--accent);
-      font-weight: 700;
-      font-style: italic;
-      letter-spacing: 0.05em;
-      user-select: none;
-      font-size: 1.25rem;
-      text-shadow: 0 0 8px var(--accent);
-    }
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.75rem 2rem;
-      align-items: start;
-    }
-    .tool-card {
-      background: rgba(16, 23, 42, 0.4);
-      border-radius: var(--radius);
-      padding: 1.75rem 2rem;
-      box-shadow: var(--shadow-lg);
-      backdrop-filter: blur(22px);
-      border: 1px solid transparent;
-      position: relative;
-      overflow: hidden;
-      cursor: default;
-      display: flex;
-      flex-direction: column;
-      min-height: 280px;
-      pointer-events: auto;
-      transition: box-shadow var(--transition);
-    }
-    .tool-card:hover {
-      box-shadow: var(--shadow-lg), 0 0 35px var(--primary);
-      border-color: var(--primary);
-    }
-    .tool-card h2 {
-      font-size: clamp(1.75rem, 2.5vw + 0.5rem, 2.5rem);
-      color: var(--primary);
-      margin-bottom: 1rem;
-      user-select: none;
-      text-shadow: 0 0 6px var(--primary);
-    }
-    input.input, select.input, textarea.input {
-      width: 100%;
-      background: var(--surface);
-      color: var(--text);
-      border: 1.5px solid rgba(127,127,127,0.3);
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius);
-      font-size: 1.1rem;
-      outline: none;
-      margin-bottom: 1rem;
-      font-family: 'Poppins', sans-serif;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
-      pointer-events: auto;
-      resize: vertical;
-      transition: border-color var(--transition), box-shadow var(--transition);
-    }
-    input.input:focus, select.input:focus, textarea.input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 6px rgba(56,189,248,0.4);
-      background: var(--surface);
-    }
-    button.button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--gradient);
-      color: #fff;
-      border: none;
-      padding: 1rem 2rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 1.1rem;
-      box-shadow: var(--shadow-lg);
-      user-select: none;
-      justify-content: center;
-      margin-top: auto;
-      pointer-events: auto;
-      transition: transform var(--transition), box-shadow var(--transition);
-    }
-    button.button:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 0 30px var(--primary);
-    }
-    button.button:active {
-      transform: translateY(0) scale(0.98);
-    }
-    #min, #max {
-      width: calc(50% - 0.5rem);
-      display: inline-block;
-      pointer-events: auto;
-      font-size: 1.1rem;
-    }
-    #max {
-      margin-left: 1rem;
-    }
-    .result-text, .clock-text, .tool-output {
-      margin-top: 0.5rem;
-      font-weight: 700;
-      color: var(--accent);
-      min-height: 1.6em;
-      user-select: text;
-      pointer-events: auto;
-      white-space: pre-wrap;
-      overflow-wrap: break-word;
-      font-size: 1.1rem;
-    }
-    .clock-text {
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: var(--secondary);
-      user-select: none;
-      pointer-events: auto;
-    }
-    footer.footer {
-      grid-column: 2;
-      margin-top: 3rem;
-      text-align: center;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-      color: var(--muted);
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-      user-select: none;
-      z-index: 10;
-    }
-    footer.footer p {
-      margin-bottom: 0.5rem;
-    }
-    #spiderweb {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      background: var(--bg-color);
-      cursor: crosshair;
-      user-select: none;
-      pointer-events: none;
-    }
-    @media (max-width: 768px) {
-      #min, #max {
-        width: 100%;
-        margin-left: 0 !important;
-        margin-bottom: 0.75rem;
-      }
-      button.button {
-        width: 100%;
-      }
-      .tools-grid {
-        grid-template-columns: 1fr !important;
-      }
-    }
-    /* Markdown Preview Styling */
-    #markdownPreview {
-      background: var(--surface);
-      color: var(--text);
-      border-radius: var(--radius);
-      padding: 0.75rem 1rem;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      overflow-y: auto;
-      max-height: 150px;
-      border: 1.5px solid rgba(127,127,127,0.3);
-      font-size: 1rem;
-    }
-    /* Password meter */
-    #passwordStrength {
-      margin-top: 0.3em;
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-    /* Color picker preview */
-    #colorPreview {
-      width: 100%;
-      height: 50px;
-      border-radius: var(--radius);
-      border: 1.5px solid rgba(127,127,127,0.3);
-      margin-top: 0.5rem;
-      box-shadow: inset 0 2px 7px rgba(0,0,0,0.3);
-    }
-    /* Glaze overlay for John McCombs */
-    #glaze {
-      position: fixed;
-      inset: 0;
-      background: rgba(56, 189, 248, 0.18);
-      pointer-events: none;
-      z-index: 9999;
-      mix-blend-mode: screen;
-      animation: glazePulse 3s ease-in-out infinite;
-    }
-    @keyframes glazePulse {
-      0%, 100% { background-color: rgba(56, 189, 248, 0.18); }
-      50% { background-color: rgba(56, 189, 248, 0.42); }
-    }
-    #glazeText {
-      position: fixed;
-      top: 15vh;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--primary);
-      font-size: clamp(3rem, 8vw, 8rem);
-      font-weight: 900;
-      text-shadow: 0 0 28px var(--primary);
-      user-select: none;
-      pointer-events: none;
-      z-index: 10000;
-      text-align: center;
-      font-family: 'Poppins', sans-serif;
-      letter-spacing: 0.12em;
-    }
-    #glazeSubText {
-      position: fixed;
-      top: calc(15vh + 7rem);
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--accent);
-      font-size: clamp(1.25rem, 4vw, 2.5rem);
-      font-weight: 800;
-      text-shadow: 0 0 14px var(--accent);
-      user-select: none;
-      pointer-events: none;
-      z-index: 10000;
-      text-align: center;
-      font-family: 'Poppins', sans-serif;
-      letter-spacing: 0.06em;
-      max-width: 90vw;
-      line-height: 1.3;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Learning Hub - Ultimate Edition with Sidebar & Bounce</title>
+<style>
+  /* Root & Global */
+  :root {
+    --bg-color: #0b1220;
+    --surface: #0f172a;
+    --primary: #38bdf8;
+    --secondary: #ef4444;
+    --accent: #a3e635;
+    --text: #e6edf7;
+    --muted: #94a3b8;
+    --radius: 16px;
+    --shadow-lg: 0 16px 40px rgba(0,0,0,0.6);
+    --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+    --gradient-alt: radial-gradient(1000px 500px at 80% 20%, rgba(56,189,248,0.18), transparent 60%);
+    --transition: 300ms ease;
+  }
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Poppins', Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    background: var(--bg-color);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0;
+    background-image: var(--gradient-alt);
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #spiderweb {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: var(--bg-color);
+    cursor: crosshair;
+    user-select: none;
+    pointer-events: none;
+  }
+  /* Sidebar */
+  #sidebar {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    background: rgba(16, 23, 42, 0.7);
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(20px);
+    user-select: none;
+  }
+  #sidebar h2 {
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 8px var(--primary);
+  }
+  .sidebar-item {
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color var(--transition), color var(--transition);
+    border-left: 4px solid transparent;
+  }
+  .sidebar-item:hover {
+    background-color: var(--primary);
+    color: black;
+  }
+  .sidebar-item.active {
+    background-color: var(--accent);
+    color: black;
+    border-left-color: var(--primary);
+  }
+
+  /* Main content area */
+  main.content-wrapper {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 3rem 3rem 3rem;
+    overflow-y: auto;
+    gap: 2rem;
+    position: relative;
+    z-index: 10;
+  }
+  header.header {
+    text-align: center;
+    margin-bottom: 1rem;
+    user-select: none;
+  }
+  header h1 {
+    font-size: clamp(4rem, 8vw, 7rem);
+    font-weight: 900;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-shadow: 0 0 12px var(--primary);
+    user-select: none;
+  }
+  .tagline {
+    color: var(--accent);
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    user-select: none;
+    font-size: 1.25rem;
+    text-shadow: 0 0 8px var(--accent);
+  }
+  .tools-grid {
+    position: relative;
+    flex-grow: 1;
+  }
+  .tool-card {
+    background: rgba(16, 23, 42, 0.45);
+    border-radius: var(--radius);
+    padding: 1.75rem 2rem;
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(22px);
+    border: 1px solid transparent;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    overflow-y: auto;
+    display: none;
+    flex-direction: column;
+  }
+  .tool-card.active {
+    display: flex;
+  }
+  .tool-card h2 {
+    font-size: clamp(1.75rem, 2.5vw + 0.5rem, 2.5rem);
+    color: var(--primary);
+    margin-bottom: 1rem;
+    user-select: none;
+    text-shadow: 0 0 6px var(--primary);
+  }
+  input.input, select.input, textarea.input {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1.5px solid rgba(127,127,127,0.3);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    font-size: 1.1rem;
+    outline: none;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+    pointer-events: auto;
+    resize: vertical;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  input.input:focus, select.input:focus, textarea.input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 6px rgba(56,189,248,0.4);
+    background: var(--surface);
+  }
+  button.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gradient);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-lg);
+    user-select: none;
+    justify-content: center;
+    margin-top: auto;
+    pointer-events: auto;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  button.button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 35px var(--primary);
+  }
+  button.button:active {
+    transform: translateY(0) scale(0.98);
+  }
+  #min, #max {
+    width: calc(50% - 0.5rem);
+    display: inline-block;
+    pointer-events: auto;
+    font-size: 1.1rem;
+  }
+  #max {
+    margin-left: 1rem;
+  }
+  .result-text, .clock-text, .tool-output {
+    margin-top: 0.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-height: 1.6em;
+    user-select: text;
+    pointer-events: auto;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    font-size: 1.1rem;
+  }
+  .clock-text {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--secondary);
+    user-select: none;
+    pointer-events: auto;
+  }
+  footer.footer {
+    grid-column: 2;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 700px;
+    margin: 1rem auto 1rem auto;
+    user-select: none;
+    z-index: 10;
+  }
+  footer.footer p {
+    margin-bottom: 0.5rem;
+  }
+  /* Markdown Preview Styling */
+  #markdownPreview {
+    background: var(--surface);
+    color: var(--text);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-y: auto;
+    max-height: 150px;
+    border: 1.5px solid rgba(127,127,127,0.3);
+    font-size: 1rem;
+  }
+  /* Password meter */
+  #passwordStrength {
+    margin-top: 0.3em;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  /* Color picker preview */
+  #colorPreview {
+    width: 100%;
+    height: 50px;
+    border-radius: var(--radius);
+    border: 1.5px solid rgba(127,127,127,0.3);
+    margin-top: 0.5rem;
+    box-shadow: inset 0 2px 7px rgba(0,0,0,0.3);
+  }
+  /* Glaze overlay for John McCombs */
+  #glaze {
+    position: fixed;
+    inset: 0;
+    background: rgba(56, 189, 248, 0.18);
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: screen;
+    animation: glazePulse 3s ease-in-out infinite;
+  }
+  @keyframes glazePulse {
+    0%, 100% { background-color: rgba(56, 189, 248, 0.18); }
+    50% { background-color: rgba(56, 189, 248, 0.42); }
+  }
+  #glazeText {
+    position: fixed;
+    top: 15vh;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--primary);
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 900;
+    text-shadow: 0 0 28px var(--primary);
+    user-select: none;
+    pointer-events: none;
+    z-index: 10000;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.12em;
+  }
+  #glazeSubText {
+    position: fixed;
+    top: calc(15vh + 7rem);
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--accent);
+    font-size: clamp(1.25rem, 4vw, 2.5rem);
+    font-weight: 800;
+    text-shadow: 0 0 14px var(--accent);
+    user-select: none;
+    pointer-events: none;
+    z-index: 10000;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.06em;
+    max-width: 90vw;
+    line-height: 1.3;
+  }
+  /* Bounce animation */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .bounce-text span {
+    display: inline-block;
+    animation: bounce 1.2s ease-in-out infinite;
+  }
+  .bounce-button, .bounce-input {
+    animation: bounce 1.2s ease-in-out infinite;
+  }
+</style>
 </head>
 <body>
   <canvas id="spiderweb"></canvas>
 
-  <header class="header" role="banner">
-    <h1>Learning Hub</h1>
-    <p class="tagline" aria-live="polite">The ultimate toolbox crafted by the legendary John McCombs</p>
-  </header>
+  <nav id="sidebar" aria-label="Tool navigation">
+    <h2>Learning Hub</h2>
+    <div class="sidebar-item active" data-tool="calculator" tabindex="0">Calculator</div>
+    <div class="sidebar-item" data-tool="clock">Current Time</div>
+    <div class="sidebar-item" data-tool="notepad">Note Pad</div>
+    <div class="sidebar-item" data-tool="random">Random Number</div>
+    <div class="sidebar-item" data-tool="unitconverter">Unit Converter</div>
+    <div class="sidebar-item" data-tool="secretcode">Secret Code</div>
+    <div class="sidebar-item" data-tool="markdown">Markdown Preview</div>
+    <div class="sidebar-item" data-tool="timezone">Timezone Converter</div>
+    <div class="sidebar-item" data-tool="password">Password Strength</div>
+    <div class="sidebar-item" data-tool="colorpicker">Color Picker</div>
+    <div class="sidebar-item" data-tool="lorem">Lorem Ipsum</div>
+  </nav>
 
-  <main class="content-wrapper" role="main">
-    <div class="tools-grid">
+  <main class="content-wrapper" role="main" aria-live="polite">
+    <header class="header">
+      <h1 id="pageTitle" class="bounce-text">Learning Hub</h1>
+      <p class="tagline bounce-text">The ultimate toolbox crafted by the legendary John McCombs</p>
+    </header>
 
-      <!-- Calculator -->
-      <section class="tool-card" aria-label="Calculator tool">
-        <h2>🧮 Calculator</h2>
-        <input class="input" type="text" id="expression" placeholder="e.g. 2 + 2" aria-label="Calculator expression input" />
-        <button class="button" onclick="calculate()">Calculate</button>
-        <div id="result" class="result-text" aria-live="polite"></div>
-      </section>
+    <section id="calculator" class="tool-card active" aria-label="Calculator tool">
+      <h2>🧮 Calculator</h2>
+      <input class="input bounce-input" type="text" id="expression" placeholder="e.g. 2 + 2" aria-label="Calculator expression input" />
+      <button class="button bounce-button" onclick="calculate()">Calculate</button>
+      <div id="result" class="result-text"></div>
+    </section>
 
-      <!-- Current Time -->
-      <section class="tool-card" aria-label="Current time display">
-        <h2>📅 Current Time</h2>
-        <div id="clock" class="clock-text" aria-live="polite" aria-atomic="true"></div>
-      </section>
+    <section id="clock" class="tool-card" aria-label="Current time display">
+      <h2>📅 Current Time</h2>
+      <div id="clock" class="clock-text"></div>
+    </section>
 
-      <!-- Note Pad -->
-      <section class="tool-card" aria-label="Note pad tool">
-        <h2>📓 Note Pad</h2>
-        <textarea class="input" id="notes" placeholder="Type your notes here..." rows="5" aria-label="Notes text area"></textarea>
-        <button class="button" onclick="saveNotes()">Save Notes</button>
-      </section>
+    <section id="notepad" class="tool-card" aria-label="Note pad tool">
+      <h2>📓 Note Pad</h2>
+      <textarea class="input bounce-input" id="notes" placeholder="Type your notes here..." rows="5" aria-label="Notes text area"></textarea>
+      <button class="button bounce-button" onclick="saveNotes()">Save Notes</button>
+    </section>
 
-      <!-- Random Number Generator -->
-      <section class="tool-card" aria-label="Random number generator">
-        <h2>🎲 Random Number Generator</h2>
-        <input class="input" type="number" id="min" placeholder="Min" aria-label="Minimum number" />
-        <input class="input" type="number" id="max" placeholder="Max" aria-label="Maximum number" />
-        <button class="button" onclick="generateRandom()">Generate</button>
-        <div id="randomResult" class="result-text" aria-live="polite"></div>
-      </section>
+    <section id="random" class="tool-card" aria-label="Random number generator">
+      <h2>🎲 Random Number Generator</h2>
+      <input class="input bounce-input" type="number" id="min" placeholder="Min" aria-label="Minimum number" />
+      <input class="input bounce-input" type="number" id="max" placeholder="Max" aria-label="Maximum number" />
+      <button class="button bounce-button" onclick="generateRandom()">Generate</button>
+      <div id="randomResult" class="result-text"></div>
+    </section>
 
-      <!-- Unit Converter -->
-      <section class="tool-card" aria-label="Unit converter">
-        <h2>🔁 Unit Converter</h2>
-        <input class="input" type="number" id="unitInput" placeholder="Enter value" aria-label="Value to convert" />
-        <select class="input" id="unitType" aria-label="Conversion type">
-          <option value="cmToIn">cm → inches</option>
-          <option value="inToCm">inches → cm</option>
-          <option value="kgToLb">kg → pounds</option>
-          <option value="lbToKg">pounds → kg</option>
-        </select>
-        <button class="button" onclick="convertUnit()">Convert</button>
-        <div id="unitResult" class="result-text" aria-live="polite"></div>
-      </section>
+    <section id="unitconverter" class="tool-card" aria-label="Unit converter">
+      <h2>🔁 Unit Converter</h2>
+      <input class="input bounce-input" type="number" id="unitInput" placeholder="Enter value" aria-label="Value to convert" />
+      <select class="input bounce-input" id="unitType" aria-label="Conversion type">
+        <option value="cmToIn">cm → inches</option>
+        <option value="inToCm">inches → cm</option>
+        <option value="kgToLb">kg → pounds</option>
+        <option value="lbToKg">pounds → kg</option>
+      </select>
+      <button class="button bounce-button" onclick="convertUnit()">Convert</button>
+      <div id="unitResult" class="result-text"></div>
+    </section>
 
-      <!-- Secret Code -->
-      <section class="tool-card" aria-label="Secret code input">
-        <h2>🕵️ Secret Code</h2>
-        <input class="input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
-        <div id="secretOutput" class="tool-output" aria-live="polite"></div>
-      </section>
+    <section id="secretcode" class="tool-card" aria-label="Secret code input">
+      <h2>🕵️ Secret Code</h2>
+      <input class="input bounce-input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
+      <div id="secretOutput" class="tool-output"></div>
+    </section>
 
-      <!-- Markdown Preview -->
-      <section class="tool-card" aria-label="Markdown preview tool">
-        <h2>📝 Markdown Preview</h2>
-        <textarea class="input" id="markdownInput" placeholder="Write Markdown here..." rows="5" aria-label="Markdown input"></textarea>
-        <div id="markdownPreview" aria-live="polite"></div>
-      </section>
+    <section id="markdown" class="tool-card" aria-label="Markdown preview tool">
+      <h2>📝 Markdown Preview</h2>
+      <textarea class="input bounce-input" id="markdownInput" placeholder="Write Markdown here..." rows="5" aria-label="Markdown input"></textarea>
+      <div id="markdownPreview"></div>
+    </section>
 
-      <!-- Timezone Converter -->
-      <section class="tool-card" aria-label="Timezone converter">
-        <h2>🌍 Timezone Converter</h2>
-        <input class="input" type="datetime-local" id="datetimeInput" aria-label="Date and time input" />
-        <select class="input" id="tzFrom" aria-label="From timezone">
-          <option value="UTC">UTC</option>
-          <option value="America/New_York">New York (EST)</option>
-          <option value="Europe/London">London (GMT)</option>
-          <option value="Asia/Tokyo">Tokyo (JST)</option>
-          <option value="Australia/Sydney">Sydney (AEST)</option>
-        </select>
-        <select class="input" id="tzTo" aria-label="To timezone">
-          <option value="UTC">UTC</option>
-          <option value="America/New_York">New York (EST)</option>
-          <option value="Europe/London">London (GMT)</option>
-          <option value="Asia/Tokyo">Tokyo (JST)</option>
-          <option value="Australia/Sydney">Sydney (AEST)</option>
-        </select>
-        <button class="button" onclick="convertTimezone()">Convert</button>
-        <div id="tzResult" class="result-text" aria-live="polite"></div>
-      </section>
+    <section id="timezone" class="tool-card" aria-label="Timezone converter">
+      <h2>🌍 Timezone Converter</h2>
+      <input class="input bounce-input" type="datetime-local" id="datetimeInput" aria-label="Date and time input" />
+      <select class="input bounce-input" id="tzFrom" aria-label="From timezone">
+        <option value="UTC">UTC</option>
+        <option value="America/New_York">New York (EST)</option>
+        <option value="Europe/London">London (GMT)</option>
+        <option value="Asia/Tokyo">Tokyo (JST)</option>
+        <option value="Australia/Sydney">Sydney (AEST)</option>
+      </select>
+      <select class="input bounce-input" id="tzTo" aria-label="To timezone">
+        <option value="UTC">UTC</option>
+        <option value="America/New_York">New York (EST)</option>
+        <option value="Europe/London">London (GMT)</option>
+        <option value="Asia/Tokyo">Tokyo (JST)</option>
+        <option value="Australia/Sydney">Sydney (AEST)</option>
+      </select>
+      <button class="button bounce-button" onclick="convertTimezone()">Convert</button>
+      <div id="tzResult" class="result-text"></div>
+    </section>
 
-      <!-- Password Strength Checker -->
-      <section class="tool-card" aria-label="Password strength checker">
-        <h2>🔐 Password Strength Checker</h2>
-        <input class="input" type="password" id="passwordInput" placeholder="Enter password" aria-label="Password input" />
-        <div id="passwordStrength" class="result-text" aria-live="polite"></div>
-      </section>
+    <section id="password" class="tool-card" aria-label="Password strength checker">
+      <h2>🔐 Password Strength Checker</h2>
+      <input class="input bounce-input" type="password" id="passwordInput" placeholder="Enter password" aria-label="Password input" />
+      <div id="passwordStrength" class="result-text"></div>
+    </section>
 
-      <!-- Color Picker -->
-      <section class="tool-card" aria-label="Color picker tool">
-        <h2>🎨 Color Picker</h2>
-        <input class="input" type="color" id="colorInput" aria-label="Color input" />
-        <div id="colorPreview"></div>
-      </section>
+    <section id="colorpicker" class="tool-card" aria-label="Color picker tool">
+      <h2>🎨 Color Picker</h2>
+      <input class="input bounce-input" type="color" id="colorInput" aria-label="Color input" />
+      <div id="colorPreview"></div>
+    </section>
 
-      <!-- Lorem Ipsum Generator -->
-      <section class="tool-card" aria-label="Lorem Ipsum generator">
-        <h2>📜 Lorem Ipsum Generator</h2>
-        <input class="input" type="number" id="loremCount" placeholder="Paragraphs count" min="1" max="10" aria-label="Paragraphs count" />
-        <button class="button" onclick="generateLorem()">Generate</button>
-        <div id="loremOutput" class="tool-output" aria-live="polite"></div>
-      </section>
-
-    </div>
+    <section id="lorem" class="tool-card" aria-label="Lorem Ipsum generator">
+      <h2>📜 Lorem Ipsum Generator</h2>
+      <input class="input bounce-input" type="number" id="loremCount" placeholder="Paragraphs count" min="1" max="10" aria-label="Paragraphs count" />
+      <button class="button bounce-button" onclick="generateLorem()">Generate</button>
+      <div id="loremOutput" class="tool-output"></div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -428,11 +463,75 @@
     John, you don't just break the mold — you are the mold.
   </div>
 
+  <!-- Bounce toggle button -->
+  <button id="bounceToggle" aria-pressed="false" aria-label="Toggle bounce animation" title="Toggle bounce animation" style="
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
+    z-index: 11000;
+    background: var(--primary);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    color: white;
+    font-weight: 900;
+    font-size: 24px;
+    user-select: none;
+  ">🌀</button>
+
   <script>
+    // Sidebar tool switching
+    const sidebarItems = document.querySelectorAll('#sidebar .sidebar-item');
+    const tools = document.querySelectorAll('.tool-card');
+    const pageTitle = document.getElementById('pageTitle');
+    const tagline = document.querySelector('.tagline');
+
+    function clearActive() {
+      sidebarItems.forEach(i => i.classList.remove('active'));
+      tools.forEach(t => t.classList.remove('active'));
+    }
+    sidebarItems.forEach(item => {
+      item.addEventListener('click', () => {
+        clearActive();
+        item.classList.add('active');
+        const toolId = item.getAttribute('data-tool');
+        const tool = document.getElementById(toolId);
+        if(tool) tool.classList.add('active');
+        // Update page title text with bounce effect
+        pageTitle.textContent = item.textContent;
+        addBounceToText(pageTitle);
+        // Update tagline with tool description or blank
+        tagline.textContent = {
+          'calculator': 'Perform quick calculations.',
+          'clock': 'View the current time.',
+          'notepad': 'Write and save your notes.',
+          'random': 'Generate random numbers.',
+          'unitconverter': 'Convert between units.',
+          'secretcode': 'Enter secret codes for surprises.',
+          'markdown': 'Preview Markdown formatting.',
+          'timezone': 'Convert between timezones.',
+          'password': 'Check password strength.',
+          'colorpicker': 'Pick and preview colors.',
+          'lorem': 'Generate Lorem Ipsum text.'
+        }[toolId] || '';
+        addBounceToText(tagline);
+      });
+      item.addEventListener('keydown', e => {
+        if(e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          item.click();
+        }
+      });
+    });
+
     // Calculator
     function calculate() {
       const expr = document.getElementById("expression").value;
       try {
+        // eslint-disable-next-line no-new-func
         const result = Function('"use strict";return (' + expr + ')')();
         document.getElementById("result").innerText = "Result: " + result;
       } catch {
@@ -503,6 +602,7 @@
               <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
               <li><strong>Shift + J</strong>: Surprise John McCombs' Personal Gallery</li>
               <li><strong>Shift + H</strong>: Show John’s Hotness Meter</li>
+              <li><strong>Shift + G</strong>: Activate Secret Glaze Burst!</li>
             </ul>
           `;
         } else {
@@ -511,7 +611,7 @@
       }
     });
 
-    // Keyboard shortcuts with secret features
+    // Keyboard shortcuts with secret features including new "G" for glaze burst
     document.addEventListener("keydown", function (e) {
       if (!e.shiftKey) return;
       const key = e.key.toLowerCase();
@@ -563,6 +663,10 @@
         } else {
           alert("Incorrect code.");
         }
+      }
+      else if (key === "g") {
+        e.preventDefault();
+        secretGlazeBurst();
       }
     });
 
@@ -964,6 +1068,67 @@
       requestAnimationFrame(draw);
     }
     draw();
+
+    // Bounce toggle logic
+    const bounceToggle = document.getElementById('bounceToggle');
+    let bounceActive = true;
+
+    function addBounceToText(element) {
+      // Wrap each letter in span for independent bounce
+      if (!element) return;
+      const text = element.textContent;
+      element.innerHTML = '';
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = text[i];
+        span.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+        element.appendChild(span);
+      }
+    }
+
+    function removeBounceFromText(element) {
+      if (!element) return;
+      element.textContent = element.textContent; // Remove all spans
+    }
+
+    function toggleBounce(state) {
+      if (state) {
+        // Add bounce to header texts
+        addBounceToText(pageTitle);
+        addBounceToText(tagline);
+        // Add bounce classes to buttons and inputs in active tool
+        document.querySelectorAll('.tool-card.active .button').forEach(btn => {
+          btn.classList.add('bounce-button');
+          btn.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+        });
+        document.querySelectorAll('.tool-card.active input, .tool-card.active select, .tool-card.active textarea').forEach(input => {
+          input.classList.add('bounce-input');
+          input.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+        });
+      } else {
+        removeBounceFromText(pageTitle);
+        removeBounceFromText(tagline);
+        document.querySelectorAll('.bounce-button').forEach(btn => {
+          btn.classList.remove('bounce-button');
+          btn.style.animationDelay = '';
+        });
+        document.querySelectorAll('.bounce-input').forEach(input => {
+          input.classList.remove('bounce-input');
+          input.style.animationDelay = '';
+        });
+      }
+    }
+
+    bounceToggle.addEventListener('click', () => {
+      bounceActive = !bounceActive;
+      bounceToggle.setAttribute('aria-pressed', bounceActive);
+      toggleBounce(bounceActive);
+    });
+
+    // Initialize bounce on load
+    window.addEventListener('load', () => {
+      toggleBounce(true);
+    });
   </script>
 </body>
 </html>
