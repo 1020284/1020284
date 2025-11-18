@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Learning Hub - All Tools</title>
+  <title>Learning Hub - Ultimate Edition</title>
   <style>
     /* Root & Global */
     :root {
@@ -52,22 +52,25 @@
       z-index: 10;
     }
     header h1 {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      font-weight: 800;
+      font-size: clamp(4rem, 8vw, 7rem);
+      font-weight: 900;
       background: var(--gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.25rem;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      text-shadow: 0 0 6px var(--primary);
+      text-shadow: 0 0 12px var(--primary);
+      user-select: none;
     }
     .tagline {
-      color: var(--muted);
-      font-weight: 500;
+      color: var(--accent);
+      font-weight: 700;
       font-style: italic;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.05em;
       user-select: none;
+      font-size: 1.25rem;
+      text-shadow: 0 0 8px var(--accent);
     }
     .tools-grid {
       display: grid;
@@ -76,11 +79,11 @@
       align-items: start;
     }
     .tool-card {
-      background: rgba(16, 23, 42, 0.35);
+      background: rgba(16, 23, 42, 0.4);
       border-radius: var(--radius);
       padding: 1.75rem 2rem;
       box-shadow: var(--shadow-lg);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(22px);
       border: 1px solid transparent;
       position: relative;
       overflow: hidden;
@@ -92,34 +95,35 @@
       transition: box-shadow var(--transition);
     }
     .tool-card:hover {
-      box-shadow: var(--shadow-lg), 0 0 30px var(--primary);
+      box-shadow: var(--shadow-lg), 0 0 35px var(--primary);
       border-color: var(--primary);
     }
     .tool-card h2 {
-      font-size: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
+      font-size: clamp(1.75rem, 2.5vw + 0.5rem, 2.5rem);
       color: var(--primary);
       margin-bottom: 1rem;
       user-select: none;
-      text-shadow: 0 0 5px var(--primary);
+      text-shadow: 0 0 6px var(--primary);
     }
     input.input, select.input, textarea.input {
       width: 100%;
       background: var(--surface);
       color: var(--text);
-      border: 1.5px solid rgba(127,127,127,0.25);
+      border: 1.5px solid rgba(127,127,127,0.3);
       padding: 0.75rem 1rem;
       border-radius: var(--radius);
-      font-size: 1rem;
+      font-size: 1.1rem;
       outline: none;
       margin-bottom: 1rem;
       font-family: 'Poppins', sans-serif;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
       pointer-events: auto;
       resize: vertical;
+      transition: border-color var(--transition), box-shadow var(--transition);
     }
     input.input:focus, select.input:focus, textarea.input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 6px rgba(56,189,248,0.3);
+      box-shadow: 0 0 0 6px rgba(56,189,248,0.4);
       background: var(--surface);
     }
     button.button {
@@ -129,11 +133,11 @@
       background: var(--gradient);
       color: #fff;
       border: none;
-      padding: 0.85rem 1.5rem;
+      padding: 1rem 2rem;
       border-radius: var(--radius);
       cursor: pointer;
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
       box-shadow: var(--shadow-lg);
       user-select: none;
       justify-content: center;
@@ -142,8 +146,8 @@
       transition: transform var(--transition), box-shadow var(--transition);
     }
     button.button:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 0 20px var(--primary);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 0 30px var(--primary);
     }
     button.button:active {
       transform: translateY(0) scale(0.98);
@@ -152,23 +156,25 @@
       width: calc(50% - 0.5rem);
       display: inline-block;
       pointer-events: auto;
+      font-size: 1.1rem;
     }
     #max {
       margin-left: 1rem;
     }
     .result-text, .clock-text, .tool-output {
       margin-top: 0.5rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--accent);
-      min-height: 1.4em;
+      min-height: 1.6em;
       user-select: text;
       pointer-events: auto;
       white-space: pre-wrap;
       overflow-wrap: break-word;
+      font-size: 1.1rem;
     }
     .clock-text {
-      font-weight: 600;
-      font-size: 1.25rem;
+      font-weight: 700;
+      font-size: 1.5rem;
       color: var(--secondary);
       user-select: none;
       pointer-events: auto;
@@ -178,7 +184,7 @@
       margin-top: 3rem;
       text-align: center;
       font-family: 'Poppins', sans-serif;
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: var(--muted);
       max-width: 700px;
       margin-left: auto;
@@ -222,80 +228,83 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       overflow-y: auto;
       max-height: 150px;
-      border: 1.5px solid rgba(127,127,127,0.25);
+      border: 1.5px solid rgba(127,127,127,0.3);
+      font-size: 1rem;
     }
     /* Password meter */
     #passwordStrength {
       margin-top: 0.3em;
       font-weight: 700;
+      font-size: 1.1rem;
     }
     /* Color picker preview */
     #colorPreview {
       width: 100%;
       height: 50px;
       border-radius: var(--radius);
-      border: 1.5px solid rgba(127,127,127,0.25);
+      border: 1.5px solid rgba(127,127,127,0.3);
       margin-top: 0.5rem;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+      box-shadow: inset 0 2px 7px rgba(0,0,0,0.3);
     }
     /* Glaze overlay for John McCombs */
     #glaze {
       position: fixed;
       inset: 0;
-      background: rgba(56, 189, 248, 0.15);
+      background: rgba(56, 189, 248, 0.18);
       pointer-events: none;
       z-index: 9999;
       mix-blend-mode: screen;
       animation: glazePulse 3s ease-in-out infinite;
     }
     @keyframes glazePulse {
-      0%, 100% { background-color: rgba(56, 189, 248, 0.15); }
-      50% { background-color: rgba(56, 189, 248, 0.35); }
+      0%, 100% { background-color: rgba(56, 189, 248, 0.18); }
+      50% { background-color: rgba(56, 189, 248, 0.42); }
     }
     #glazeText {
       position: fixed;
-      top: 20vh;
+      top: 15vh;
       left: 50%;
       transform: translateX(-50%);
       color: var(--primary);
-      font-size: clamp(2rem, 6vw, 5rem);
+      font-size: clamp(3rem, 8vw, 8rem);
       font-weight: 900;
-      text-shadow: 0 0 20px var(--primary);
+      text-shadow: 0 0 28px var(--primary);
       user-select: none;
       pointer-events: none;
       z-index: 10000;
       text-align: center;
       font-family: 'Poppins', sans-serif;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
     }
     #glazeSubText {
       position: fixed;
-      top: calc(20vh + 5rem);
+      top: calc(15vh + 7rem);
       left: 50%;
       transform: translateX(-50%);
       color: var(--accent);
-      font-size: clamp(1rem, 3vw, 2rem);
-      font-weight: 700;
-      text-shadow: 0 0 10px var(--accent);
+      font-size: clamp(1.25rem, 4vw, 2.5rem);
+      font-weight: 800;
+      text-shadow: 0 0 14px var(--accent);
       user-select: none;
       pointer-events: none;
       z-index: 10000;
       text-align: center;
       font-family: 'Poppins', sans-serif;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       max-width: 90vw;
+      line-height: 1.3;
     }
   </style>
 </head>
 <body>
   <canvas id="spiderweb"></canvas>
 
-  <header class="header">
-    <h1>Welcome To Learning Hub</h1>
-    <p class="tagline">This is version 1.4 with new tools added!</p>
+  <header class="header" role="banner">
+    <h1>Learning Hub</h1>
+    <p class="tagline" aria-live="polite">The ultimate toolbox crafted by the legendary John McCombs</p>
   </header>
 
-  <main class="content-wrapper">
+  <main class="content-wrapper" role="main">
     <div class="tools-grid">
 
       <!-- Calculator -->
@@ -411,12 +420,12 @@
   <!-- Glaze overlay and praise text for John McCombs -->
   <div id="glaze"></div>
   <div id="glazeText">John McCombs</div>
-  <div id="glazeSubText">
-    John is A Legend.<br/>
-    John Makes Unblocked Games for the People of CV.<br/>
-    John has all A's.<br/>
-    John Is unparalleled with his Collection of over 6000 games. <br/>
-    
+  <div id="glazeSubText" aria-live="polite">
+    The ultimate legend of Learning Hub.<br/>
+    A blazing genius, effortlessly cool and undeniably hot.<br/>
+    Your coding mastery turns ideas into magic.<br/>
+    A true visionary, inspiring all who behold your work.<br/>
+    John, you don't just break the mold — you are the mold.
   </div>
 
   <script>
@@ -424,7 +433,6 @@
     function calculate() {
       const expr = document.getElementById("expression").value;
       try {
-        // eslint-disable-next-line no-new-func
         const result = Function('"use strict";return (' + expr + ')')();
         document.getElementById("result").innerText = "Result: " + result;
       } catch {
@@ -483,23 +491,27 @@
       document.getElementById("unitResult").innerText = result;
     }
 
-    // Secret code input event and keyboard shortcuts for secret portals
+    // Secret code input event and expanded secret features
     document.getElementById("secretInput").addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         const input = this.value.trim().toLowerCase();
+        const output = document.getElementById("secretOutput");
         if (input === "john is awesome") {
-          document.getElementById("secretOutput").innerHTML = `
-            <ul style="list-style: none; padding-left: 0; user-select:none;">
+          output.innerHTML = `
+            <ul style="list-style: none; padding-left: 0; user-select:none; font-weight: 700;">
               <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
               <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
+              <li><strong>Shift + J</strong>: Surprise John McCombs' Personal Gallery</li>
+              <li><strong>Shift + H</strong>: Show John’s Hotness Meter</li>
             </ul>
           `;
         } else {
-          document.getElementById("secretOutput").innerText = "Incorrect code.";
+          output.innerText = "Incorrect code.";
         }
       }
     });
 
+    // Keyboard shortcuts with secret features
     document.addEventListener("keydown", function (e) {
       if (!e.shiftKey) return;
       const key = e.key.toLowerCase();
@@ -508,259 +520,196 @@
         e.preventDefault();
         const code = prompt("Enter access code:");
         if (code === "1020284") {
-          const newTab = window.open("about:blank", "_blank");
-          const content = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <title>Interstellar</title>
-              <style>
-                body { margin: 0; overflow: hidden; background: black; }
-                iframe { width: 100vw; height: 100vh; border: none; }
-                #fullscreenBtn {
-                  position: fixed;
-                  top: 10px;
-                  right: 10px;
-                  z-index: 9999;
-                  padding: 10px 15px;
-                  background: #00c6ff;
-                  color: white;
-                  border: none;
-                  font-size: 16px;
-                  cursor: pointer;
-                }
-              </style>
-            </head>
-            <body>
-              <button id="fullscreenBtn">Fullscreen</button>
-              <iframe id="proxyFrame" src="https://johnnyboyisthebest.dpdns.org/"></iframe>
-              <script>
-                document.getElementById("fullscreenBtn").onclick = function() {
-                  const iframe = document.getElementById("proxyFrame");
-                  if (iframe.requestFullscreen) {
-                    iframe.requestFullscreen();
-                  } else if (iframe.webkitRequestFullscreen) {
-                    iframe.webkitRequestFullscreen();
-                  } else if (iframe.msRequestFullscreen) {
-                    iframe.msRequestFullscreen();
-                  }
-                };
-              <\/script>
-            </body>
-            </html>
-          `;
-          newTab.document.open();
-          newTab.document.write(content);
-          newTab.document.close();
+          openFullscreenSite("https://johnnyboyisthebest.dpdns.org/", "Interstellar");
         } else {
           alert("Incorrect code.");
         }
       }
-
-      if (key === "d") {
+      else if (key === "d") {
         e.preventDefault();
         const code = prompt("Enter access code:");
         if (code === "1020284") {
-          const newTab = window.open("about:blank", "_blank");
-          const content = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <title>School Resource Portal</title>
-              <style>
-                body {
-                  font-family: Arial, sans-serif;
-                  background-color: #f9f9f9;
-                  color: #333;
-                  padding: 40px;
-                  text-align: center;
-                }
-                h1 {
-                  font-size: 2.2em;
-                  margin-bottom: 20px;
-                  color: #004080;
-                }
-                ul {
-                  list-style: none;
-                  padding: 0;
-                  max-width: 600px;
-                  margin: 0 auto;
-                }
-                li {
-                  margin: 15px 0;
-                  padding: 12px 20px;
-                  background-color: #ffffff;
-                  border: 1px solid #ccc;
-                  border-radius: 8px;
-                  text-align: left;
-                  font-size: 1.1em;
-                }
-                a {
-                  color: #004080;
-                  text-decoration: none;
-                  cursor: pointer;
-                }
-                a:hover {
-                  text-decoration: underline;
-                }
-                .footer {
-                  margin-top: 40px;
-                  font-size: 1em;
-                  color: #666;
-                }
-              </style>
-            </head>
-            <body>
-              <h1>School Resource Portal</h1>
-              <ul>
-                <li><a onclick="openInNewTab('https://108192.xyz.cdn.cloudflare.net')">Reds Exploit Corner – Tools & Resources</a></li>
-                <li><a onclick="openInNewTab('https://quiz-math-70.us')">Quiz70 Games – blocked for some</a></li>
-                <li><a onclick="openInNewTab('https://jordans-math-homework.pages.dev')">Jordan's Math Homework</a></li>
-                <li><a onclick="openInNewTab('https://john2.pages.dev')">John2 – More games</a></li>
-                <li><a onclick="openInNewTab('https://johnlovesmath.pages.dev')">John Loves Math – Unreliable</a></li>
-                <li><a onclick="openInNewTab('https://novamath.net')">Saratoga Resources – I fixed Saratoga</a></li>
-                <li><a onclick="openInNewTab('https://geometrytime.pages.dev')">Geometry Time – Genizy Math</a></li>
-                <li><a onclick="openInNewTab('https://math-hw.pages.dev')">Math Homework – Minecraft</a></li>
-                <li><a onclick="openInNewTab('https://john3.pages.dev')">Another One of my amazing game sites</a></li>
-                <li><a onclick="openInNewTab('https://johns-selection.wasmer.app')">John's Selection – Unblocked Games & Proxy</a></li>
-              </ul>
-              <div class="footer">More coming soon! -John</div>
-
-              <script>
-                function openInNewTab(url) {
-                  const tab = window.open("about:blank", "_blank");
-                  tab.document.write(\`
-                    <!DOCTYPE html>
-                    <html>
-                    <head>
-                      <title>Resource Viewer</title>
-                      <style>
-                        body { margin:0; font-family:Arial; }
-                        iframe { border:none; width:100%; height:100vh; }
-                      </style>
-                    </head>
-                    <body>
-                      <iframe src="\${url}"></iframe>
-                    </body>
-                    </html>
-                  \`);
-                  tab.document.close();
-                }
-              <\/script>
-            </body>
-            </html>
-          `;
-          newTab.document.open();
-          newTab.document.write(content);
-          newTab.document.close();
+          openSchoolPortal();
         } else {
           alert("Incorrect code.");
         }
       }
-
-      if (key === "r") {
+      else if (key === "j") {
         e.preventDefault();
-        const newTab = window.open("about:blank", "_blank");
-        const content = `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>Private Selection</title>
-            <style>
-              body { margin: 0; overflow: hidden; background: #111; }
-              iframe { width: 100vw; height: 100vh; border: none; }
-            </style>
-          </head>
-          <body>
-            <iframe src="https://johns-selection.wasmer.app"></iframe>
-          </body>
-          </html>
-        `;
-        newTab.document.open();
-        newTab.document.write(content);
-        newTab.document.close();
+        alert("✨ Welcome to John McCombs' Personal Gallery! ✨\n\n(Feature coming soon!)");
       }
-
-      if (key === "x") {
+      else if (key === "h") {
+        e.preventDefault();
+        alert("🔥 John McCombs' Hotness Meter 🔥\n\nOver 9000! You're literally on fire, John!");
+      }
+      else if (key === "r") {
+        e.preventDefault();
+        openInNewTab("https://johns-selection.wasmer.app");
+      }
+      else if (key === "x") {
         e.preventDefault();
         const code = prompt("Enter access code:");
         if (code === "1020284") {
-          const newTab = window.open("about:blank", "_blank");
-          const content = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <title>Nothing To See Here...</title>
-              <style>
-                body { margin: 0; overflow: hidden; background: black; }
-                iframe { width: 100vw; height: 100vh; border: none; }
-                #fullscreenBtn {
-                  position: fixed;
-                  top: 10px;
-                  right: 10px;
-                  z-index: 9999;
-                  padding: 10px 15px;
-                  background: #00c6ff;
-                  color: white;
-                  border: none;
-                  font-size: 16px;
-                  cursor: pointer;
-                }
-              </style>
-            </head>
-            <body>
-              <iframe id="proxyFrame" src="https://novamath.net/"></iframe>
-              <script>
-                document.getElementById("fullscreenBtn")?.addEventListener('click', function() {
-                  const iframe = document.getElementById("proxyFrame");
-                  if (iframe.requestFullscreen) {
-                    iframe.requestFullscreen();
-                  } else if (iframe.webkitRequestFullscreen) {
-                    iframe.webkitRequestFullscreen();
-                  } else if (iframe.msRequestFullscreen) {
-                    iframe.msRequestFullscreen();
-                  }
-                });
-              <\/script>
-            </body>
-            </html>
-          `;
-          newTab.document.open();
-          newTab.document.write(content);
-          newTab.document.close();
+          openFullscreenSite("https://novamath.net/", "NettleWeb");
         } else {
           alert("Incorrect code.");
         }
       }
-
-      if (key === "c") {
+      else if (key === "c") {
         e.preventDefault();
         const code = prompt("Enter access code:");
         if (code === "1020284") {
-          const newTab = window.open("about:blank", "_blank");
-          const content = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <title>Canlite</title>
-              <style>
-                body { margin: 0; overflow: hidden; background: black; }
-                iframe { width: 100vw; height: 100vh; border: none; }
-              </style>
-            </head>
-            <body>
-              <iframe src="https://canlite.org"></iframe>
-            </body>
-            </html>
-          `;
-          newTab.document.open();
-          newTab.document.write(content);
-          newTab.document.close();
+          openInNewTab("https://canlite.org");
         } else {
           alert("Incorrect code.");
         }
       }
     });
+
+    function openFullscreenSite(url, title) {
+      const newTab = window.open("about:blank", "_blank");
+      const content = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>${title}</title>
+          <style>
+            body { margin: 0; overflow: hidden; background: black; }
+            iframe { width: 100vw; height: 100vh; border: none; }
+            #fullscreenBtn {
+              position: fixed;
+              top: 10px;
+              right: 10px;
+              z-index: 9999;
+              padding: 10px 15px;
+              background: #00c6ff;
+              color: white;
+              border: none;
+              font-size: 16px;
+              cursor: pointer;
+            }
+          </style>
+        </head>
+        <body>
+          <button id="fullscreenBtn">Fullscreen</button>
+          <iframe id="proxyFrame" src="${url}"></iframe>
+          <script>
+            document.getElementById("fullscreenBtn").onclick = function() {
+              const iframe = document.getElementById("proxyFrame");
+              if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+              } else if (iframe.webkitRequestFullscreen) {
+                iframe.webkitRequestFullscreen();
+              } else if (iframe.msRequestFullscreen) {
+                iframe.msRequestFullscreen();
+              }
+            };
+          <\/script>
+        </body>
+        </html>
+      `;
+      newTab.document.open();
+      newTab.document.write(content);
+      newTab.document.close();
+    }
+    function openSchoolPortal() {
+      const newTab = window.open("about:blank", "_blank");
+      const content = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>School Resource Portal</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f9f9f9;
+              color: #333;
+              padding: 40px;
+              text-align: center;
+            }
+            h1 {
+              font-size: 2.2em;
+              margin-bottom: 20px;
+              color: #004080;
+            }
+            ul {
+              list-style: none;
+              padding: 0;
+              max-width: 600px;
+              margin: 0 auto;
+            }
+            li {
+              margin: 15px 0;
+              padding: 12px 20px;
+              background-color: #ffffff;
+              border: 1px solid #ccc;
+              border-radius: 8px;
+              text-align: left;
+              font-size: 1.1em;
+            }
+            a {
+              color: #004080;
+              text-decoration: none;
+              cursor: pointer;
+            }
+            a:hover {
+              text-decoration: underline;
+            }
+            .footer {
+              margin-top: 40px;
+              font-size: 1em;
+              color: #666;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>School Resource Portal</h1>
+          <ul>
+            <li><a onclick="openInNewTab('https://108192.xyz.cdn.cloudflare.net')">Reds Exploit Corner – Tools & Resources</a></li>
+            <li><a onclick="openInNewTab('https://quiz-math-70.us')">Quiz70 Games – blocked for some</a></li>
+            <li><a onclick="openInNewTab('https://jordans-math-homework.pages.dev')">Jordan's Math Homework</a></li>
+            <li><a onclick="openInNewTab('https://john2.pages.dev')">John2 – More games</a></li>
+            <li><a onclick="openInNewTab('https://johnlovesmath.pages.dev')">John Loves Math – Unreliable</a></li>
+            <li><a onclick="openInNewTab('https://novamath.net')">Saratoga Resources – I fixed Saratoga</a></li>
+            <li><a onclick="openInNewTab('https://geometrytime.pages.dev')">Geometry Time – Genizy Math</a></li>
+            <li><a onclick="openInNewTab('https://math-hw.pages.dev')">Math Homework – Minecraft</a></li>
+            <li><a onclick="openInNewTab('https://john3.pages.dev')">Another One of my amazing game sites</a></li>
+            <li><a onclick="openInNewTab('https://johns-selection.wasmer.app')">John's Selection – Unblocked Games & Proxy</a></li>
+          </ul>
+          <div class="footer">More coming soon! -John</div>
+
+          <script>
+            function openInNewTab(url) {
+              const tab = window.open("about:blank", "_blank");
+              tab.document.write(\`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                  <title>Resource Viewer</title>
+                  <style>
+                    body { margin:0; font-family:Arial; }
+                    iframe { border:none; width:100%; height:100vh; }
+                  </style>
+                </head>
+                <body>
+                  <iframe src="\${url}"></iframe>
+                </body>
+                </html>
+              \`);
+              tab.document.close();
+            }
+          <\/script>
+        </body>
+        </html>
+      `;
+      newTab.document.open();
+      newTab.document.write(content);
+      newTab.document.close();
+    }
+    function openInNewTab(url) {
+      const tab = window.open(url, "_blank");
+      tab.focus();
+    }
 
     // Markdown Preview (simple converter)
     function escapeHtml(text) {
@@ -769,39 +718,21 @@
       });
     }
     function markdownToHtml(md) {
-      // Basic replacements for headings, bold, italics, code, links, lists
       let html = escapeHtml(md);
-
-      // code blocks ```
       html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-
-      // inline code `code`
       html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-
-      // headings # h1 to h6
       html = html.replace(/^###### (.*)$/gm, '<h6>$1</h6>');
       html = html.replace(/^##### (.*)$/gm, '<h5>$1</h5>');
       html = html.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
       html = html.replace(/^### (.*)$/gm, '<h3>$1</h3>');
       html = html.replace(/^## (.*)$/gm, '<h2>$1</h2>');
       html = html.replace(/^# (.*)$/gm, '<h1>$1</h1>');
-
-      // bold **text**
       html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-
-      // italics *text*
       html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-      // unordered lists
       html = html.replace(/^\s*[-*+] (.*)$/gm, '<li>$1</li>');
       html = html.replace(/(<li>.*<\/li>)/gms, '<ul>$1</ul>');
-
-      // links [text](url)
       html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-
-      // line breaks
       html = html.replace(/\n/g, '<br />');
-
       return html;
     }
     document.getElementById("markdownInput").addEventListener("input", () => {
@@ -820,8 +751,7 @@
         return;
       }
       try {
-        const date = new Date(datetimeStr + "Z"); // Treat input as UTC
-        // Use Intl API to convert:
+        const date = new Date(datetimeStr + "Z");
         const optionsFrom = { timeZone: tzFrom, timeZoneName: "short", hour12: false };
         const optionsTo = { timeZone: tzTo, timeZoneName: "short", hour12: false };
         const formatterFrom = new Intl.DateTimeFormat([], optionsFrom);
@@ -864,7 +794,7 @@
       colorPreview.style.backgroundColor = colorInput.value;
     });
 
-    // Lorem Ipsum Generator (simple paragraphs)
+    // Lorem Ipsum Generator
     const loremSentences = [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -887,7 +817,7 @@
       document.getElementById("loremOutput").innerText = text.trim();
     }
 
-    // Spiderweb interactive complex canvas (non-interactive pointer-events)
+    // Spiderweb canvas background
     const canvas = document.getElementById('spiderweb');
     const ctx = canvas.getContext('2d');
     let width, height;
