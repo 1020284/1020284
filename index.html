@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Learning Hub - Ultimate Edition with Intro & Scrollable Sidebar</title>
+<title>Learning Hub - Ultimate Edition with Intro & Settings</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;700;900&display=swap');
   /* Root & Global */
   :root {
     --bg-color: #0b1220;
@@ -27,7 +28,7 @@
     height: 100%;
   }
   body {
-    font-family: 'Poppins', Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    font-family: 'Poppins', ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
     background: var(--bg-color);
     color: var(--text);
     line-height: 1.6;
@@ -233,10 +234,20 @@
   }
   .clock-text {
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: var(--secondary);
     user-select: none;
     pointer-events: auto;
+    position: fixed;
+    top: 8px;
+    right: 12px;
+    font-family: 'Orbitron', monospace;
+    letter-spacing: 0.08em;
+    z-index: 12000;
+    background: rgba(11, 18, 32, 0.8);
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    user-select: none;
   }
   footer.footer {
     grid-column: 2;
@@ -320,14 +331,61 @@
     justify-content: center;
     align-items: center;
     color: var(--primary);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Orbitron', monospace;
     user-select: none;
     text-align: center;
   }
   #introText {
     font-weight: 900;
-    font-size: clamp(2rem, 6vw, 5rem);
+    font-size: clamp(4rem, 12vw, 10rem);
     opacity: 0;
+    transition: opacity 1s ease;
+    white-space: nowrap;
+  }
+  /* Settings tool form styling */
+  .settings-form label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .settings-form input[type="text"] {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1.5px solid rgba(127,127,127,0.3);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    font-size: 1.1rem;
+    outline: none;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .settings-form input[type="text"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 6px rgba(56,189,248,0.4);
+    background: var(--surface);
+  }
+  .settings-form button {
+    background: var(--gradient);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-lg);
+    user-select: none;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .settings-form button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 35px var(--primary);
+  }
+  .settings-form button:active {
+    transform: translateY(0) scale(0.98);
   }
 </style>
 </head>
@@ -347,10 +405,11 @@
     <div class="sidebar-item" data-tool="password">Password Strength</div>
     <div class="sidebar-item" data-tool="colorpicker">Color Picker</div>
     <div class="sidebar-item" data-tool="lorem">Lorem Ipsum</div>
+    <div class="sidebar-item" data-tool="settings">Settings</div>
   </nav>
 
   <main class="content-wrapper" role="main" aria-live="polite" style="display:none;">
-    <header class="header">
+    <header class="header" aria-label="Page Title and Tagline">
       <h1 id="pageTitle" class="bounce-text">Learning Hub</h1>
       <p class="tagline bounce-text">The ultimate toolbox crafted by the legendary John McCombs</p>
     </header>
@@ -359,12 +418,12 @@
       <h2>🧮 Calculator</h2>
       <input class="input bounce-input" type="text" id="expression" placeholder="e.g. 2 + 2" aria-label="Calculator expression input" />
       <button class="button bounce-button" onclick="calculate()">Calculate</button>
-      <div id="result" class="result-text"></div>
+      <div id="result" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="clock" class="tool-card" aria-label="Current time display">
       <h2>📅 Current Time</h2>
-      <div id="clock" class="clock-text"></div>
+      <div id="clock" class="clock-text" aria-live="polite" aria-atomic="true"></div>
     </section>
 
     <section id="notepad" class="tool-card" aria-label="Note pad tool">
@@ -378,7 +437,7 @@
       <input class="input bounce-input" type="number" id="min" placeholder="Min" aria-label="Minimum number" />
       <input class="input bounce-input" type="number" id="max" placeholder="Max" aria-label="Maximum number" />
       <button class="button bounce-button" onclick="generateRandom()">Generate</button>
-      <div id="randomResult" class="result-text"></div>
+      <div id="randomResult" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="unitconverter" class="tool-card" aria-label="Unit converter">
@@ -391,19 +450,19 @@
         <option value="lbToKg">pounds → kg</option>
       </select>
       <button class="button bounce-button" onclick="convertUnit()">Convert</button>
-      <div id="unitResult" class="result-text"></div>
+      <div id="unitResult" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="secretcode" class="tool-card" aria-label="Secret code input">
       <h2>🕵️ Secret Code</h2>
       <input class="input bounce-input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
-      <div id="secretOutput" class="tool-output"></div>
+      <div id="secretOutput" class="tool-output" aria-live="polite"></div>
     </section>
 
     <section id="markdown" class="tool-card" aria-label="Markdown preview tool">
       <h2>📝 Markdown Preview</h2>
       <textarea class="input bounce-input" id="markdownInput" placeholder="Write Markdown here..." rows="5" aria-label="Markdown input"></textarea>
-      <div id="markdownPreview"></div>
+      <div id="markdownPreview" aria-live="polite"></div>
     </section>
 
     <section id="timezone" class="tool-card" aria-label="Timezone converter">
@@ -424,13 +483,13 @@
         <option value="Australia/Sydney">Sydney (AEST)</option>
       </select>
       <button class="button bounce-button" onclick="convertTimezone()">Convert</button>
-      <div id="tzResult" class="result-text"></div>
+      <div id="tzResult" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="password" class="tool-card" aria-label="Password strength checker">
       <h2>🔐 Password Strength Checker</h2>
       <input class="input bounce-input" type="password" id="passwordInput" placeholder="Enter password" aria-label="Password input" />
-      <div id="passwordStrength" class="result-text"></div>
+      <div id="passwordStrength" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="colorpicker" class="tool-card" aria-label="Color picker tool">
@@ -443,7 +502,19 @@
       <h2>📜 Lorem Ipsum Generator</h2>
       <input class="input bounce-input" type="number" id="loremCount" placeholder="Paragraphs count" min="1" max="10" aria-label="Paragraphs count" />
       <button class="button bounce-button" onclick="generateLorem()">Generate</button>
-      <div id="loremOutput" class="tool-output"></div>
+      <div id="loremOutput" class="tool-output" aria-live="polite"></div>
+    </section>
+
+    <section id="settings" class="tool-card" aria-label="Settings">
+      <h2>⚙️ Settings</h2>
+      <form class="settings-form" onsubmit="event.preventDefault(); saveSettings();">
+        <label for="tabTitleInput">Tab Title:</label>
+        <input type="text" id="tabTitleInput" placeholder="Enter custom tab title" aria-label="Tab Title Input" />
+        <label for="tabFaviconInput">Favicon URL:</label>
+        <input type="text" id="tabFaviconInput" placeholder="Enter favicon URL" aria-label="Favicon URL Input" />
+        <button type="submit">Save Settings</button>
+      </form>
+      <div id="settingsOutput" class="tool-output" aria-live="polite" style="margin-top: 1rem;"></div>
     </section>
   </main>
 
@@ -470,10 +541,11 @@
     const pageTitle = document.getElementById('pageTitle');
     const tagline = document.querySelector('.tagline');
 
+    // Remove first "by John McCombs"
+    // So only show "John McCombs" and "Learning Hub"
     const introTexts = [
-      { text: 'by John McCombs', duration: 3000 },
-      { text: 'John McCombs', duration: 2000 },
-      { text: 'Learning Hub', duration: 3000 },
+      { text: 'John McCombs', duration: 2500 },
+      { text: 'Learning Hub', duration: 3500 },
     ];
 
     function fadeIn(element, duration = 1000) {
@@ -494,13 +566,16 @@
       introText.style.opacity = 0;
       introText.style.color = 'var(--primary)';
       introText.style.fontWeight = '900';
+      introText.style.fontFamily = "'Orbitron', monospace";
+      introText.style.fontSize = 'clamp(6rem, 15vw, 12rem)';
+      introText.style.whiteSpace = 'nowrap';
 
       for (let i = 0; i < introTexts.length; i++) {
         introText.textContent = introTexts[i].text;
-        fadeIn(introText, 1000);
+        fadeIn(introText, 1200);
         await delay(introTexts[i].duration);
-        fadeOut(introText, 1000);
-        await delay(1000);
+        fadeOut(introText, 1200);
+        await delay(800);
       }
 
       // Hide overlay and show main content
@@ -516,6 +591,8 @@
 
       // Initialize bounce effect on header texts
       toggleBounce(true);
+      updateClock();
+      setInterval(updateClock, 50); // Update every 50ms for milliseconds display
     }
 
     // Bounce toggle logic
@@ -600,7 +677,8 @@
           'timezone': 'Convert between timezones.',
           'password': 'Check password strength.',
           'colorpicker': 'Pick and preview colors.',
-          'lorem': 'Generate Lorem Ipsum text.'
+          'lorem': 'Generate Lorem Ipsum text.',
+          'settings': 'Customize your experience.'
         }[toolId] || '';
         addBounceToText(tagline);
         // Reset bounce animations for new tool inputs/buttons
@@ -623,19 +701,7 @@
       });
     });
 
-    // Run intro on page load
-    window.addEventListener('load', () => {
-      runIntro();
-    });
-
-    // The tools' functions (calculator, clock, etc.) remain unchanged and can be added here (omitted for brevity)
-    // For brevity, you can reuse the previous code for calculators, clock, notes, random, etc.
-
-    // Copy-paste all function definitions from previous code here to keep full functionality
-
-    // For demonstration, here are some to keep page functional:
-
-    // Calculator
+    // Calculate function
     function calculate() {
       const expr = document.getElementById("expression").value;
       try {
@@ -646,13 +712,12 @@
       }
     }
 
-    // Clock update
+    // Clock update with milliseconds
     function updateClock() {
       const now = new Date();
-      document.getElementById("clock").innerText = now.toLocaleString();
+      const formatted = now.toLocaleDateString() + ' ' + now.toLocaleTimeString() + '.' + now.getMilliseconds().toString().padStart(3, '0');
+      document.getElementById("clock").innerText = formatted;
     }
-    setInterval(updateClock, 1000);
-    updateClock();
 
     // Save notes locally
     function saveNotes() {
@@ -697,8 +762,339 @@
       document.getElementById("unitResult").innerText = result;
     }
 
-    // ... (Add remaining functions from previous code as needed)
+    // Secret code input event (example secret code with feature)
+    document.getElementById("secretInput").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const input = this.value.trim().toLowerCase();
+        const output = document.getElementById("secretOutput");
+        if (input === "john is awesome") {
+          output.innerHTML = `
+            <ul style="list-style: none; padding-left: 0; user-select:none; font-weight: 700;">
+              <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
+              <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
+              <li><strong>Shift + J</strong>: Surprise John McCombs' Personal Gallery</li>
+              <li><strong>Shift + H</strong>: Show John’s Hotness Meter</li>
+              <li><strong>Shift + G</strong>: Activate Secret Glaze Burst!</li>
+            </ul>
+          `;
+        } else {
+          output.innerText = "Incorrect code.";
+        }
+      }
+    });
 
+    // Markdown Preview simple parser
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, function(m) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+      });
+    }
+    function markdownToHtml(md) {
+      let html = escapeHtml(md);
+      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      html = html.replace(/^###### (.*)$/gm, '<h6>$1</h6>');
+      html = html.replace(/^##### (.*)$/gm, '<h5>$1</h5>');
+      html = html.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
+      html = html.replace(/^### (.*)$/gm, '<h3>$1</h3>');
+      html = html.replace(/^## (.*)$/gm, '<h2>$1</h2>');
+      html = html.replace(/^# (.*)$/gm, '<h1>$1</h1>');
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      html = html.replace(/^\s*[-*+] (.*)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.*<\/li>)/gms, '<ul>$1</ul>');
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      html = html.replace(/\n/g, '<br />');
+      return html;
+    }
+    document.getElementById("markdownInput").addEventListener("input", () => {
+      const md = document.getElementById("markdownInput").value;
+      const html = markdownToHtml(md);
+      document.getElementById("markdownPreview").innerHTML = html;
+    });
+
+    // Timezone Converter
+    function convertTimezone() {
+      const datetimeStr = document.getElementById("datetimeInput").value;
+      const tzFrom = document.getElementById("tzFrom").value;
+      const tzTo = document.getElementById("tzTo").value;
+      if (!datetimeStr) {
+        document.getElementById("tzResult").innerText = "Please select a date and time.";
+        return;
+      }
+      try {
+        const date = new Date(datetimeStr + "Z");
+        const optionsFrom = { timeZone: tzFrom, timeZoneName: "short", hour12: false };
+        const optionsTo = { timeZone: tzTo, timeZoneName: "short", hour12: false };
+        const formatterFrom = new Intl.DateTimeFormat([], optionsFrom);
+        const formatterTo = new Intl.DateTimeFormat([], optionsTo);
+        const fromStr = formatterFrom.format(date);
+        const toStr = formatterTo.format(date);
+        document.getElementById("tzResult").innerText = `${fromStr} → ${toStr}`;
+      } catch {
+        document.getElementById("tzResult").innerText = "Error converting timezone.";
+      }
+    }
+
+    // Password strength checker
+    const strengthMessages = ["Very Weak", "Weak", "Moderate", "Strong", "Very Strong"];
+    function checkPasswordStrength(pw) {
+      let score = 0;
+      if (pw.length >= 8) score++;
+      if (/[a-z]/.test(pw)) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/\d/.test(pw)) score++;
+      if (/[\W_]/.test(pw)) score++;
+      return score;
+    }
+    document.getElementById("passwordInput").addEventListener("input", function() {
+      const val = this.value;
+      if (!val) {
+        document.getElementById("passwordStrength").innerText = "";
+        return;
+      }
+      const score = checkPasswordStrength(val);
+      document.getElementById("passwordStrength").innerText = `Strength: ${strengthMessages[score-1] || "Very Weak"}`;
+    });
+
+    // Color picker preview
+    const colorInput = document.getElementById("colorInput");
+    const colorPreview = document.getElementById("colorPreview");
+    colorInput.value = "#38bdf8";
+    colorPreview.style.backgroundColor = colorInput.value;
+    colorInput.addEventListener("input", () => {
+      colorPreview.style.backgroundColor = colorInput.value;
+    });
+
+    // Lorem Ipsum Generator
+    const loremSentences = [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    ];
+    function generateLorem() {
+      let count = parseInt(document.getElementById("loremCount").value);
+      if (isNaN(count) || count < 1) count = 1;
+      if (count > 10) count = 10;
+      let text = "";
+      for(let p = 0; p < count; p++) {
+        let para = "";
+        for(let s = 0; s < 5; s++) {
+          para += loremSentences[Math.floor(Math.random() * loremSentences.length)] + " ";
+        }
+        text += para.trim() + "\n\n";
+      }
+      document.getElementById("loremOutput").innerText = text.trim();
+    }
+
+    // Settings tool: Tab title and favicon management
+    function saveSettings() {
+      const titleInput = document.getElementById('tabTitleInput').value.trim();
+      const faviconInput = document.getElementById('tabFaviconInput').value.trim();
+      let messages = [];
+      if(titleInput) {
+        document.title = titleInput;
+        localStorage.setItem('customTabTitle', titleInput);
+        messages.push(`Tab title set to "${titleInput}"`);
+      } else {
+        localStorage.removeItem('customTabTitle');
+        location.reload(); // reset to default title
+      }
+      if(faviconInput) {
+        setFavicon(faviconInput);
+        localStorage.setItem('customFavicon', faviconInput);
+        messages.push("Favicon updated.");
+      } else {
+        removeFavicon();
+        localStorage.removeItem('customFavicon');
+      }
+      document.getElementById('settingsOutput').innerText = messages.join(' ');
+    }
+
+    function setFavicon(url) {
+      removeFavicon();
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.href = url;
+      link.id = 'dynamicFavicon';
+      document.head.appendChild(link);
+    }
+    function removeFavicon() {
+      const existing = document.getElementById('dynamicFavicon');
+      if(existing) existing.remove();
+    }
+
+    function applySavedSettings() {
+      const savedTitle = localStorage.getItem('customTabTitle');
+      const savedFavicon = localStorage.getItem('customFavicon');
+      if(savedTitle) {
+        document.title = savedTitle;
+        document.getElementById('tabTitleInput').value = savedTitle;
+      }
+      if(savedFavicon) {
+        setFavicon(savedFavicon);
+        document.getElementById('tabFaviconInput').value = savedFavicon;
+      }
+    }
+
+    window.addEventListener('load', () => {
+      applySavedSettings();
+    });
+
+    // Spiderweb canvas background
+    const canvas = document.getElementById('spiderweb');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * devicePixelRatio;
+      canvas.height = height * devicePixelRatio;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const POINTS = 150;
+    const MAX_DIST = 130;
+    const SPEED = 0.3;
+    const NODE_RADIUS = 3;
+    const HOVER_RADIUS = 50;
+    const colors = ["#38bdf8", "#ef4444", "#94a3b8"];
+
+    let points = Array.from({ length: POINTS }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * SPEED,
+      vy: (Math.random() - 0.5) * SPEED,
+      c: colors[Math.floor(Math.random() * colors.length)],
+      radius: NODE_RADIUS,
+      glow: 0,
+      connections: []
+    }));
+
+    function updateConnections() {
+      points.forEach(p => p.connections = []);
+      for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        for (let j = i + 1; j < points.length; j++) {
+          const q = points[j];
+          const dx = p.x - q.x, dy = p.y - q.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MAX_DIST) {
+            p.connections.push({ point: q, dist });
+            points[j].connections.push({ point: p, dist });
+          }
+        }
+      }
+    }
+    updateConnections();
+
+    let mouse = { x: null, y: null, isHovering: false };
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.isHovering = true;
+    });
+    canvas.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+      mouse.isHovering = false;
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      const ROTATION_SPEED = 0.0005;
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      ctx.lineWidth = 0.2;
+      ctx.strokeStyle = `rgba(100, 149, 237, 0.12)`;
+      ctx.beginPath();
+      const radialLines = 24;
+      for (let i = 0; i < radialLines; i++) {
+        const angle = (Math.PI * 2 / radialLines) * i + performance.now() * ROTATION_SPEED;
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(centerX + Math.cos(angle) * width, centerY + Math.sin(angle) * height);
+      }
+      ctx.stroke();
+
+      ctx.lineWidth = 0.15;
+      ctx.strokeStyle = `rgba(100, 149, 237, 0.1)`;
+      for (let i = 1; i <= 20; i++) {
+        ctx.beginPath();
+        const radius = (Math.min(width, height) / 2) * (i / 20);
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      points.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        p.glow *= 0.9;
+
+        if (mouse.isHovering && mouse.x !== null && mouse.y !== null) {
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < HOVER_RADIUS) {
+            p.glow = Math.min(1, p.glow + 0.15);
+            p.vx += (dx / dist) * 0.05;
+            p.vy += (dy / dist) * 0.05;
+          }
+        }
+      });
+
+      points.forEach(p => {
+        p.connections.forEach(c => {
+          const opacity = 1 - c.dist / MAX_DIST;
+          const glowFactor = Math.min(p.glow, c.point.glow);
+          ctx.strokeStyle = `rgba(56, 189, 248, ${opacity * 0.5 + glowFactor * 0.5})`;
+          ctx.lineWidth = 0.3 + glowFactor * 1.2;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(c.point.x, c.point.y);
+          ctx.stroke();
+        });
+      });
+
+      points.forEach(p => {
+        if (p.glow > 0.01) {
+          const gradient = ctx.createRadialGradient(p.x, p.y, NODE_RADIUS, p.x, p.y, NODE_RADIUS * 7);
+          gradient.addColorStop(0, `rgba(56, 189, 248, ${p.glow * 0.6})`);
+          gradient.addColorStop(1, 'rgba(56, 189, 248, 0)');
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, NODE_RADIUS * 7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, NODE_RADIUS, 0, Math.PI * 2);
+        ctx.fillStyle = p.c;
+        ctx.shadowColor = `rgba(56, 189, 248, ${p.glow * 0.7})`;
+        ctx.shadowBlur = 8 * p.glow;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // Run intro on page load
+    window.addEventListener('load', () => {
+      runIntro();
+    });
   </script>
 </body>
 </html>
