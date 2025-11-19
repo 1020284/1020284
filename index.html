@@ -4,8 +4,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Learning Hub - Ultimate Edition 2.8</title>
+<title>Learning Hub - Ultimate Edition with Intro & Settings</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@400;700;900&display=swap');
   /* Root & Global */
   :root {
     --bg-color: #0b1220;
@@ -24,8 +25,11 @@
   * {
     margin: 0; padding: 0; box-sizing: border-box;
   }
+  html, body {
+    height: 100%;
+  }
   body {
-    font-family: 'Poppins', Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    font-family: 'Poppins', ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
     background: var(--bg-color);
     color: var(--text);
     line-height: 1.6;
@@ -61,6 +65,7 @@
     box-shadow: var(--shadow-lg);
     backdrop-filter: blur(20px);
     user-select: none;
+    overflow-y: auto;
   }
   #sidebar h2 {
     color: var(--primary);
@@ -70,6 +75,7 @@
     font-weight: 900;
     letter-spacing: 0.1em;
     text-shadow: 0 0 8px var(--primary);
+    flex-shrink: 0;
   }
   .sidebar-item {
     padding: 0.75rem 1.5rem;
@@ -79,6 +85,7 @@
     cursor: pointer;
     transition: background-color var(--transition), color var(--transition);
     border-left: 4px solid transparent;
+    flex-shrink: 0;
   }
   .sidebar-item:hover {
     background-color: var(--primary);
@@ -106,6 +113,7 @@
     text-align: center;
     margin-bottom: 1rem;
     user-select: none;
+    flex-shrink: 0;
   }
   header h1 {
     font-size: clamp(4rem, 8vw, 7rem);
@@ -118,6 +126,7 @@
     text-transform: uppercase;
     text-shadow: 0 0 12px var(--primary);
     user-select: none;
+    white-space: nowrap;
   }
   .tagline {
     color: var(--accent);
@@ -127,10 +136,12 @@
     user-select: none;
     font-size: 1.25rem;
     text-shadow: 0 0 8px var(--accent);
+    white-space: nowrap;
   }
   .tools-grid {
     position: relative;
     flex-grow: 1;
+    min-height: 400px; /* ensure some height for scrolling */
   }
   .tool-card {
     background: rgba(16, 23, 42, 0.45);
@@ -224,10 +235,20 @@
   }
   .clock-text {
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: var(--secondary);
     user-select: none;
     pointer-events: auto;
+    position: fixed;
+    top: 8px;
+    right: 12px;
+    font-family: 'Orbitron', monospace;
+    letter-spacing: 0.08em;
+    z-index: 12000;
+    background: rgba(11, 18, 32, 0.8);
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    user-select: none;
   }
   footer.footer {
     grid-column: 2;
@@ -270,54 +291,6 @@
     margin-top: 0.5rem;
     box-shadow: inset 0 2px 7px rgba(0,0,0,0.3);
   }
-  /* Glaze overlay for John McCombs */
-  #glaze {
-    position: fixed;
-    inset: 0;
-    background: rgba(56, 189, 248, 0.18);
-    pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: screen;
-    animation: glazePulse 3s ease-in-out infinite;
-  }
-  @keyframes glazePulse {
-    0%, 100% { background-color: rgba(56, 189, 248, 0.18); }
-    50% { background-color: rgba(56, 189, 248, 0.42); }
-  }
-  #glazeText {
-    position: fixed;
-    top: 15vh;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--primary);
-    font-size: clamp(3rem, 8vw, 8rem);
-    font-weight: 900;
-    text-shadow: 0 0 28px var(--primary);
-    user-select: none;
-    pointer-events: none;
-    z-index: 10000;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-    letter-spacing: 0.12em;
-  }
-  #glazeSubText {
-    position: fixed;
-    top: calc(15vh + 7rem);
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--accent);
-    font-size: clamp(1.25rem, 4vw, 2.5rem);
-    font-weight: 800;
-    text-shadow: 0 0 14px var(--accent);
-    user-select: none;
-    pointer-events: none;
-    z-index: 10000;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-    letter-spacing: 0.06em;
-    max-width: 90vw;
-    line-height: 1.3;
-  }
   /* Bounce animation */
   @keyframes bounce {
     0%, 100% { transform: translateY(0); }
@@ -330,12 +303,97 @@
   .bounce-button, .bounce-input {
     animation: bounce 1.2s ease-in-out infinite;
   }
+  /* Bounce toggle button */
+  #bounceToggle {
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
+    z-index: 11000;
+    background: var(--primary);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    color: white;
+    font-weight: 900;
+    font-size: 24px;
+    user-select: none;
+  }
+  /* Intro Overlay */
+  #introOverlay {
+    position: fixed;
+    inset: 0;
+    background: #001a4d; /* Dark blue */
+    z-index: 15000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary);
+    font-family: 'Orbitron', monospace;
+    user-select: none;
+    text-align: center;
+  }
+  #introText {
+    font-weight: 900;
+    font-size: clamp(4rem, 12vw, 10rem);
+    opacity: 0;
+    transition: opacity 1s ease;
+    white-space: nowrap;
+  }
+  /* Settings tool form styling */
+  .settings-form label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .settings-form input[type="text"] {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1.5px solid rgba(127,127,127,0.3);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    font-size: 1.1rem;
+    outline: none;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .settings-form input[type="text"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 6px rgba(56,189,248,0.4);
+    background: var(--surface);
+  }
+  .settings-form button {
+    background: var(--gradient);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-lg);
+    user-select: none;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .settings-form button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 35px var(--primary);
+  }
+  .settings-form button:active {
+    transform: translateY(0) scale(0.98);
+  }
 </style>
 </head>
 <body>
   <canvas id="spiderweb"></canvas>
 
-  <nav id="sidebar" aria-label="Tool navigation">
+  <nav id="sidebar" aria-label="Tool navigation" tabindex="0">
     <h2>Learning Hub</h2>
     <div class="sidebar-item active" data-tool="calculator" tabindex="0">Calculator</div>
     <div class="sidebar-item" data-tool="clock">Current Time</div>
@@ -348,10 +406,11 @@
     <div class="sidebar-item" data-tool="password">Password Strength</div>
     <div class="sidebar-item" data-tool="colorpicker">Color Picker</div>
     <div class="sidebar-item" data-tool="lorem">Lorem Ipsum</div>
+    <div class="sidebar-item" data-tool="settings">Settings</div>
   </nav>
 
-  <main class="content-wrapper" role="main" aria-live="polite">
-    <header class="header">
+  <main class="content-wrapper" role="main" aria-live="polite" style="display:none;">
+    <header class="header" aria-label="Page Title and Tagline">
       <h1 id="pageTitle" class="bounce-text">Learning Hub</h1>
       <p class="tagline bounce-text">The ultimate toolbox crafted by the legendary John McCombs</p>
     </header>
@@ -360,12 +419,12 @@
       <h2>🧮 Calculator</h2>
       <input class="input bounce-input" type="text" id="expression" placeholder="e.g. 2 + 2" aria-label="Calculator expression input" />
       <button class="button bounce-button" onclick="calculate()">Calculate</button>
-      <div id="result" class="result-text"></div>
+      <div id="result" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="clock" class="tool-card" aria-label="Current time display">
       <h2>📅 Current Time</h2>
-      <div id="clock" class="clock-text"></div>
+      <div id="clock" class="clock-text" aria-live="polite" aria-atomic="true"></div>
     </section>
 
     <section id="notepad" class="tool-card" aria-label="Note pad tool">
@@ -379,7 +438,7 @@
       <input class="input bounce-input" type="number" id="min" placeholder="Min" aria-label="Minimum number" />
       <input class="input bounce-input" type="number" id="max" placeholder="Max" aria-label="Maximum number" />
       <button class="button bounce-button" onclick="generateRandom()">Generate</button>
-      <div id="randomResult" class="result-text"></div>
+      <div id="randomResult" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="unitconverter" class="tool-card" aria-label="Unit converter">
@@ -392,19 +451,19 @@
         <option value="lbToKg">pounds → kg</option>
       </select>
       <button class="button bounce-button" onclick="convertUnit()">Convert</button>
-      <div id="unitResult" class="result-text"></div>
+      <div id="unitResult" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="secretcode" class="tool-card" aria-label="Secret code input">
       <h2>🕵️ Secret Code</h2>
       <input class="input bounce-input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
-      <div id="secretOutput" class="tool-output"></div>
+      <div id="secretOutput" class="tool-output" aria-live="polite"></div>
     </section>
 
     <section id="markdown" class="tool-card" aria-label="Markdown preview tool">
       <h2>📝 Markdown Preview</h2>
       <textarea class="input bounce-input" id="markdownInput" placeholder="Write Markdown here..." rows="5" aria-label="Markdown input"></textarea>
-      <div id="markdownPreview"></div>
+      <div id="markdownPreview" aria-live="polite"></div>
     </section>
 
     <section id="timezone" class="tool-card" aria-label="Timezone converter">
@@ -425,13 +484,13 @@
         <option value="Australia/Sydney">Sydney (AEST)</option>
       </select>
       <button class="button bounce-button" onclick="convertTimezone()">Convert</button>
-      <div id="tzResult" class="result-text"></div>
+      <div id="tzResult" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="password" class="tool-card" aria-label="Password strength checker">
       <h2>🔐 Password Strength Checker</h2>
       <input class="input bounce-input" type="password" id="passwordInput" placeholder="Enter password" aria-label="Password input" />
-      <div id="passwordStrength" class="result-text"></div>
+      <div id="passwordStrength" class="result-text" aria-live="polite"></div>
     </section>
 
     <section id="colorpicker" class="tool-card" aria-label="Color picker tool">
@@ -444,39 +503,154 @@
       <h2>📜 Lorem Ipsum Generator</h2>
       <input class="input bounce-input" type="number" id="loremCount" placeholder="Paragraphs count" min="1" max="10" aria-label="Paragraphs count" />
       <button class="button bounce-button" onclick="generateLorem()">Generate</button>
-      <div id="loremOutput" class="tool-output"></div>
+      <div id="loremOutput" class="tool-output" aria-live="polite"></div>
+    </section>
+
+    <section id="settings" class="tool-card" aria-label="Settings">
+      <h2>⚙️ Settings</h2>
+      <form class="settings-form" onsubmit="event.preventDefault(); saveSettings();">
+        <label for="tabTitleInput">Tab Title:</label>
+        <input type="text" id="tabTitleInput" placeholder="Enter custom tab title" aria-label="Tab Title Input" />
+        <label for="tabFaviconInput">Favicon URL:</label>
+        <input type="text" id="tabFaviconInput" placeholder="Enter favicon URL" aria-label="Favicon URL Input" />
+        <button type="submit">Save Settings</button>
+      </form>
+      <div id="settingsOutput" class="tool-output" aria-live="polite" style="margin-top: 1rem;"></div>
     </section>
   </main>
 
-  <footer class="footer">
+  <footer class="footer" style="display:none;">
     <p>Special thanks to: Judah, Fisher, GitHub, Copilot, and Cloudflare.</p>
     <p>by John McCombs</p>
   </footer>
+
   <!-- Bounce toggle button -->
-  <button id="bounceToggle" aria-pressed="false" aria-label="Toggle bounce animation" title="Toggle bounce animation" style="
-    position: fixed;
-    bottom: 12px;
-    right: 12px;
-    z-index: 11000;
-    background: var(--primary);
-    border: none;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    cursor: pointer;
-    box-shadow: var(--shadow-lg);
-    color: white;
-    font-weight: 900;
-    font-size: 24px;
-    user-select: none;
-  ">🌀</button>
+  <button id="bounceToggle" aria-pressed="false" aria-label="Toggle bounce animation" title="Toggle bounce animation" style="display:none;">🌀</button>
+
+  <!-- Intro Overlay -->
+  <div id="introOverlay" aria-live="polite" aria-atomic="true" role="alert">
+    <div id="introText"></div>
+  </div>
 
   <script>
+    // Intro sequence text & animation
+    const introOverlay = document.getElementById('introOverlay');
+    const introText = document.getElementById('introText');
+    const contentWrapper = document.querySelector('main.content-wrapper');
+    const footer = document.querySelector('footer.footer');
+    const bounceToggle = document.getElementById('bounceToggle');
+    const pageTitle = document.getElementById('pageTitle');
+    const tagline = document.querySelector('.tagline');
+
+    // Remove first "by John McCombs"
+    // So only show "John McCombs" and "Learning Hub"
+    const introTexts = [
+      { text: 'John McCombs', duration: 2500 },
+      { text: 'Learning Hub', duration: 3500 },
+    ];
+
+    function fadeIn(element, duration = 1000) {
+      element.style.transition = `opacity ${duration}ms ease`;
+      element.style.opacity = 1;
+    }
+    function fadeOut(element, duration = 1000) {
+      element.style.transition = `opacity ${duration}ms ease`;
+      element.style.opacity = 0;
+    }
+
+    async function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function runIntro() {
+      introOverlay.style.backgroundColor = '#001a4d';
+      introText.style.opacity = 0;
+      introText.style.color = 'var(--primary)';
+      introText.style.fontWeight = '900';
+      introText.style.fontFamily = "'Orbitron', monospace";
+      introText.style.fontSize = 'clamp(6rem, 15vw, 12rem)';
+      introText.style.whiteSpace = 'nowrap';
+
+      for (let i = 0; i < introTexts.length; i++) {
+        introText.textContent = introTexts[i].text;
+        fadeIn(introText, 1200);
+        await delay(introTexts[i].duration);
+        fadeOut(introText, 1200);
+        await delay(800);
+      }
+
+      // Hide overlay and show main content
+      introOverlay.style.transition = 'opacity 1500ms ease';
+      introOverlay.style.opacity = 0;
+      await delay(1500);
+      introOverlay.style.display = 'none';
+
+      // Show main content and footer & bounce toggle
+      contentWrapper.style.display = 'flex';
+      footer.style.display = 'block';
+      bounceToggle.style.display = 'inline-flex';
+
+      // Initialize bounce effect on header texts
+      toggleBounce(true);
+      updateClock();
+      setInterval(updateClock, 50); // Update every 50ms for milliseconds display
+    }
+
+    // Bounce toggle logic
+    let bounceActive = true;
+
+    function addBounceToText(element) {
+      if (!element) return;
+      const text = element.textContent;
+      element.innerHTML = '';
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = text[i];
+        span.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+        element.appendChild(span);
+      }
+    }
+
+    function removeBounceFromText(element) {
+      if (!element) return;
+      element.textContent = element.textContent;
+    }
+
+    function toggleBounce(state) {
+      if (state) {
+        addBounceToText(pageTitle);
+        addBounceToText(tagline);
+        document.querySelectorAll('.tool-card.active .button').forEach(btn => {
+          btn.classList.add('bounce-button');
+          btn.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+        });
+        document.querySelectorAll('.tool-card.active input, .tool-card.active select, .tool-card.active textarea').forEach(input => {
+          input.classList.add('bounce-input');
+          input.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+        });
+      } else {
+        removeBounceFromText(pageTitle);
+        removeBounceFromText(tagline);
+        document.querySelectorAll('.bounce-button').forEach(btn => {
+          btn.classList.remove('bounce-button');
+          btn.style.animationDelay = '';
+        });
+        document.querySelectorAll('.bounce-input').forEach(input => {
+          input.classList.remove('bounce-input');
+          input.style.animationDelay = '';
+        });
+      }
+      bounceActive = state;
+      bounceToggle.setAttribute('aria-pressed', bounceActive);
+    }
+
+    bounceToggle.addEventListener('click', () => {
+      toggleBounce(!bounceActive);
+    });
+
     // Sidebar tool switching
     const sidebarItems = document.querySelectorAll('#sidebar .sidebar-item');
     const tools = document.querySelectorAll('.tool-card');
-    const pageTitle = document.getElementById('pageTitle');
-    const tagline = document.querySelector('.tagline');
 
     function clearActive() {
       sidebarItems.forEach(i => i.classList.remove('active'));
@@ -504,9 +678,21 @@
           'timezone': 'Convert between timezones.',
           'password': 'Check password strength.',
           'colorpicker': 'Pick and preview colors.',
-          'lorem': 'Generate Lorem Ipsum text.'
+          'lorem': 'Generate Lorem Ipsum text.',
+          'settings': 'Customize your experience.'
         }[toolId] || '';
         addBounceToText(tagline);
+        // Reset bounce animations for new tool inputs/buttons
+        if (bounceActive) {
+          document.querySelectorAll('.tool-card.active .button').forEach(btn => {
+            btn.classList.add('bounce-button');
+            btn.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+          });
+          document.querySelectorAll('.tool-card.active input, .tool-card.active select, .tool-card.active textarea').forEach(input => {
+            input.classList.add('bounce-input');
+            input.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+          });
+        }
       });
       item.addEventListener('keydown', e => {
         if(e.key === "Enter" || e.key === " ") {
@@ -516,11 +702,10 @@
       });
     });
 
-    // Calculator
+    // Calculate function
     function calculate() {
       const expr = document.getElementById("expression").value;
       try {
-        // eslint-disable-next-line no-new-func
         const result = Function('"use strict";return (' + expr + ')')();
         document.getElementById("result").innerText = "Result: " + result;
       } catch {
@@ -528,13 +713,12 @@
       }
     }
 
-    // Clock update
+    // Clock update with milliseconds
     function updateClock() {
       const now = new Date();
-      document.getElementById("clock").innerText = now.toLocaleString();
+      const formatted = now.toLocaleDateString() + ' ' + now.toLocaleTimeString() + '.' + now.getMilliseconds().toString().padStart(3, '0');
+      document.getElementById("clock").innerText = formatted;
     }
-    setInterval(updateClock, 1000);
-    updateClock();
 
     // Save notes locally
     function saveNotes() {
@@ -579,7 +763,7 @@
       document.getElementById("unitResult").innerText = result;
     }
 
-    // Secret code input event and expanded secret features
+    // Secret code input event (example secret code with feature)
     document.getElementById("secretInput").addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         const input = this.value.trim().toLowerCase();
@@ -600,211 +784,7 @@
       }
     });
 
-    // Keyboard shortcuts with secret features including new "G" for glaze burst
-    document.addEventListener("keydown", function (e) {
-      if (!e.shiftKey) return;
-      const key = e.key.toLowerCase();
-
-      if (key === "b") {
-        e.preventDefault();
-        const code = prompt("Enter access code:");
-        if (code === "1020284") {
-          openFullscreenSite("https://johnnyboyisthebest.dpdns.org/", "Interstellar");
-        } else {
-          alert("Incorrect code.");
-        }
-      }
-      else if (key === "d") {
-        e.preventDefault();
-        const code = prompt("Enter access code:");
-        if (code === "1020284") {
-          openSchoolPortal();
-        } else {
-          alert("Incorrect code.");
-        }
-      }
-      else if (key === "j") {
-        e.preventDefault();
-        alert("✨ Welcome to John McCombs' Personal Gallery! ✨\n\n(Feature coming soon!)");
-      }
-      else if (key === "h") {
-        e.preventDefault();
-        alert("🔥 John McCombs' Hotness Meter 🔥\n\nOver 9000! You're literally on fire, John!");
-      }
-      else if (key === "r") {
-        e.preventDefault();
-        openInNewTab("https://johns-selection.wasmer.app");
-      }
-      else if (key === "x") {
-        e.preventDefault();
-        const code = prompt("Enter access code:");
-        if (code === "1020284") {
-          openFullscreenSite("https://novamath.net/", "NettleWeb");
-        } else {
-          alert("Incorrect code.");
-        }
-      }
-      else if (key === "c") {
-        e.preventDefault();
-        const code = prompt("Enter access code:");
-        if (code === "1020284") {
-          openInNewTab("https://canlite.org");
-        } else {
-          alert("Incorrect code.");
-        }
-      }
-      else if (key === "g") {
-        e.preventDefault();
-        secretGlazeBurst();
-      }
-    });
-
-    function openFullscreenSite(url, title) {
-      const newTab = window.open("about:blank", "_blank");
-      const content = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>${title}</title>
-          <style>
-            body { margin: 0; overflow: hidden; background: black; }
-            iframe { width: 100vw; height: 100vh; border: none; }
-            #fullscreenBtn {
-              position: fixed;
-              top: 10px;
-              right: 10px;
-              z-index: 9999;
-              padding: 10px 15px;
-              background: #00c6ff;
-              color: white;
-              border: none;
-              font-size: 16px;
-              cursor: pointer;
-            }
-          </style>
-        </head>
-        <body>
-          <button id="fullscreenBtn">Fullscreen</button>
-          <iframe id="proxyFrame" src="${url}"></iframe>
-          <script>
-            document.getElementById("fullscreenBtn").onclick = function() {
-              const iframe = document.getElementById("proxyFrame");
-              if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-              } else if (iframe.webkitRequestFullscreen) {
-                iframe.webkitRequestFullscreen();
-              } else if (iframe.msRequestFullscreen) {
-                iframe.msRequestFullscreen();
-              }
-            };
-          <\/script>
-        </body>
-        </html>
-      `;
-      newTab.document.open();
-      newTab.document.write(content);
-      newTab.document.close();
-    }
-    function openSchoolPortal() {
-      const newTab = window.open("about:blank", "_blank");
-      const content = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>School Resource Portal</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              background-color: #f9f9f9;
-              color: #333;
-              padding: 40px;
-              text-align: center;
-            }
-            h1 {
-              font-size: 2.2em;
-              margin-bottom: 20px;
-              color: #004080;
-            }
-            ul {
-              list-style: none;
-              padding: 0;
-              max-width: 600px;
-              margin: 0 auto;
-            }
-            li {
-              margin: 15px 0;
-              padding: 12px 20px;
-              background-color: #ffffff;
-              border: 1px solid #ccc;
-              border-radius: 8px;
-              text-align: left;
-              font-size: 1.1em;
-            }
-            a {
-              color: #004080;
-              text-decoration: none;
-              cursor: pointer;
-            }
-            a:hover {
-              text-decoration: underline;
-            }
-            .footer {
-              margin-top: 40px;
-              font-size: 1em;
-              color: #666;
-            }
-          </style>
-        </head>
-        <body>
-          <h1>School Resource Portal</h1>
-          <ul>
-            <li><a onclick="openInNewTab('https://108192.xyz.cdn.cloudflare.net')">Reds Exploit Corner – Tools & Resources</a></li>
-            <li><a onclick="openInNewTab('https://quiz-math-70.us')">Quiz70 Games – blocked for some</a></li>
-            <li><a onclick="openInNewTab('https://jordans-math-homework.pages.dev')">Jordan's Math Homework</a></li>
-            <li><a onclick="openInNewTab('https://john2.pages.dev')">John2 – More games</a></li>
-            <li><a onclick="openInNewTab('https://johnlovesmath.pages.dev')">John Loves Math – Unreliable</a></li>
-            <li><a onclick="openInNewTab('https://novamath.net')">Saratoga Resources – I fixed Saratoga</a></li>
-            <li><a onclick="openInNewTab('https://geometrytime.pages.dev')">Geometry Time – Genizy Math</a></li>
-            <li><a onclick="openInNewTab('https://math-hw.pages.dev')">Math Homework – Minecraft</a></li>
-            <li><a onclick="openInNewTab('https://john3.pages.dev')">Another One of my amazing game sites</a></li>
-            <li><a onclick="openInNewTab('https://johns-selection.wasmer.app')">John's Selection – Unblocked Games & Proxy</a></li>
-          </ul>
-          <div class="footer">More coming soon! -John</div>
-
-          <script>
-            function openInNewTab(url) {
-              const tab = window.open("about:blank", "_blank");
-              tab.document.write(\`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                  <title>Resource Viewer</title>
-                  <style>
-                    body { margin:0; font-family:Arial; }
-                    iframe { border:none; width:100%; height:100vh; }
-                  </style>
-                </head>
-                <body>
-                  <iframe src="\${url}"></iframe>
-                </body>
-                </html>
-              \`);
-              tab.document.close();
-            }
-          <\/script>
-        </body>
-        </html>
-      `;
-      newTab.document.open();
-      newTab.document.write(content);
-      newTab.document.close();
-    }
-    function openInNewTab(url) {
-      const tab = window.open(url, "_blank");
-      tab.focus();
-    }
-
-    // Markdown Preview (simple converter)
+    // Markdown Preview simple parser
     function escapeHtml(text) {
       return text.replace(/[&<>"']/g, function(m) {
         return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
@@ -909,6 +889,60 @@
       }
       document.getElementById("loremOutput").innerText = text.trim();
     }
+
+    // Settings tool: Tab title and favicon management
+    function saveSettings() {
+      const titleInput = document.getElementById('tabTitleInput').value.trim();
+      const faviconInput = document.getElementById('tabFaviconInput').value.trim();
+      let messages = [];
+      if(titleInput) {
+        document.title = titleInput;
+        localStorage.setItem('customTabTitle', titleInput);
+        messages.push(`Tab title set to "${titleInput}"`);
+      } else {
+        localStorage.removeItem('customTabTitle');
+        location.reload(); // reset to default title
+      }
+      if(faviconInput) {
+        setFavicon(faviconInput);
+        localStorage.setItem('customFavicon', faviconInput);
+        messages.push("Favicon updated.");
+      } else {
+        removeFavicon();
+        localStorage.removeItem('customFavicon');
+      }
+      document.getElementById('settingsOutput').innerText = messages.join(' ');
+    }
+
+    function setFavicon(url) {
+      removeFavicon();
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.href = url;
+      link.id = 'dynamicFavicon';
+      document.head.appendChild(link);
+    }
+    function removeFavicon() {
+      const existing = document.getElementById('dynamicFavicon');
+      if(existing) existing.remove();
+    }
+
+    function applySavedSettings() {
+      const savedTitle = localStorage.getItem('customTabTitle');
+      const savedFavicon = localStorage.getItem('customFavicon');
+      if(savedTitle) {
+        document.title = savedTitle;
+        document.getElementById('tabTitleInput').value = savedTitle;
+      }
+      if(savedFavicon) {
+        setFavicon(savedFavicon);
+        document.getElementById('tabFaviconInput').value = savedFavicon;
+      }
+    }
+
+    window.addEventListener('load', () => {
+      applySavedSettings();
+    });
 
     // Spiderweb canvas background
     const canvas = document.getElementById('spiderweb');
@@ -1058,65 +1092,9 @@
     }
     draw();
 
-    // Bounce toggle logic
-    const bounceToggle = document.getElementById('bounceToggle');
-    let bounceActive = true;
-
-    function addBounceToText(element) {
-      // Wrap each letter in span for independent bounce
-      if (!element) return;
-      const text = element.textContent;
-      element.innerHTML = '';
-      for (let i = 0; i < text.length; i++) {
-        const span = document.createElement('span');
-        span.textContent = text[i];
-        span.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
-        element.appendChild(span);
-      }
-    }
-
-    function removeBounceFromText(element) {
-      if (!element) return;
-      element.textContent = element.textContent; // Remove all spans
-    }
-
-    function toggleBounce(state) {
-      if (state) {
-        // Add bounce to header texts
-        addBounceToText(pageTitle);
-        addBounceToText(tagline);
-        // Add bounce classes to buttons and inputs in active tool
-        document.querySelectorAll('.tool-card.active .button').forEach(btn => {
-          btn.classList.add('bounce-button');
-          btn.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
-        });
-        document.querySelectorAll('.tool-card.active input, .tool-card.active select, .tool-card.active textarea').forEach(input => {
-          input.classList.add('bounce-input');
-          input.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
-        });
-      } else {
-        removeBounceFromText(pageTitle);
-        removeBounceFromText(tagline);
-        document.querySelectorAll('.bounce-button').forEach(btn => {
-          btn.classList.remove('bounce-button');
-          btn.style.animationDelay = '';
-        });
-        document.querySelectorAll('.bounce-input').forEach(input => {
-          input.classList.remove('bounce-input');
-          input.style.animationDelay = '';
-        });
-      }
-    }
-
-    bounceToggle.addEventListener('click', () => {
-      bounceActive = !bounceActive;
-      bounceToggle.setAttribute('aria-pressed', bounceActive);
-      toggleBounce(bounceActive);
-    });
-
-    // Initialize bounce on load
+    // Run intro on page load
     window.addEventListener('load', () => {
-      toggleBounce(true);
+      runIntro();
     });
   </script>
 </body>
