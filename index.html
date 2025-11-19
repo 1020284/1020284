@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +19,7 @@
     --radius: 16px;
     --shadow-lg: 0 16px 40px rgba(0,0,0,0.6);
     --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+    --gradient-alt: radial-gradient(1000px 500px at 80% 20%, rgba(56,189,248,0.18), transparent 60%);
     --transition: 300ms ease;
   }
   * {
@@ -33,6 +35,7 @@
     line-height: 1.6;
     min-height: 100vh;
     padding: 0;
+    background-image: var(--gradient-alt);
     display: grid;
     grid-template-columns: 250px 1fr;
     grid-template-rows: auto 1fr auto;
@@ -54,12 +57,13 @@
   #sidebar {
     grid-column: 1;
     grid-row: 1 / span 3;
-    background: rgba(16, 23, 42, 0.85);
+    background: rgba(16, 23, 42, 0.7);
     padding: 1rem 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(20px);
     user-select: none;
     overflow-y: auto;
   }
@@ -72,7 +76,6 @@
     letter-spacing: 0.1em;
     text-shadow: 0 0 8px var(--primary);
     flex-shrink: 0;
-    font-family: 'Bungee', cursive;
   }
   .sidebar-item {
     padding: 0.75rem 1.5rem;
@@ -113,7 +116,7 @@
     flex-shrink: 0;
   }
   header h1 {
-    font-size: clamp(3rem, 6vw, 5rem);
+    font-size: clamp(4rem, 8vw, 7rem);
     font-weight: 900;
     background: var(--gradient);
     -webkit-background-clip: text;
@@ -141,10 +144,11 @@
     min-height: 400px; /* ensure some height for scrolling */
   }
   .tool-card {
-    background: rgba(16, 23, 42, 0.85);
+    background: rgba(16, 23, 42, 0.45);
     border-radius: var(--radius);
     padding: 1.75rem 2rem;
     box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(22px);
     border: 1px solid transparent;
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -244,6 +248,7 @@
     background: rgba(11, 18, 32, 0.8);
     padding: 6px 12px;
     border-radius: var(--radius);
+    user-select: none;
   }
   footer.footer {
     grid-column: 2;
@@ -327,16 +332,61 @@
     justify-content: center;
     align-items: center;
     color: var(--primary);
-    font-family: 'Bungee', cursive;
+    font-family: 'Orbitron', monospace;
     user-select: none;
     text-align: center;
   }
   #introText {
     font-weight: 900;
-    font-size: clamp(3rem, 10vw, 8rem);
+    font-size: clamp(4rem, 12vw, 10rem);
     opacity: 0;
     transition: opacity 1s ease;
     white-space: nowrap;
+  }
+  /* Settings tool form styling */
+  .settings-form label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .settings-form input[type="text"] {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1.5px solid rgba(127,127,127,0.3);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    font-size: 1.1rem;
+    outline: none;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .settings-form input[type="text"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 6px rgba(56,189,248,0.4);
+    background: var(--surface);
+  }
+  .settings-form button {
+    background: var(--gradient);
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-lg);
+    user-select: none;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .settings-form button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 35px var(--primary);
+  }
+  .settings-form button:active {
+    transform: translateY(0) scale(0.98);
   }
 </style>
 </head>
@@ -357,12 +407,6 @@
     <div class="sidebar-item" data-tool="colorpicker">Color Picker</div>
     <div class="sidebar-item" data-tool="lorem">Lorem Ipsum</div>
     <div class="sidebar-item" data-tool="settings">Settings</div>
-    <!-- More tools added -->
-    <div class="sidebar-item" data-tool="currencyconverter">Currency Converter</div>
-    <div class="sidebar-item" data-tool="bmi">BMI Calculator</div>
-    <div class="sidebar-item" data-tool="timer">Timer</div>
-    <div class="sidebar-item" data-tool="stopwatch">Stopwatch</div>
-    <div class="sidebar-item" data-tool="agecalculator">Age Calculator</div>
   </nav>
 
   <main class="content-wrapper" role="main" aria-live="polite" style="display:none;">
@@ -371,66 +415,97 @@
       <p class="tagline bounce-text">The ultimate toolbox crafted by the legendary John McCombs</p>
     </header>
 
-    <!-- Existing tools here... -->
+    <section id="calculator" class="tool-card active" aria-label="Calculator tool">
+      <h2>🧮 Calculator</h2>
+      <input class="input bounce-input" type="text" id="expression" placeholder="e.g. 2 + 2" aria-label="Calculator expression input" />
+      <button class="button bounce-button" onclick="calculate()">Calculate</button>
+      <div id="result" class="result-text" aria-live="polite"></div>
+    </section>
 
-    <!-- Currency Converter -->
-    <section id="currencyconverter" class="tool-card" aria-label="Currency Converter">
-      <h2>💱 Currency Converter</h2>
-      <input class="input bounce-input" type="number" id="currencyAmount" placeholder="Amount" />
-      <select class="input bounce-input" id="currencyFrom">
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
-        <option value="JPY">JPY</option>
-        <option value="CAD">CAD</option>
+    <section id="clock" class="tool-card" aria-label="Current time display">
+      <h2>📅 Current Time</h2>
+      <div id="clock" class="clock-text" aria-live="polite" aria-atomic="true"></div>
+    </section>
+
+    <section id="notepad" class="tool-card" aria-label="Note pad tool">
+      <h2>📓 Note Pad</h2>
+      <textarea class="input bounce-input" id="notes" placeholder="Type your notes here..." rows="5" aria-label="Notes text area"></textarea>
+      <button class="button bounce-button" onclick="saveNotes()">Save Notes</button>
+    </section>
+
+    <section id="random" class="tool-card" aria-label="Random number generator">
+      <h2>🎲 Random Number Generator</h2>
+      <input class="input bounce-input" type="number" id="min" placeholder="Min" aria-label="Minimum number" />
+      <input class="input bounce-input" type="number" id="max" placeholder="Max" aria-label="Maximum number" />
+      <button class="button bounce-button" onclick="generateRandom()">Generate</button>
+      <div id="randomResult" class="result-text" aria-live="polite"></div>
+    </section>
+
+    <section id="unitconverter" class="tool-card" aria-label="Unit converter">
+      <h2>🔁 Unit Converter</h2>
+      <input class="input bounce-input" type="number" id="unitInput" placeholder="Enter value" aria-label="Value to convert" />
+      <select class="input bounce-input" id="unitType" aria-label="Conversion type">
+        <option value="cmToIn">cm → inches</option>
+        <option value="inToCm">inches → cm</option>
+        <option value="kgToLb">kg → pounds</option>
+        <option value="lbToKg">pounds → kg</option>
       </select>
-      <select class="input bounce-input" id="currencyTo">
-        <option value="EUR">EUR</option>
-        <option value="USD">USD</option>
-        <option value="GBP">GBP</option>
-        <option value="JPY">JPY</option>
-        <option value="CAD">CAD</option>
+      <button class="button bounce-button" onclick="convertUnit()">Convert</button>
+      <div id="unitResult" class="result-text" aria-live="polite"></div>
+    </section>
+
+    <section id="secretcode" class="tool-card" aria-label="Secret code input">
+      <h2>🕵️ Secret Code</h2>
+      <input class="input bounce-input" type="text" id="secretInput" placeholder="Type your secret code..." aria-label="Secret code input" />
+      <div id="secretOutput" class="tool-output" aria-live="polite"></div>
+    </section>
+
+    <section id="markdown" class="tool-card" aria-label="Markdown preview tool">
+      <h2>📝 Markdown Preview</h2>
+      <textarea class="input bounce-input" id="markdownInput" placeholder="Write Markdown here..." rows="5" aria-label="Markdown input"></textarea>
+      <div id="markdownPreview" aria-live="polite"></div>
+    </section>
+
+    <section id="timezone" class="tool-card" aria-label="Timezone converter">
+      <h2>🌍 Timezone Converter</h2>
+      <input class="input bounce-input" type="datetime-local" id="datetimeInput" aria-label="Date and time input" />
+      <select class="input bounce-input" id="tzFrom" aria-label="From timezone">
+        <option value="UTC">UTC</option>
+        <option value="America/New_York">New York (EST)</option>
+        <option value="Europe/London">London (GMT)</option>
+        <option value="Asia/Tokyo">Tokyo (JST)</option>
+        <option value="Australia/Sydney">Sydney (AEST)</option>
       </select>
-      <button class="button bounce-button" onclick="convertCurrency()">Convert</button>
-      <div id="currencyResult" class="result-text"></div>
+      <select class="input bounce-input" id="tzTo" aria-label="To timezone">
+        <option value="UTC">UTC</option>
+        <option value="America/New_York">New York (EST)</option>
+        <option value="Europe/London">London (GMT)</option>
+        <option value="Asia/Tokyo">Tokyo (JST)</option>
+        <option value="Australia/Sydney">Sydney (AEST)</option>
+      </select>
+      <button class="button bounce-button" onclick="convertTimezone()">Convert</button>
+      <div id="tzResult" class="result-text" aria-live="polite"></div>
     </section>
 
-    <!-- BMI Calculator -->
-    <section id="bmi" class="tool-card" aria-label="BMI Calculator">
-      <h2>⚖️ BMI Calculator</h2>
-      <input class="input bounce-input" type="number" id="bmiWeight" placeholder="Weight (kg)" />
-      <input class="input bounce-input" type="number" id="bmiHeight" placeholder="Height (cm)" />
-      <button class="button bounce-button" onclick="calculateBMI()">Calculate BMI</button>
-      <div id="bmiResult" class="result-text"></div>
+    <section id="password" class="tool-card" aria-label="Password strength checker">
+      <h2>🔐 Password Strength Checker</h2>
+      <input class="input bounce-input" type="password" id="passwordInput" placeholder="Enter password" aria-label="Password input" />
+      <div id="passwordStrength" class="result-text" aria-live="polite"></div>
     </section>
 
-    <!-- Timer -->
-    <section id="timer" class="tool-card" aria-label="Timer">
-      <h2>⏲️ Timer</h2>
-      <input class="input bounce-input" type="number" id="timerInput" placeholder="Seconds" />
-      <button class="button bounce-button" onclick="startTimer()">Start Timer</button>
-      <button class="button bounce-button" onclick="stopTimer()">Stop Timer</button>
-      <div id="timerDisplay" class="result-text"></div>
+    <section id="colorpicker" class="tool-card" aria-label="Color picker tool">
+      <h2>🎨 Color Picker</h2>
+      <input class="input bounce-input" type="color" id="colorInput" aria-label="Color input" />
+      <div id="colorPreview"></div>
     </section>
 
-    <!-- Stopwatch -->
-    <section id="stopwatch" class="tool-card" aria-label="Stopwatch">
-      <h2>⏱️ Stopwatch</h2>
-      <button class="button bounce-button" onclick="startStopwatch()">Start</button>
-      <button class="button bounce-button" onclick="stopStopwatch()">Stop</button>
-      <button class="button bounce-button" onclick="resetStopwatch()">Reset</button>
-      <div id="stopwatchDisplay" class="result-text">00:00.000</div>
+    <section id="lorem" class="tool-card" aria-label="Lorem Ipsum generator">
+      <h2>📜 Lorem Ipsum Generator</h2>
+      <input class="input bounce-input" type="number" id="loremCount" placeholder="Paragraphs count" min="1" max="10" aria-label="Paragraphs count" />
+      <button class="button bounce-button" onclick="generateLorem()">Generate</button>
+      <div id="loremOutput" class="tool-output" aria-live="polite"></div>
     </section>
 
-    <!-- Age Calculator -->
-    <section id="agecalculator" class="tool-card" aria-label="Age Calculator">
-      <h2>🎂 Age Calculator</h2>
-      <input class="input bounce-input" type="date" id="birthDate" />
-      <button class="button bounce-button" onclick="calculateAge()">Calculate Age</button>
-      <div id="ageResult" class="result-text"></div>
-    </section>
-
-    <!-- Settings -->
     <section id="settings" class="tool-card" aria-label="Settings">
       <h2>⚙️ Settings</h2>
       <form class="settings-form" onsubmit="event.preventDefault(); saveSettings();">
@@ -457,161 +532,94 @@
     <div id="introText"></div>
   </div>
 
-<script>
-  // Intro sequence text & animation
-  const introOverlay = document.getElementById('introOverlay');
-  const introText = document.getElementById('introText');
-  const contentWrapper = document.querySelector('main.content-wrapper');
-  const footer = document.querySelector('footer.footer');
-  const bounceToggle = document.getElementById('bounceToggle');
-  const pageTitle = document.getElementById('pageTitle');
-  const tagline = document.querySelector('.tagline');
+  <script>
+    // Intro sequence text & animation
+    const introOverlay = document.getElementById('introOverlay');
+    const introText = document.getElementById('introText');
+    const contentWrapper = document.querySelector('main.content-wrapper');
+    const footer = document.querySelector('footer.footer');
+    const bounceToggle = document.getElementById('bounceToggle');
+    const pageTitle = document.getElementById('pageTitle');
+    const tagline = document.querySelector('.tagline');
 
-  const introTexts = [
-    { text: 'John McCombs', duration: 2500 },
-    { text: 'Learning Hub', duration: 3500 },
-  ];
+    // Remove first "by John McCombs"
+    // So only show "John McCombs" and "Learning Hub"
+    const introTexts = [
+      { text: 'John McCombs', duration: 2500 },
+      { text: 'Learning Hub', duration: 3500 },
+    ];
 
-  function fadeIn(element, duration = 1000) {
-    element.style.transition = `opacity ${duration}ms ease`;
-    element.style.opacity = 1;
-  }
-  function fadeOut(element, duration = 1000) {
-    element.style.transition = `opacity ${duration}ms ease`;
-    element.style.opacity = 0;
-  }
-
-  async function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async function runIntro() {
-    introOverlay.style.backgroundColor = '#001a4d';
-    introText.style.opacity = 0;
-    introText.style.color = 'var(--primary)';
-    introText.style.fontWeight = '900';
-    introText.style.fontFamily = "'Bungee', cursive";
-    introText.style.fontSize = 'clamp(3rem, 10vw, 8rem)';
-    introText.style.whiteSpace = 'nowrap';
-
-    for (let i = 0; i < introTexts.length; i++) {
-      introText.textContent = introTexts[i].text;
-      fadeIn(introText, 1200);
-      await delay(introTexts[i].duration);
-      fadeOut(introText, 1200);
-      await delay(800);
+    function fadeIn(element, duration = 1000) {
+      element.style.transition = `opacity ${duration}ms ease`;
+      element.style.opacity = 1;
+    }
+    function fadeOut(element, duration = 1000) {
+      element.style.transition = `opacity ${duration}ms ease`;
+      element.style.opacity = 0;
     }
 
-    // Hide overlay and show main content
-    introOverlay.style.transition = 'opacity 1500ms ease';
-    introOverlay.style.opacity = 0;
-    await delay(1500);
-    introOverlay.style.display = 'none';
-
-    // Show main content and footer & bounce toggle
-    contentWrapper.style.display = 'flex';
-    footer.style.display = 'block';
-    bounceToggle.style.display = 'inline-flex';
-
-    // Initialize bounce effect on header texts
-    toggleBounce(true);
-    updateClock();
-    setInterval(updateClock, 50); // Update every 50ms for milliseconds display
-  }
-
-  // Bounce toggle logic
-  let bounceActive = true;
-
-  function addBounceToText(element) {
-    if (!element) return;
-    const text = element.textContent;
-    element.innerHTML = '';
-    for (let i = 0; i < text.length; i++) {
-      const span = document.createElement('span');
-      span.textContent = text[i];
-      span.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
-      element.appendChild(span);
+    async function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
-  }
 
-  function removeBounceFromText(element) {
-    if (!element) return;
-    element.textContent = element.textContent;
-  }
+    async function runIntro() {
+      introOverlay.style.backgroundColor = '#001a4d';
+      introText.style.opacity = 0;
+      introText.style.color = 'var(--primary)';
+      introText.style.fontWeight = '900';
+      introText.style.fontFamily = "'Orbitron', monospace";
+      introText.style.fontSize = 'clamp(6rem, 15vw, 12rem)';
+      introText.style.whiteSpace = 'nowrap';
 
-  function toggleBounce(state) {
-    if (state) {
-      addBounceToText(pageTitle);
-      addBounceToText(tagline);
-      document.querySelectorAll('.tool-card.active .button').forEach(btn => {
-        btn.classList.add('bounce-button');
-        btn.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
-      });
-      document.querySelectorAll('.tool-card.active input, .tool-card.active select, .tool-card.active textarea').forEach(input => {
-        input.classList.add('bounce-input');
-        input.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
-      });
-    } else {
-      removeBounceFromText(pageTitle);
-      removeBounceFromText(tagline);
-      document.querySelectorAll('.bounce-button').forEach(btn => {
-        btn.classList.remove('bounce-button');
-        btn.style.animationDelay = '';
-      });
-      document.querySelectorAll('.bounce-input').forEach(input => {
-        input.classList.remove('bounce-input');
-        input.style.animationDelay = '';
-      });
+      for (let i = 0; i < introTexts.length; i++) {
+        introText.textContent = introTexts[i].text;
+        fadeIn(introText, 1200);
+        await delay(introTexts[i].duration);
+        fadeOut(introText, 1200);
+        await delay(800);
+      }
+
+      // Hide overlay and show main content
+      introOverlay.style.transition = 'opacity 1500ms ease';
+      introOverlay.style.opacity = 0;
+      await delay(1500);
+      introOverlay.style.display = 'none';
+
+      // Show main content and footer & bounce toggle
+      contentWrapper.style.display = 'flex';
+      footer.style.display = 'block';
+      bounceToggle.style.display = 'inline-flex';
+
+      // Initialize bounce effect on header texts
+      toggleBounce(true);
+      updateClock();
+      setInterval(updateClock, 50); // Update every 50ms for milliseconds display
     }
-    bounceActive = state;
-    bounceToggle.setAttribute('aria-pressed', bounceActive);
-  }
 
-  bounceToggle.addEventListener('click', () => {
-    toggleBounce(!bounceActive);
-  });
+    // Bounce toggle logic
+    let bounceActive = true;
 
-  // Sidebar tool switching
-  const sidebarItems = document.querySelectorAll('#sidebar .sidebar-item');
-  const tools = document.querySelectorAll('.tool-card');
+    function addBounceToText(element) {
+      if (!element) return;
+      const text = element.textContent;
+      element.innerHTML = '';
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = text[i];
+        span.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+        element.appendChild(span);
+      }
+    }
 
-  function clearActive() {
-    sidebarItems.forEach(i => i.classList.remove('active'));
-    tools.forEach(t => t.classList.remove('active'));
-  }
-  sidebarItems.forEach(item => {
-    item.addEventListener('click', () => {
-      clearActive();
-      item.classList.add('active');
-      const toolId = item.getAttribute('data-tool');
-      const tool = document.getElementById(toolId);
-      if(tool) tool.classList.add('active');
-      // Update page title text with bounce effect
-      pageTitle.textContent = item.textContent;
-      addBounceToText(pageTitle);
-      // Update tagline with tool description or blank
-      tagline.textContent = {
-        'calculator': 'Perform quick calculations.',
-        'clock': 'View the current time.',
-        'notepad': 'Write and save your notes.',
-        'random': 'Generate random numbers.',
-        'unitconverter': 'Convert between units.',
-        'secretcode': 'Enter secret codes for surprises.',
-        'markdown': 'Preview Markdown formatting.',
-        'timezone': 'Convert between timezones.',
-        'password': 'Check password strength.',
-        'colorpicker': 'Pick and preview colors.',
-        'lorem': 'Generate Lorem Ipsum text.',
-        'settings': 'Customize your experience.',
-        'currencyconverter': 'Convert currencies quickly.',
-        'bmi': 'Calculate your Body Mass Index.',
-        'timer': 'Set a countdown timer.',
-        'stopwatch': 'Track elapsed time.',
-        'agecalculator': 'Calculate your age.'
-      }[toolId] || '';
-      addBounceToText(tagline);
-      // Reset bounce animations for new tool inputs/buttons
-      if (bounceActive) {
+    function removeBounceFromText(element) {
+      if (!element) return;
+      element.textContent = element.textContent;
+    }
+
+    function toggleBounce(state) {
+      if (state) {
+        addBounceToText(pageTitle);
+        addBounceToText(tagline);
         document.querySelectorAll('.tool-card.active .button').forEach(btn => {
           btn.classList.add('bounce-button');
           btn.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
@@ -620,412 +628,474 @@
           input.classList.add('bounce-input');
           input.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
         });
-      }
-    });
-    item.addEventListener('keydown', e => {
-      if(e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        item.click();
-      }
-    });
-  });
-
-  // Tools functions
-
-  // Calculator
-  function calculate() {
-    const expr = document.getElementById("expression").value;
-    try {
-      const result = Function('"use strict";return (' + expr + ')')();
-      document.getElementById("result").innerText = "Result: " + result;
-    } catch {
-      document.getElementById("result").innerText = "Invalid expression.";
-    }
-  }
-
-  // Clock update with milliseconds
-  function updateClock() {
-    const now = new Date();
-    const formatted = now.toLocaleDateString() + ' ' + now.toLocaleTimeString() + '.' + now.getMilliseconds().toString().padStart(3, '0');
-    document.getElementById("clock").innerText = formatted;
-  }
-
-  // Save notes locally
-  function saveNotes() {
-    const notes = document.getElementById("notes").value;
-    localStorage.setItem("userNotes", notes);
-    alert("Notes saved!");
-  }
-  window.addEventListener("load", () => {
-    const notes = localStorage.getItem("userNotes");
-    if (notes) document.getElementById("notes").value = notes;
-  });
-
-  // Random number generator
-  function generateRandom() {
-    const min = parseInt(document.getElementById("min").value);
-    const max = parseInt(document.getElementById("max").value);
-    if (isNaN(min) || isNaN(max) || min > max) {
-      document.getElementById("randomResult").innerText = "Invalid range.";
-      return;
-    }
-    const rand = Math.floor(Math.random() * (max - min + 1)) + min;
-    document.getElementById("randomResult").innerText = "Random number: " + rand;
-  }
-
-  // Unit converter
-  function convertUnit() {
-    const value = parseFloat(document.getElementById("unitInput").value);
-    const type = document.getElementById("unitType").value;
-    let result = "";
-
-    if (isNaN(value)) {
-      result = "Please enter a valid number.";
-    } else {
-      switch (type) {
-        case "cmToIn": result = (value / 2.54).toFixed(2) + " in"; break;
-        case "inToCm": result = (value * 2.54).toFixed(2) + " cm"; break;
-        case "kgToLb": result = (value * 2.20462).toFixed(2) + " lb"; break;
-        case "lbToKg": result = (value / 2.20462).toFixed(2) + " kg"; break;
-      }
-    }
-
-    document.getElementById("unitResult").innerText = result;
-  }
-
-  // Secret code input event
-  document.getElementById("secretInput").addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      const input = this.value.trim().toLowerCase();
-      const output = document.getElementById("secretOutput");
-      if (input === "john is awesome") {
-        output.innerHTML = `
-          <ul style="list-style: none; padding-left: 0; user-select:none; font-weight: 700;">
-            <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
-            <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
-            <li><strong>Shift + J</strong>: Surprise John McCombs' Personal Gallery</li>
-            <li><strong>Shift + H</strong>: Show John’s Hotness Meter</li>
-            <li><strong>Shift + G</strong>: Activate Secret Glaze Burst!</li>
-          </ul>
-        `;
       } else {
-        output.innerText = "Incorrect code.";
+        removeBounceFromText(pageTitle);
+        removeBounceFromText(tagline);
+        document.querySelectorAll('.bounce-button').forEach(btn => {
+          btn.classList.remove('bounce-button');
+          btn.style.animationDelay = '';
+        });
+        document.querySelectorAll('.bounce-input').forEach(input => {
+          input.classList.remove('bounce-input');
+          input.style.animationDelay = '';
+        });
       }
-    }
-  });
-
-  // Markdown Preview simple parser
-  function escapeHtml(text) {
-    return text.replace(/[&<>"']/g, function(m) {
-      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
-    });
-  }
-  function markdownToHtml(md) {
-    let html = escapeHtml(md);
-    html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-    html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-    html = html.replace(/^###### (.*)$/gm, '<h6>$1</h6>');
-    html = html.replace(/^##### (.*)$/gm, '<h5>$1</h5>');
-    html = html.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
-    html = html.replace(/^### (.*)$/gm, '<h3>$1</h3>');
-    html = html.replace(/^## (.*)$/gm, '<h2>$1</h2>');
-    html = html.replace(/^# (.*)$/gm, '<h1>$1</h1>');
-    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-    html = html.replace(/^\s*[-*+] (.*)$/gm, '<li>$1</li>');
-    html = html.replace(/(<li>.*<\/li>)/gms, '<ul>$1</ul>');
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-    html = html.replace(/\n/g, '<br />');
-    return html;
-  }
-  document.getElementById("markdownInput").addEventListener("input", () => {
-    const md = document.getElementById("markdownInput").value;
-    const html = markdownToHtml(md);
-    document.getElementById("markdownPreview").innerHTML = html;
-  });
-
-  // Timezone Converter
-  function convertTimezone() {
-    const datetimeStr = document.getElementById("datetimeInput").value;
-    const tzFrom = document.getElementById("tzFrom").value;
-    const tzTo = document.getElementById("tzTo").value;
-    if (!datetimeStr) {
-      document.getElementById("tzResult").innerText = "Please select a date and time.";
-      return;
-    }
-    try {
-      const date = new Date(datetimeStr + "Z");
-      const optionsFrom = { timeZone: tzFrom, timeZoneName: "short", hour12: false };
-      const optionsTo = { timeZone: tzTo, timeZoneName: "short", hour12: false };
-      const formatterFrom = new Intl.DateTimeFormat([], optionsFrom);
-      const formatterTo = new Intl.DateTimeFormat([], optionsTo);
-      const fromStr = formatterFrom.format(date);
-      const toStr = formatterTo.format(date);
-      document.getElementById("tzResult").innerText = `${fromStr} → ${toStr}`;
-    } catch {
-      document.getElementById("tzResult").innerText = "Error converting timezone.";
-    }
-  }
-
-  // Password strength checker
-  const strengthMessages = ["Very Weak", "Weak", "Moderate", "Strong", "Very Strong"];
-  function checkPasswordStrength(pw) {
-    let score = 0;
-    if (pw.length >= 8) score++;
-    if (/[a-z]/.test(pw)) score++;
-    if (/[A-Z]/.test(pw)) score++;
-    if (/\d/.test(pw)) score++;
-    if (/[\W_]/.test(pw)) score++;
-    return score;
-  }
-  document.getElementById("passwordInput").addEventListener("input", function() {
-    const val = this.value;
-    if (!val) {
-      document.getElementById("passwordStrength").innerText = "";
-      return;
-    }
-    const score = checkPasswordStrength(val);
-    document.getElementById("passwordStrength").innerText = `Strength: ${strengthMessages[score-1] || "Very Weak"}`;
-  });
-
-  // Color picker preview
-  const colorInput = document.getElementById("colorInput");
-  const colorPreview = document.getElementById("colorPreview");
-  colorInput.value = "#38bdf8";
-  colorPreview.style.backgroundColor = colorInput.value;
-  colorInput.addEventListener("input", () => {
-    colorPreview.style.backgroundColor = colorInput.value;
-  });
-
-  // Lorem Ipsum Generator
-  const loremSentences = [
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-  ];
-  function generateLorem() {
-    let count = parseInt(document.getElementById("loremCount").value);
-    if (isNaN(count) || count < 1) count = 1;
-    if (count > 10) count = 10;
-    let text = "";
-    for(let p = 0; p < count; p++) {
-      let para = "";
-      for(let s = 0; s < 5; s++) {
-        para += loremSentences[Math.floor(Math.random() * loremSentences.length)] + " ";
-      }
-      text += para.trim() + "\n\n";
-    }
-    document.getElementById("loremOutput").innerText = text.trim();
-  }
-
-  // Settings tool: Tab title and favicon management
-  function saveSettings() {
-    const titleInput = document.getElementById('tabTitleInput').value.trim();
-    const faviconInput = document.getElementById('tabFaviconInput').value.trim();
-    let messages = [];
-    if(titleInput) {
-      document.title = titleInput;
-      localStorage.setItem('customTabTitle', titleInput);
-      messages.push(`Tab title set to "${titleInput}"`);
-    } else {
-      localStorage.removeItem('customTabTitle');
-      location.reload(); // reset to default title
-    }
-    if(faviconInput) {
-      setFavicon(faviconInput);
-      localStorage.setItem('customFavicon', faviconInput);
-      messages.push("Favicon updated.");
-    } else {
-      removeFavicon();
-      localStorage.removeItem('customFavicon');
-    }
-    document.getElementById('settingsOutput').innerText = messages.join(' ');
-  }
-
-  function setFavicon(url) {
-    removeFavicon();
-    const link = document.createElement('link');
-    link.rel = 'icon';
-    link.href = url;
-    link.id = 'dynamicFavicon';
-    document.head.appendChild(link);
-  }
-  function removeFavicon() {
-    const existing = document.getElementById('dynamicFavicon');
-    if(existing) existing.remove();
-  }
-
-  function applySavedSettings() {
-    const savedTitle = localStorage.getItem('customTabTitle');
-    const savedFavicon = localStorage.getItem('customFavicon');
-    if(savedTitle) {
-      document.title = savedTitle;
-      document.getElementById('tabTitleInput').value = savedTitle;
-    }
-    if(savedFavicon) {
-      setFavicon(savedFavicon);
-      document.getElementById('tabFaviconInput').value = savedFavicon;
-    }
-  }
-
-  window.addEventListener('load', () => {
-    applySavedSettings();
-  });
-
-  // Spiderweb canvas background
-  const canvas = document.getElementById('spiderweb');
-  const ctx = canvas.getContext('2d');
-  let width, height;
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width * devicePixelRatio;
-    canvas.height = height * devicePixelRatio;
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(devicePixelRatio, devicePixelRatio);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const POINTS = 150;
-  const MAX_DIST = 130;
-  const SPEED = 0.3;
-  const NODE_RADIUS = 3;
-  const HOVER_RADIUS = 50;
-  const colors = ["#38bdf8", "#ef4444", "#94a3b8"];
-
-  let points = Array.from({ length: POINTS }, () => ({
-    x: Math.random() * width,
-    y: Math.random() * height,
-    vx: (Math.random() - 0.5) * SPEED,
-    vy: (Math.random() - 0.5) * SPEED,
-    c: colors[Math.floor(Math.random() * colors.length)],
-    radius: NODE_RADIUS,
-    glow: 0,
-    connections: []
-  }));
-
-  function updateConnections() {
-    points.forEach(p => p.connections = []);
-    for (let i = 0; i < points.length; i++) {
-      const p = points[i];
-      for (let j = i + 1; j < points.length; j++) {
-        const q = points[j];
-        const dx = p.x - q.x, dy = p.y - q.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < MAX_DIST) {
-          p.connections.push({ point: q, dist });
-          points[j].connections.push({ point: p, dist });
-        }
-      }
-    }
-  }
-  updateConnections();
-
-  let mouse = { x: null, y: null, isHovering: false };
-  canvas.addEventListener('mousemove', e => {
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
-    mouse.isHovering = true;
-  });
-  canvas.addEventListener('mouseleave', () => {
-    mouse.x = null;
-    mouse.y = null;
-    mouse.isHovering = false;
-  });
-
-  function draw() {
-    ctx.clearRect(0, 0, width, height);
-
-    const ROTATION_SPEED = 0.0005;
-    const centerX = width / 2;
-    const centerY = height / 2;
-
-    ctx.lineWidth = 0.2;
-    ctx.strokeStyle = `rgba(100, 149, 237, 0.12)`;
-    ctx.beginPath();
-    const radialLines = 24;
-    for (let i = 0; i < radialLines; i++) {
-      const angle = (Math.PI * 2 / radialLines) * i + performance.now() * ROTATION_SPEED;
-      ctx.moveTo(centerX, centerY);
-      ctx.lineTo(centerX + Math.cos(angle) * width, centerY + Math.sin(angle) * height);
-    }
-    ctx.stroke();
-
-    ctx.lineWidth = 0.15;
-    ctx.strokeStyle = `rgba(100, 149, 237, 0.1)`;
-    for (let i = 1; i <= 20; i++) {
-      ctx.beginPath();
-      const radius = (Math.min(width, height) / 2) * (i / 20);
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.stroke();
+      bounceActive = state;
+      bounceToggle.setAttribute('aria-pressed', bounceActive);
     }
 
-    points.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < 0 || p.x > width) p.vx *= -1;
-      if (p.y < 0 || p.y > height) p.vy *= -1;
-
-      p.glow *= 0.9;
-
-      if (mouse.isHovering && mouse.x !== null && mouse.y !== null) {
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < HOVER_RADIUS) {
-          p.glow = Math.min(1, p.glow + 0.15);
-          p.vx += (dx / dist) * 0.05;
-          p.vy += (dy / dist) * 0.05;
-        }
-      }
+    bounceToggle.addEventListener('click', () => {
+      toggleBounce(!bounceActive);
     });
 
-    points.forEach(p => {
-      p.connections.forEach(c => {
-        const opacity = 1 - c.dist / MAX_DIST;
-        const glowFactor = Math.min(p.glow, c.point.glow);
-        ctx.strokeStyle = `rgba(56, 189, 248, ${opacity * 0.5 + glowFactor * 0.5})`;
-        ctx.lineWidth = 0.3 + glowFactor * 1.2;
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(c.point.x, c.point.y);
-        ctx.stroke();
+    // Sidebar tool switching
+    const sidebarItems = document.querySelectorAll('#sidebar .sidebar-item');
+    const tools = document.querySelectorAll('.tool-card');
+
+    function clearActive() {
+      sidebarItems.forEach(i => i.classList.remove('active'));
+      tools.forEach(t => t.classList.remove('active'));
+    }
+    sidebarItems.forEach(item => {
+      item.addEventListener('click', () => {
+        clearActive();
+        item.classList.add('active');
+        const toolId = item.getAttribute('data-tool');
+        const tool = document.getElementById(toolId);
+        if(tool) tool.classList.add('active');
+        // Update page title text with bounce effect
+        pageTitle.textContent = item.textContent;
+        addBounceToText(pageTitle);
+        // Update tagline with tool description or blank
+        tagline.textContent = {
+          'calculator': 'Perform quick calculations.',
+          'clock': 'View the current time.',
+          'notepad': 'Write and save your notes.',
+          'random': 'Generate random numbers.',
+          'unitconverter': 'Convert between units.',
+          'secretcode': 'Enter secret codes for surprises.',
+          'markdown': 'Preview Markdown formatting.',
+          'timezone': 'Convert between timezones.',
+          'password': 'Check password strength.',
+          'colorpicker': 'Pick and preview colors.',
+          'lorem': 'Generate Lorem Ipsum text.',
+          'settings': 'Customize your experience.'
+        }[toolId] || '';
+        addBounceToText(tagline);
+        // Reset bounce animations for new tool inputs/buttons
+        if (bounceActive) {
+          document.querySelectorAll('.tool-card.active .button').forEach(btn => {
+            btn.classList.add('bounce-button');
+            btn.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+          });
+          document.querySelectorAll('.tool-card.active input, .tool-card.active select, .tool-card.active textarea').forEach(input => {
+            input.classList.add('bounce-input');
+            input.style.animationDelay = (Math.random() * 1.2).toFixed(2) + 's';
+          });
+        }
+      });
+      item.addEventListener('keydown', e => {
+        if(e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          item.click();
+        }
       });
     });
 
-    points.forEach(p => {
-      if (p.glow > 0.01) {
-        const gradient = ctx.createRadialGradient(p.x, p.y, NODE_RADIUS, p.x, p.y, NODE_RADIUS * 7);
-        gradient.addColorStop(0, `rgba(56, 189, 248, ${p.glow * 0.6})`);
-        gradient.addColorStop(1, 'rgba(56, 189, 248, 0)');
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, NODE_RADIUS * 7, 0, Math.PI * 2);
-        ctx.fill();
+    // Calculate function
+    function calculate() {
+      const expr = document.getElementById("expression").value;
+      try {
+        const result = Function('"use strict";return (' + expr + ')')();
+        document.getElementById("result").innerText = "Result: " + result;
+      } catch {
+        document.getElementById("result").innerText = "Invalid expression.";
       }
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, NODE_RADIUS, 0, Math.PI * 2);
-      ctx.fillStyle = p.c;
-      ctx.shadowColor = `rgba(56, 189, 248, ${p.glow * 0.7})`;
-      ctx.shadowBlur = 8 * p.glow;
-      ctx.fill();
-      ctx.shadowBlur = 0;
+    }
+
+    // Clock update with milliseconds
+    function updateClock() {
+      const now = new Date();
+      const formatted = now.toLocaleDateString() + ' ' + now.toLocaleTimeString() + '.' + now.getMilliseconds().toString().padStart(3, '0');
+      document.getElementById("clock").innerText = formatted;
+    }
+
+    // Save notes locally
+    function saveNotes() {
+      const notes = document.getElementById("notes").value;
+      localStorage.setItem("userNotes", notes);
+      alert("Notes saved!");
+    }
+    window.addEventListener("load", () => {
+      const notes = localStorage.getItem("userNotes");
+      if (notes) document.getElementById("notes").value = notes;
     });
 
-    requestAnimationFrame(draw);
-  }
-  draw();
+    // Random number generator
+    function generateRandom() {
+      const min = parseInt(document.getElementById("min").value);
+      const max = parseInt(document.getElementById("max").value);
+      if (isNaN(min) || isNaN(max) || min > max) {
+        document.getElementById("randomResult").innerText = "Invalid range.";
+        return;
+      }
+      const rand = Math.floor(Math.random() * (max - min + 1)) + min;
+      document.getElementById("randomResult").innerText = "Random number: " + rand;
+    }
 
-  // Run intro on page load
-  window.addEventListener('load', () => {
-    runIntro();
-  });
-</script>
+    // Unit converter
+    function convertUnit() {
+      const value = parseFloat(document.getElementById("unitInput").value);
+      const type = document.getElementById("unitType").value;
+      let result = "";
+
+      if (isNaN(value)) {
+        result = "Please enter a valid number.";
+      } else {
+        switch (type) {
+          case "cmToIn": result = (value / 2.54).toFixed(2) + " in"; break;
+          case "inToCm": result = (value * 2.54).toFixed(2) + " cm"; break;
+          case "kgToLb": result = (value * 2.20462).toFixed(2) + " lb"; break;
+          case "lbToKg": result = (value / 2.20462).toFixed(2) + " kg"; break;
+        }
+      }
+
+      document.getElementById("unitResult").innerText = result;
+    }
+
+    // Secret code input event (example secret code with feature)
+    document.getElementById("secretInput").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const input = this.value.trim().toLowerCase();
+        const output = document.getElementById("secretOutput");
+        if (input === "john is awesome") {
+          output.innerHTML = `
+            <ul style="list-style: none; padding-left: 0; user-select:none; font-weight: 700;">
+              <li><strong>Shift + B</strong>: Opens <em>johnnyboyisthebest.dpdns.org</em> in fullscreen mode</li>
+              <li><strong>Shift + D</strong>: Opens <em>School Resource Portal</em> with links to educational games</li>
+              <li><strong>Shift + J</strong>: Surprise John McCombs' Personal Gallery</li>
+              <li><strong>Shift + H</strong>: Show John’s Hotness Meter</li>
+              <li><strong>Shift + G</strong>: Activate Secret Glaze Burst!</li>
+            </ul>
+          `;
+        } else {
+          output.innerText = "Incorrect code.";
+        }
+      }
+    });
+
+    // Markdown Preview simple parser
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, function(m) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+      });
+    }
+    function markdownToHtml(md) {
+      let html = escapeHtml(md);
+      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      html = html.replace(/^###### (.*)$/gm, '<h6>$1</h6>');
+      html = html.replace(/^##### (.*)$/gm, '<h5>$1</h5>');
+      html = html.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
+      html = html.replace(/^### (.*)$/gm, '<h3>$1</h3>');
+      html = html.replace(/^## (.*)$/gm, '<h2>$1</h2>');
+      html = html.replace(/^# (.*)$/gm, '<h1>$1</h1>');
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      html = html.replace(/^\s*[-*+] (.*)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.*<\/li>)/gms, '<ul>$1</ul>');
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      html = html.replace(/\n/g, '<br />');
+      return html;
+    }
+    document.getElementById("markdownInput").addEventListener("input", () => {
+      const md = document.getElementById("markdownInput").value;
+      const html = markdownToHtml(md);
+      document.getElementById("markdownPreview").innerHTML = html;
+    });
+
+    // Timezone Converter
+    function convertTimezone() {
+      const datetimeStr = document.getElementById("datetimeInput").value;
+      const tzFrom = document.getElementById("tzFrom").value;
+      const tzTo = document.getElementById("tzTo").value;
+      if (!datetimeStr) {
+        document.getElementById("tzResult").innerText = "Please select a date and time.";
+        return;
+      }
+      try {
+        const date = new Date(datetimeStr + "Z");
+        const optionsFrom = { timeZone: tzFrom, timeZoneName: "short", hour12: false };
+        const optionsTo = { timeZone: tzTo, timeZoneName: "short", hour12: false };
+        const formatterFrom = new Intl.DateTimeFormat([], optionsFrom);
+        const formatterTo = new Intl.DateTimeFormat([], optionsTo);
+        const fromStr = formatterFrom.format(date);
+        const toStr = formatterTo.format(date);
+        document.getElementById("tzResult").innerText = `${fromStr} → ${toStr}`;
+      } catch {
+        document.getElementById("tzResult").innerText = "Error converting timezone.";
+      }
+    }
+
+    // Password strength checker
+    const strengthMessages = ["Very Weak", "Weak", "Moderate", "Strong", "Very Strong"];
+    function checkPasswordStrength(pw) {
+      let score = 0;
+      if (pw.length >= 8) score++;
+      if (/[a-z]/.test(pw)) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/\d/.test(pw)) score++;
+      if (/[\W_]/.test(pw)) score++;
+      return score;
+    }
+    document.getElementById("passwordInput").addEventListener("input", function() {
+      const val = this.value;
+      if (!val) {
+        document.getElementById("passwordStrength").innerText = "";
+        return;
+      }
+      const score = checkPasswordStrength(val);
+      document.getElementById("passwordStrength").innerText = `Strength: ${strengthMessages[score-1] || "Very Weak"}`;
+    });
+
+    // Color picker preview
+    const colorInput = document.getElementById("colorInput");
+    const colorPreview = document.getElementById("colorPreview");
+    colorInput.value = "#38bdf8";
+    colorPreview.style.backgroundColor = colorInput.value;
+    colorInput.addEventListener("input", () => {
+      colorPreview.style.backgroundColor = colorInput.value;
+    });
+
+    // Lorem Ipsum Generator
+    const loremSentences = [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    ];
+    function generateLorem() {
+      let count = parseInt(document.getElementById("loremCount").value);
+      if (isNaN(count) || count < 1) count = 1;
+      if (count > 10) count = 10;
+      let text = "";
+      for(let p = 0; p < count; p++) {
+        let para = "";
+        for(let s = 0; s < 5; s++) {
+          para += loremSentences[Math.floor(Math.random() * loremSentences.length)] + " ";
+        }
+        text += para.trim() + "\n\n";
+      }
+      document.getElementById("loremOutput").innerText = text.trim();
+    }
+
+    // Settings tool: Tab title and favicon management
+    function saveSettings() {
+      const titleInput = document.getElementById('tabTitleInput').value.trim();
+      const faviconInput = document.getElementById('tabFaviconInput').value.trim();
+      let messages = [];
+      if(titleInput) {
+        document.title = titleInput;
+        localStorage.setItem('customTabTitle', titleInput);
+        messages.push(`Tab title set to "${titleInput}"`);
+      } else {
+        localStorage.removeItem('customTabTitle');
+        location.reload(); // reset to default title
+      }
+      if(faviconInput) {
+        setFavicon(faviconInput);
+        localStorage.setItem('customFavicon', faviconInput);
+        messages.push("Favicon updated.");
+      } else {
+        removeFavicon();
+        localStorage.removeItem('customFavicon');
+      }
+      document.getElementById('settingsOutput').innerText = messages.join(' ');
+    }
+
+    function setFavicon(url) {
+      removeFavicon();
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.href = url;
+      link.id = 'dynamicFavicon';
+      document.head.appendChild(link);
+    }
+    function removeFavicon() {
+      const existing = document.getElementById('dynamicFavicon');
+      if(existing) existing.remove();
+    }
+
+    function applySavedSettings() {
+      const savedTitle = localStorage.getItem('customTabTitle');
+      const savedFavicon = localStorage.getItem('customFavicon');
+      if(savedTitle) {
+        document.title = savedTitle;
+        document.getElementById('tabTitleInput').value = savedTitle;
+      }
+      if(savedFavicon) {
+        setFavicon(savedFavicon);
+        document.getElementById('tabFaviconInput').value = savedFavicon;
+      }
+    }
+
+    window.addEventListener('load', () => {
+      applySavedSettings();
+    });
+
+    // Spiderweb canvas background
+    const canvas = document.getElementById('spiderweb');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * devicePixelRatio;
+      canvas.height = height * devicePixelRatio;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const POINTS = 150;
+    const MAX_DIST = 130;
+    const SPEED = 0.3;
+    const NODE_RADIUS = 3;
+    const HOVER_RADIUS = 50;
+    const colors = ["#38bdf8", "#ef4444", "#94a3b8"];
+
+    let points = Array.from({ length: POINTS }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * SPEED,
+      vy: (Math.random() - 0.5) * SPEED,
+      c: colors[Math.floor(Math.random() * colors.length)],
+      radius: NODE_RADIUS,
+      glow: 0,
+      connections: []
+    }));
+
+    function updateConnections() {
+      points.forEach(p => p.connections = []);
+      for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        for (let j = i + 1; j < points.length; j++) {
+          const q = points[j];
+          const dx = p.x - q.x, dy = p.y - q.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MAX_DIST) {
+            p.connections.push({ point: q, dist });
+            points[j].connections.push({ point: p, dist });
+          }
+        }
+      }
+    }
+    updateConnections();
+
+    let mouse = { x: null, y: null, isHovering: false };
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.isHovering = true;
+    });
+    canvas.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+      mouse.isHovering = false;
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      const ROTATION_SPEED = 0.0005;
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      ctx.lineWidth = 0.2;
+      ctx.strokeStyle = `rgba(100, 149, 237, 0.12)`;
+      ctx.beginPath();
+      const radialLines = 24;
+      for (let i = 0; i < radialLines; i++) {
+        const angle = (Math.PI * 2 / radialLines) * i + performance.now() * ROTATION_SPEED;
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(centerX + Math.cos(angle) * width, centerY + Math.sin(angle) * height);
+      }
+      ctx.stroke();
+
+      ctx.lineWidth = 0.15;
+      ctx.strokeStyle = `rgba(100, 149, 237, 0.1)`;
+      for (let i = 1; i <= 20; i++) {
+        ctx.beginPath();
+        const radius = (Math.min(width, height) / 2) * (i / 20);
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      points.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        p.glow *= 0.9;
+
+        if (mouse.isHovering && mouse.x !== null && mouse.y !== null) {
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < HOVER_RADIUS) {
+            p.glow = Math.min(1, p.glow + 0.15);
+            p.vx += (dx / dist) * 0.05;
+            p.vy += (dy / dist) * 0.05;
+          }
+        }
+      });
+
+      points.forEach(p => {
+        p.connections.forEach(c => {
+          const opacity = 1 - c.dist / MAX_DIST;
+          const glowFactor = Math.min(p.glow, c.point.glow);
+          ctx.strokeStyle = `rgba(56, 189, 248, ${opacity * 0.5 + glowFactor * 0.5})`;
+          ctx.lineWidth = 0.3 + glowFactor * 1.2;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(c.point.x, c.point.y);
+          ctx.stroke();
+        });
+      });
+
+      points.forEach(p => {
+        if (p.glow > 0.01) {
+          const gradient = ctx.createRadialGradient(p.x, p.y, NODE_RADIUS, p.x, p.y, NODE_RADIUS * 7);
+          gradient.addColorStop(0, `rgba(56, 189, 248, ${p.glow * 0.6})`);
+          gradient.addColorStop(1, 'rgba(56, 189, 248, 0)');
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, NODE_RADIUS * 7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, NODE_RADIUS, 0, Math.PI * 2);
+        ctx.fillStyle = p.c;
+        ctx.shadowColor = `rgba(56, 189, 248, ${p.glow * 0.7})`;
+        ctx.shadowBlur = 8 * p.glow;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // Run intro on page load
+    window.addEventListener('load', () => {
+      runIntro();
+    });
+  </script>
 </body>
 </html>
